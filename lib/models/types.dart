@@ -1,0 +1,1 @@
+typedef LoadCollection(String id);

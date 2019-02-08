@@ -1,4 +1,5 @@
-import 'package:anchr_android/objects/link.dart';
+
+import 'package:anchr_android/models/link.dart';
 
 class LinkCollection {
   final String id;

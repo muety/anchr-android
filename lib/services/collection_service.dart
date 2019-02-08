@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:anchr_android/objects/link_collection.dart';
+import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/services/api_service.dart';
 
 class CollectionService extends ApiService {

@@ -1,4 +1,4 @@
-import 'package:anchr_android/objects/link.dart';
+import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/utils.dart';
 import 'package:flutter/material.dart';
 

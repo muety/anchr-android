@@ -1,31 +1,22 @@
-import 'package:anchr_android/objects/link_collection.dart';
+import 'package:anchr_android/models/app_state.dart';
 import 'package:flutter/material.dart';
 
 class CollectionDrawer extends StatefulWidget {
-  final String username;
+  final AppState appState;
   final Function(String collectionId) onCollectionSelect;
 
-  // TODO: Remove class attributes
-  // TODO: Rework constructor: should initialize collection loading
-  const CollectionDrawer({Key key, this.username, this.onCollectionSelect}) : super(key: key);
+  const CollectionDrawer({Key key, this.appState, this.onCollectionSelect}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CollectionDrawerState(username, onCollectionSelect);
+  State<StatefulWidget> createState() => _CollectionDrawerState();
 }
 
 class _CollectionDrawerState extends State<CollectionDrawer> {
-  final String username;
-  final Function(String collectionId) onCollectionSelect;
-
-  List<LinkCollection> collections = List();
-
-  _CollectionDrawerState(this.username, this.onCollectionSelect);
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
         child: ListView.builder(
-            itemCount: collections.length + 1,
+            itemCount: widget.appState.hasData ? widget.appState.collections.length : 0,
             itemBuilder: (ctx, idx) {
               if (idx == 0) {
                 return Container(
@@ -41,11 +32,11 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
                 );
               }
 
-              final item = collections[idx - 1];
+              final item = widget.appState.collections[idx - 1];
               return ListTile(
                 title: Text(item.name),
                 onTap: () {
-                  onCollectionSelect(item.id);
+                  widget.onCollectionSelect(item.id);
                   Navigator.pop(context);
                 },
               );
