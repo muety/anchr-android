@@ -16,35 +16,48 @@ class CollectionPage extends StatefulWidget {
 }
 
 class _CollectionPageState extends State<CollectionPage> {
+  static const defaultTitle = 'Collection';
   final CollectionService collectionService = CollectionService();
+  final String collectionId;
+  Future<LinkCollection> collection;
 
-  LinkCollection collection;
-  String title = 'Collection';
+  _CollectionPageState(this.collectionId);
 
-  _CollectionPageState(String collectionId) {
+  @override
+  void initState() {
+    super.initState();
     loadCollection(collectionId);
   }
 
-  void loadCollection(String collectionId) async {
-    collection = await collectionService.getCollection(collectionId);
-    setState(() {
-      this.collection = collection;
-      this.title = collection.name;
-    });
+  void loadCollection(String collectionId) {
+    collection = collectionService.getCollection(collectionId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CollectionDrawer(
-          username: "mail@ferdinand-muetsch.de",
-          onCollectionSelect: loadCollection,
+        username: "mail@ferdinand-muetsch.de",
+        onCollectionSelect: loadCollection,
       ),
       appBar: AppBar(
-        title: Text(title),
+        title: FutureBuilder<LinkCollection>(
+          future: collection,
+          builder: (context, snapshot) => snapshot.hasData ? Text(snapshot.data.name) : Text(defaultTitle),
+        ),
       ),
       body: Center(
-        child: LinkList(links: collection?.links),
+        child: FutureBuilder<LinkCollection>(
+          future: collection,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return LinkList(links: snapshot.data.links);
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return CircularProgressIndicator();
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {},
