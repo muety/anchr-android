@@ -12,8 +12,20 @@ class CollectionService extends ApiService {
 
   CollectionService._internal();
 
+  Future<List<LinkCollection>> listCollections() async {
+    final res = await super.get('/collection?short=true');
+    if (res.statusCode == 200) {
+      return (json.decode(res.body) as List<dynamic>)
+          .map((c) => LinkCollection.fromJson(c))
+          .where((c) => c.name != null)
+          .toList();
+    } else {
+      throw Exception(res.body);
+    }
+  }
+
   Future<LinkCollection> getCollection(String id) async {
-    final res = await super.get('/$id');
+    final res = await super.get('/collection/$id');
     if (res.statusCode == 200) {
       return LinkCollection.fromJson(json.decode(res.body));
     } else {
