@@ -5,7 +5,7 @@ abstract class ApiService {
 
   Future<http.Response> get(String resourcePath) {
     const headers = {
-      'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2NhbCI6eyJwYXNzd29yZCI6IiQyYSQwOCRzTjUuaXc1SkpBajRwTVBPTDdWYkZ1LkszemRSYk9GYkgxODNqRzUyZnlRZjVVS2kubm1zRyIsImVtYWlsIjoidWVkc2ZAc3R1ZGVudC5raXQuZWR1In0sInN0cmF0ZWd5IjoibG9jYWwiLCJpYXQiOjE1NDk1OTEyMjUsImV4cCI6MTU1MjE4MzIyNX0.iW96GG2Sy8cx0xWSX_AU_I2JTGyQDTPhoaq3nktivqo'
+      'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2NhbCI6eyJwYXNzd29yZCI6IiQyYSQwOCRzTjUuaXc1SkpBajRwTVBPTDdWYkZ1LkszemRSYk9GYkgxODNqRzUyZnlRZjVVS2kubm1zRyIsImVtYWlsIjoidWVkc2ZAc3R1ZGVudC5raXQuZWR1In0sInN0cmF0ZWd5IjoibG9jYWwiLCJpYXQiOjE1NDk2MDcwMzQsImV4cCI6MTU1MjE5OTAzNH0.9QMGtJPiM0Wq0QmgrHt4V3Wf89-XdW1_cc_Af1pn0Ts'
     };
     return http.get(_apiUrl + resourcePath, headers: headers);
   }

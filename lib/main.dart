@@ -8,13 +8,14 @@ class AnchrApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Anchr.io',
         theme: ThemeData(
           primarySwatch: Colors.teal,
         ),
-        home: CollectionPage(collectionId: 'links.json'),
+        initialRoute: "/",
         routes: <String, WidgetBuilder>{
-          LoginPage.routeName: (BuildContext context) => const LoginPage(),
+          LoginPage.routeName: (BuildContext context) => LoginPage(),
+          CollectionPage.routeName: (BuildContext context) => CollectionPage(collectionId: 'Sr1xI',),
         });
   }
 }
