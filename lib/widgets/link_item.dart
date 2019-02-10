@@ -1,11 +1,14 @@
 import 'package:anchr_android/models/link.dart';
+import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/utils.dart';
+import 'package:anchr_android/widgets/delete_link_dialog.dart';
 import 'package:flutter/material.dart';
 
 class LinkItem extends StatelessWidget {
   final Link link;
+  final DeleteLink deleteLink;
 
-  LinkItem({this.link});
+  LinkItem({this.link, this.deleteLink});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,13 @@ class LinkItem extends StatelessWidget {
                       color: Colors.red,
                       size: 24,
                     ),
-                    onPressed: () => {},
+                    onPressed: () => showDialog(
+                        context: context,
+                        builder: DeleteLinkDialog(
+                          link: link,
+                          onDelete: deleteLink,
+                        ).builder
+                    ),
                   ),
                   minWidth: 24
               ),

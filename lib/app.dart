@@ -1,9 +1,12 @@
 import 'package:anchr_android/models/app_state.dart';
+import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/services/collection_service.dart';
 import 'package:flutter/material.dart';
 
 class AnchrApp extends StatefulWidget {
+  static final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   final collectionService = CollectionService();
 
   @override
@@ -29,6 +32,7 @@ class AnchrAppState extends State<AnchrApp> {
         home: CollectionsPage(
           appState: appState,
           loadCollection: _loadCollection,
+          deleteLink: _deleteLink,
         )
     );
   }
@@ -52,6 +56,15 @@ class AnchrAppState extends State<AnchrApp> {
     var activeCollection = await widget.collectionService.getCollection(id);
     setState(() {
       appState = appState.copyWith(activeCollection: activeCollection);
+    });
+  }
+
+  void _deleteLink(Link link) async {
+    final ScaffoldState scaffoldContext = AnchrApp.scaffoldKey.currentState;
+    await widget.collectionService.deleteLink(appState.activeCollection.id, link.id);
+    scaffoldContext.showSnackBar(SnackBar(content: Text('Link deleted.')));
+    setState(() {
+      appState.activeCollection.links.remove(link);
     });
   }
 }

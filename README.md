@@ -17,3 +17,11 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Developer notes
 * State handling architecture inspired by [vanilla](https://github.com/brianegan/flutter_architecture_samples/tree/master/example/vanilla).
+
+## To Do
+* Caching
+* Pull to refresh
+* Add links
+* Add collections
+* Delete collections
+* Login Page

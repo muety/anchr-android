@@ -1,3 +1,4 @@
+import 'package:anchr_android/app.dart';
 import 'package:anchr_android/models/app_state.dart';
 import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/widgets/collection_drawer.dart';
@@ -9,8 +10,9 @@ class CollectionsPage extends StatefulWidget {
 
   final AppState appState;
   final LoadCollection loadCollection;
+  final DeleteLink deleteLink;
 
-  const CollectionsPage({Key key, this.appState, this.loadCollection}) : super(key: key);
+  const CollectionsPage({Key key, this.appState, this.loadCollection, this.deleteLink}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CollectionsPageState();
@@ -22,6 +24,7 @@ class _CollectionsPageState extends State<CollectionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: AnchrApp.scaffoldKey,
       drawer: CollectionDrawer(
         appState: widget.appState,
         onCollectionSelect: widget.loadCollection,
@@ -31,7 +34,10 @@ class _CollectionsPageState extends State<CollectionsPage> {
       ),
       body: Center(
         child: widget.appState.hasData && !widget.appState.isLoading
-            ? LinkList(links: widget.appState.activeCollection.links)
+            ? LinkList(
+                links: widget.appState.activeCollection.links,
+                deleteLink: widget.deleteLink,
+              )
             : CircularProgressIndicator(),
       ),
       floatingActionButton: FloatingActionButton(

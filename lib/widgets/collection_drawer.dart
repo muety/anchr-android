@@ -16,7 +16,7 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
         child: ListView.builder(
-            itemCount: widget.appState.hasData ? widget.appState.collections.length : 0,
+            itemCount: widget.appState.hasData ? widget.appState.collections.length + 1 : 0,
             itemBuilder: (ctx, idx) {
               if (idx == 0) {
                 return Container(

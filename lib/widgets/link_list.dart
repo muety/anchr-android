@@ -1,11 +1,13 @@
 import 'package:anchr_android/models/link.dart';
+import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/widgets/link_item.dart';
 import 'package:flutter/material.dart';
 
 class LinkList extends StatelessWidget {
   final List<Link> links;
+  final DeleteLink deleteLink;
 
-  const LinkList({Key key, this.links}) : super(key: key);
+  const LinkList({Key key, this.links, this.deleteLink}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,7 @@ class LinkList extends StatelessWidget {
     }
 
     return ListView(
-      children: links.map((l) => LinkItem(link: l)).toList(),
+      children: links.map((l) => LinkItem(link: l, deleteLink: deleteLink,)).toList(),
     );
   }
 }
