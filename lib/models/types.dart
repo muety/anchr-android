@@ -1,5 +1,13 @@
 import 'package:anchr_android/models/link.dart';
 
-typedef Future<Null> LoadCollections();
-typedef Future<Null> LoadCollection(String id);
-typedef Future<Null> DeleteLink(Link link);
+typedef Future<dynamic> LoadCollections();
+typedef Future<dynamic> LoadCollection(String id);
+typedef Future<dynamic> DeleteLink(Link link);
+
+class AnchrActions {
+  final LoadCollections loadCollections;
+  final LoadCollection loadCollection;
+  final DeleteLink deleteLink;
+
+  AnchrActions({this.loadCollections, this.loadCollection, this.deleteLink});
+}

@@ -9,10 +9,9 @@ class CollectionsPage extends StatefulWidget {
   static const String routeName = '/';
 
   final AppState appState;
-  final LoadCollection loadCollection;
-  final DeleteLink deleteLink;
+  final AnchrActions anchrActions;
 
-  const CollectionsPage({Key key, this.appState, this.loadCollection, this.deleteLink}) : super(key: key);
+  const CollectionsPage({Key key, this.appState, this.anchrActions}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CollectionsPageState();
@@ -28,24 +27,24 @@ class _CollectionsPageState extends State<CollectionsPage> {
       key: AnchrApp.scaffoldKey,
       drawer: CollectionDrawer(
         appState: widget.appState,
-        onCollectionSelect: widget.loadCollection,
+        onCollectionSelect: widget.anchrActions.loadCollection,
       ),
       appBar: AppBar(
         title: Text(widget.appState.title),
       ),
       body: Center(
         child: () {
-          if (!widget.appState.hasData || (widget.appState.isLoading && !refreshing)) {
+          if (widget.appState.isLoading && !refreshing) {
             return CircularProgressIndicator();
           }
           return RefreshIndicator(
             child: LinkList(
-              links: widget.appState.activeCollection.links,
-              deleteLink: widget.deleteLink,
+              links: widget.appState.activeCollection?.links,
+              deleteLink: widget.anchrActions.deleteLink,
             ),
             onRefresh: () async {
               refreshing = true;
-              await widget.loadCollection(widget.appState.activeCollection.id);
+              await widget.anchrActions.loadCollection(widget.appState.activeCollection.id);
               refreshing = false;
             },
           );
@@ -54,7 +53,7 @@ class _CollectionsPageState extends State<CollectionsPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => {},
         tooltip: 'Add Link',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -31,7 +31,7 @@ class LinkItem extends StatelessWidget {
             Padding(
               child: ButtonTheme(
                   child: FlatButton(
-                    child: Icon(
+                    child: const Icon(
                       Icons.delete,
                       color: Colors.red,
                       size: 24,
@@ -46,7 +46,7 @@ class LinkItem extends StatelessWidget {
                   ),
                   minWidth: 24
               ),
-              padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
             ),
           ],
           crossAxisAlignment: CrossAxisAlignment.end,

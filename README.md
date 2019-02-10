@@ -20,9 +20,9 @@ samples, guidance on mobile development, and a full API reference.
 
 ## To Do
 * Caching
-* Pull to refresh
 * Add links
 * Add collections
 * Delete collections
 * Login Page
 * Content receiver
+* String constants
