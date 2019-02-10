@@ -1,9 +1,10 @@
 import 'package:anchr_android/models/link.dart';
+import 'package:anchr_android/models/types.dart';
 import 'package:flutter/material.dart';
 
 class DeleteLinkDialog extends AlertDialog {
   final Link link;
-  final Function(Link link) onDelete;
+  final DeleteLink onDelete;
 
   DeleteLinkDialog({this.link, this.onDelete});
 
@@ -30,7 +31,7 @@ class DeleteLinkDialog extends AlertDialog {
         FlatButton(
           child: const Text('Yes'),
           onPressed: () {
-            onDelete(link);
+            onDelete(link, context: context);
             Navigator.of(context).pop();
           },
         ),

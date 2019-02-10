@@ -1,8 +1,10 @@
 import 'package:anchr_android/models/app_state.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/types.dart';
+import 'package:anchr_android/pages/add_link_page.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/services/collection_service.dart';
+import 'package:anchr_android/utils/ui_utils.dart';
 import 'package:flutter/material.dart';
 
 class AnchrApp extends StatefulWidget {
@@ -32,6 +34,16 @@ class AnchrAppState extends State<AnchrApp> {
 
   @override
   Widget build(BuildContext context) {
+    final CollectionsPage defaultCollectionsPage = CollectionsPage(
+      appState: appState,
+      anchrActions: anchrActions,
+    );
+
+    final AddLinkPage defaultAddLinkPage = AddLinkPage(
+      appState: appState,
+      anchrActions: anchrActions,
+    );
+
     return MaterialApp(
         title: 'Anchr.io',
         debugShowCheckedModeBanner: false,
@@ -39,49 +51,53 @@ class AnchrAppState extends State<AnchrApp> {
           primarySwatch: Colors.teal,
           accentColor: Color(0xFFDD5237)
         ),
-        home: CollectionsPage(
-          appState: appState,
-          anchrActions: anchrActions,
-        )
+        home: defaultCollectionsPage,
+        routes: <String, WidgetBuilder> { //5
+          CollectionsPage.routeName: (BuildContext context) => defaultCollectionsPage, //6
+          AddLinkPage.routeName: (BuildContext context) => defaultAddLinkPage //7
+        }
     );
   }
 
   void _initData() async {
     await _loadCollections();
-    await _loadCollection(appState.collections.first.id);
+    if (appState.collections != null && appState.collections.isNotEmpty) {
+      await _loadCollection(appState.collections.first.id);
+    }
   }
 
-  Future<dynamic> _loadCollections() {
+  Future<dynamic> _loadCollections({BuildContext context}) {
     return widget.collectionService.listCollections()
         .then((collections) {
           if (collections != null) {
             setState(() => appState.collections = collections);
           }
         })
-        .catchError((e) => showSnackbar('Could not load collections, sorry...'))
+        .catchError((e) => _showSnackbar('Could not load collections, sorry...'))
         .whenComplete(() => setState(() => appState.isLoading = false));
   }
 
-  Future<dynamic> _loadCollection(String id) {
+  Future<dynamic> _loadCollection(String id, {BuildContext context}) {
     setState(() => appState.isLoading = true);
     return widget.collectionService.getCollection(id)
         .then((activeCollection) => setState(() => appState.activeCollection = activeCollection))
-        .catchError((e) => showSnackbar('Could not load collection, sorry...'))
+        .catchError((e) => _showSnackbar('Could not load collection, sorry...'))
         .whenComplete(() => setState(() => appState.isLoading = false));
   }
 
-  Future<dynamic> _deleteLink(Link link) {
+  Future<dynamic> _deleteLink(Link link, {BuildContext context}) {
     return widget.collectionService.deleteLink(appState.activeCollection.id, link.id)
         .then((_) {
-          showSnackbar('Link deleted');
+          _showSnackbar('Link deleted');
           setState(() => appState.activeCollection.links.remove(link));
         })
-        .catchError((e) => showSnackbar('Could not delete link, sorry...'));
+        .catchError((e) => _showSnackbar('Could not delete link, sorry...'));
   }
 
-  void showSnackbar(String text) {
+  void _showSnackbar(String text, {BuildContext context}) {
+    if (context != null) UIUtils.showSnackbar(text, context: context);
     if (AnchrApp.scaffoldKey?.currentState is ScaffoldState) {
-      AnchrApp.scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(text)));
+      UIUtils.showSnackbar(text, scaffoldState: AnchrApp.scaffoldKey.currentState);
     }
   }
 }

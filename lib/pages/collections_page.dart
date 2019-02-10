@@ -6,7 +6,7 @@ import 'package:anchr_android/widgets/link_list.dart';
 import 'package:flutter/material.dart';
 
 class CollectionsPage extends StatefulWidget {
-  static const String routeName = '/';
+  static const String routeName = '/collection';
 
   final AppState appState;
   final AnchrActions anchrActions;
@@ -44,14 +44,16 @@ class _CollectionsPageState extends State<CollectionsPage> {
             ),
             onRefresh: () async {
               refreshing = true;
-              await widget.anchrActions.loadCollection(widget.appState.activeCollection.id);
+              await widget.anchrActions.loadCollection(widget.appState.activeCollection.id, context: context);
               refreshing = false;
             },
           );
         }(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
+        onPressed: () {
+          Navigator.of(context).pushNamed('/add');
+        },
         tooltip: 'Add Link',
         child: const Icon(Icons.add),
       ),
