@@ -59,22 +59,13 @@ class AnchrAppState extends State<AnchrApp> {
           }
         })
         .catchError((e) => showSnackbar('Could not load collections, sorry...'))
-        .whenComplete(() =>
-        setState(() {
-          appState.isLoading = false;
-        }));
+        .whenComplete(() => setState(() => appState.isLoading = false));
   }
 
   Future<dynamic> _loadCollection(String id) {
-    setState(() {
-      appState.isLoading = true;
-    });
+    setState(() => appState.isLoading = true);
     return widget.collectionService.getCollection(id)
-        .then((activeCollection) {
-      setState(() {
-        appState.activeCollection = activeCollection;
-      });
-    })
+        .then((activeCollection) => setState(() => appState.activeCollection = activeCollection))
         .catchError((e) => showSnackbar('Could not load collection, sorry...'))
         .whenComplete(() => setState(() => appState.isLoading = false));
   }
@@ -82,16 +73,15 @@ class AnchrAppState extends State<AnchrApp> {
   Future<dynamic> _deleteLink(Link link) {
     return widget.collectionService.deleteLink(appState.activeCollection.id, link.id)
         .then((_) {
-      showSnackbar('Link deleted');
-      setState(() {
-        appState.activeCollection.links.remove(link);
-      });
-    })
+          showSnackbar('Link deleted');
+          setState(() => appState.activeCollection.links.remove(link));
+        })
         .catchError((e) => showSnackbar('Could not delete link, sorry...'));
   }
 
   void showSnackbar(String text) {
-    final ScaffoldState scaffoldContext = AnchrApp.scaffoldKey.currentState;
-    scaffoldContext.showSnackBar(SnackBar(content: Text(text)));
+    if (AnchrApp.scaffoldKey?.currentState is ScaffoldState) {
+      AnchrApp.scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(text)));
+    }
   }
 }
