@@ -34,7 +34,7 @@ class CollectionService extends ApiService {
     }
   }
 
-  Future<void> deleteLink(String collectionId, String linkId) async {
+  Future<Null> deleteLink(String collectionId, String linkId) async {
     final res = await super.delete('/collection/$collectionId/links/$linkId');
     if (res.statusCode != 200) {
       throw Exception(res.body);

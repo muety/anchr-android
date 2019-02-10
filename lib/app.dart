@@ -38,33 +38,40 @@ class AnchrAppState extends State<AnchrApp> {
   }
 
   void _initData() async {
-    var collections = await widget.collectionService.listCollections();
-    setState(() {
-      if (collections != null) {
-        appState = appState.copyWith(collections: collections);
-      } else {
-        appState.isLoading = false;
-      }
-    });
-    _loadCollection(appState.collections.first.id);
+    await _loadCollections();
+    await _loadCollection(appState.collections.first.id);
   }
 
-  void _loadCollection(String id) async {
+  Future<Null> _loadCollections() {
+    return widget.collectionService.listCollections().then((collections) {
+      setState(() {
+        if (collections != null) {
+          appState = appState.copyWith(collections: collections);
+        } else {
+          appState.isLoading = false;
+        }
+      });
+    });
+  }
+
+  Future<Null> _loadCollection(String id) {
     setState(() {
       appState.isLoading = true;
     });
-    var activeCollection = await widget.collectionService.getCollection(id);
-    setState(() {
-      appState = appState.copyWith(activeCollection: activeCollection);
+    return widget.collectionService.getCollection(id).then((activeCollection) {
+      setState(() {
+        appState = appState.copyWith(activeCollection: activeCollection);
+      });
     });
   }
 
-  void _deleteLink(Link link) async {
+  Future<Null> _deleteLink(Link link) {
     final ScaffoldState scaffoldContext = AnchrApp.scaffoldKey.currentState;
-    await widget.collectionService.deleteLink(appState.activeCollection.id, link.id);
-    scaffoldContext.showSnackBar(SnackBar(content: Text('Link deleted.')));
-    setState(() {
-      appState.activeCollection.links.remove(link);
+    return widget.collectionService.deleteLink(appState.activeCollection.id, link.id).then((_) {
+      scaffoldContext.showSnackBar(SnackBar(content: Text('Link deleted.')));
+      setState(() {
+        appState.activeCollection.links.remove(link);
+      });
     });
   }
 }

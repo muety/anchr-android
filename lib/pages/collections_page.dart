@@ -20,6 +20,7 @@ class CollectionsPage extends StatefulWidget {
 
 class _CollectionsPageState extends State<CollectionsPage> {
   static const defaultTitle = 'Collection';
+  bool refreshing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +34,22 @@ class _CollectionsPageState extends State<CollectionsPage> {
         title: Text(widget.appState.title),
       ),
       body: Center(
-        child: widget.appState.hasData && !widget.appState.isLoading
-            ? LinkList(
-                links: widget.appState.activeCollection.links,
-                deleteLink: widget.deleteLink,
-              )
-            : CircularProgressIndicator(),
+        child: () {
+          if (!widget.appState.hasData || (widget.appState.isLoading && !refreshing)) {
+            return CircularProgressIndicator();
+          }
+          return RefreshIndicator(
+            child: LinkList(
+              links: widget.appState.activeCollection.links,
+              deleteLink: widget.deleteLink,
+            ),
+            onRefresh: () async {
+              refreshing = true;
+              await widget.loadCollection(widget.appState.activeCollection.id);
+              refreshing = false;
+            },
+          );
+        }(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {},

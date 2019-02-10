@@ -25,3 +25,4 @@ samples, guidance on mobile development, and a full API reference.
 * Add collections
 * Delete collections
 * Login Page
+* Content receiver
