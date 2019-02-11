@@ -1,50 +1,57 @@
-import 'package:anchr_android/app.dart';
+import 'package:anchr_android/mixins/anchr_actions.dart';
 import 'package:anchr_android/models/app_state.dart';
-import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/widgets/collection_drawer.dart';
 import 'package:anchr_android/widgets/link_list.dart';
 import 'package:flutter/material.dart';
 
 class CollectionsPage extends StatefulWidget {
   static const String routeName = '/collection';
-
   final AppState appState;
-  final AnchrActions anchrActions;
 
-  const CollectionsPage({Key key, this.appState, this.anchrActions}) : super(key: key);
+  const CollectionsPage(this.appState, {Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CollectionsPageState();
+  State<StatefulWidget> createState() => _CollectionsPageState(appState);
 }
 
-class _CollectionsPageState extends State<CollectionsPage> {
+class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrActions {
   static const defaultTitle = 'Collection';
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool refreshing = false;
+
+  _CollectionsPageState(AppState appState) : super(appState);
+
+
+  @override
+  void initState() {
+    super.initState();
+    _initData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: AnchrApp.scaffoldKey,
+      key: _scaffoldKey,
       drawer: CollectionDrawer(
-        appState: widget.appState,
-        onCollectionSelect: widget.anchrActions.loadCollection,
+        appState: appState,
+        onCollectionSelect: loadCollection,
       ),
       appBar: AppBar(
-        title: Text(widget.appState.title),
+        title: Text(appState.title),
       ),
       body: Center(
         child: () {
-          if (widget.appState.isLoading && !refreshing) {
+          if (appState.isLoading && !refreshing) {
             return CircularProgressIndicator();
           }
           return RefreshIndicator(
             child: LinkList(
               links: widget.appState.activeCollection?.links,
-              deleteLink: widget.anchrActions.deleteLink,
+              deleteLink: deleteLink,
             ),
             onRefresh: () async {
               refreshing = true;
-              await widget.anchrActions.loadCollection(widget.appState.activeCollection.id, context: context);
+              await loadCollection(appState.activeCollection.id, context: context);
               refreshing = false;
             },
           );
@@ -59,4 +66,14 @@ class _CollectionsPageState extends State<CollectionsPage> {
       ),
     );
   }
+
+  void _initData() async {
+    await loadCollections();
+    if (appState.collections != null && appState.collections.isNotEmpty) {
+      await loadCollection(appState.collections.first.id);
+    }
+  }
+
+  @override
+  ScaffoldState get scaffold => _scaffoldKey.currentState;
 }

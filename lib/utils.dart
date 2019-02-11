@@ -11,15 +11,13 @@ abstract class Utils {
       throw 'Could not launch $url';
     }
   }
-}
 
-mixin SnackbarSupport<T extends StatefulWidget> on State<T> {
   /**
    * Show a notification. Requires a Scaffold to be present.
    * You must either pass a ScaffoldState directly or use it in a context where a Scaffold widget is available.
    * Will do nothing if no Scaffold can be found.
    */
-  void showSnackbar(String text, { ScaffoldState scaffoldState }) {
+  static void showSnackbar(String text, { BuildContext context, ScaffoldState scaffoldState }) {
     scaffoldState = scaffoldState ?? context.ancestorStateOfType(TypeMatcher<ScaffoldState>());
     if (scaffoldState != null) {
       scaffoldState.showSnackBar(SnackBar(content: Text(text)));
