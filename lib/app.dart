@@ -4,7 +4,7 @@ import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/pages/add_link_page.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/services/collection_service.dart';
-import 'package:anchr_android/utils/ui_utils.dart';
+import 'package:anchr_android/utils.dart';
 import 'package:flutter/material.dart';
 
 class AnchrApp extends StatefulWidget {
@@ -13,10 +13,10 @@ class AnchrApp extends StatefulWidget {
   final collectionService = CollectionService();
 
   @override
-  State<StatefulWidget> createState() => AnchrAppState();
+  State<AnchrApp> createState() => AnchrAppState();
 }
 
-class AnchrAppState extends State<AnchrApp> {
+class AnchrAppState extends State<AnchrApp> with SnackbarSupport {
   AppState appState = AppState.loading().copyWith(user: 'mail@ferdinand-muetsch.de');
   AnchrActions anchrActions;
 
@@ -95,9 +95,8 @@ class AnchrAppState extends State<AnchrApp> {
   }
 
   void _showSnackbar(String text, {BuildContext context}) {
-    if (context != null) UIUtils.showSnackbar(text, context: context);
     if (AnchrApp.scaffoldKey?.currentState is ScaffoldState) {
-      UIUtils.showSnackbar(text, scaffoldState: AnchrApp.scaffoldKey.currentState);
+      showSnackbar(text, scaffoldState: AnchrApp.scaffoldKey.currentState);
     }
   }
 }

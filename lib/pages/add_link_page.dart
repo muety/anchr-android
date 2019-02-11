@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 class AddLinkPage extends StatelessWidget {
   static const String routeName = '/add';
   static const String title = 'Add new link';
-  static final RegExp urlPattern = RegExp(
-      '^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?');
+  static final RegExp urlPattern = RegExp('^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?');
 
   final AppState appState;
   final AnchrActions anchrActions;
 
 
-  AddLinkPage({Key key, this.appState, this.anchrActions}) :super(key: key);
+  AddLinkPage({Key key, this.appState, this.anchrActions}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
