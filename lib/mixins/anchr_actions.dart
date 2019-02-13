@@ -25,24 +25,29 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
             setState(() => appState.collections = collections);
           }
         })
-        .catchError((e) => showSnackbar('Could not load collections, sorry...'))
         .whenComplete(() => setState(() => appState.isLoading = false));
   }
 
-  Future<dynamic> loadCollection(String id, {BuildContext context}) {
+  Future<dynamic> loadCollection(String id) {
     setState(() => appState.isLoading = true);
     return collectionService.getCollection(id)
         .then((activeCollection) => setState(() => appState.activeCollection = activeCollection))
-        .catchError((e) => showSnackbar('Could not load collection, sorry...'))
         .whenComplete(() => setState(() => appState.isLoading = false));
   }
 
-  Future<dynamic> deleteLink(Link link, {BuildContext context}) {
+  Future<dynamic> deleteLink(Link link) {
     return collectionService.deleteLink(appState.activeCollection.id, link.id)
         .then((_) {
           showSnackbar('Link deleted');
           setState(() => appState.activeCollection.links.remove(link));
-        })
-        .catchError((e) => showSnackbar('Could not delete link, sorry...'));
+        });
+  }
+
+  Future<dynamic> addLink(String collectionId, Link link) {
+    return collectionService.addLink(appState.activeCollection.id, link)
+        .then((link) {
+          showSnackbar('Link added');
+          setState(() => appState.activeCollection.links.add(link));
+        });
   }
 }

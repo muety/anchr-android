@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/services/api_service.dart';
 
@@ -39,5 +40,18 @@ class CollectionService extends ApiService {
     if (res.statusCode != 200) {
       throw Exception(res.body);
     }
+  }
+
+  Future<Link> addLink(String collectionId, Link link) async {
+    final data = {
+      'collId': collectionId,
+      'description': link.description,
+      'url': link.url
+    };
+    final res = await super.post('/collection/$collectionId/links', data);
+    if (res.statusCode != 201) {
+      throw Exception(res.body);
+    }
+    return Link.fromJson(json.decode(res.body));
   }
 }

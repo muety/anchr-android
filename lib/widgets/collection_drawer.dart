@@ -27,7 +27,7 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
                       )
                   ),
                   decoration: BoxDecoration(
-                      color: Colors.teal
+                      color: Theme.of(context).primaryColor
                   ),
                 );
               }

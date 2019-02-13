@@ -12,6 +12,11 @@ abstract class Utils {
     }
   }
 
+  static bool validateUrl(String url) {
+    Uri parsedUrl = Uri.tryParse(url);
+    return parsedUrl != null && parsedUrl.scheme.isNotEmpty;
+  }
+
   /**
    * Show a notification. Requires a Scaffold to be present.
    * You must either pass a ScaffoldState directly or use it in a context where a Scaffold widget is available.

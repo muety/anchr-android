@@ -34,7 +34,8 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
       key: _scaffoldKey,
       drawer: CollectionDrawer(
         appState: appState,
-        onCollectionSelect: loadCollection,
+        onCollectionSelect: (id) =>
+            loadCollection(id).catchError((e) => showSnackbar('Could not load collection, sorry...')),
       ),
       appBar: AppBar(
         title: Text(appState.title),
@@ -47,12 +48,17 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
           return RefreshIndicator(
             child: LinkList(
               links: widget.appState.activeCollection?.links,
-              deleteLink: deleteLink,
+              deleteLink: (link) => deleteLink(link).catchError((e) => showSnackbar('Could not delete link, sorry...')),
             ),
             onRefresh: () async {
               refreshing = true;
-              await loadCollection(appState.activeCollection.id, context: context);
-              refreshing = false;
+              try {
+                await loadCollection(appState.activeCollection.id);
+              } catch (e) {
+                showSnackbar('Could not load collection, sorry...');
+              } finally {
+                refreshing = false;
+              }
             },
           );
         }(),
@@ -68,9 +74,13 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
   }
 
   void _initData() async {
-    await loadCollections();
-    if (appState.collections != null && appState.collections.isNotEmpty) {
-      await loadCollection(appState.collections.first.id);
+    try {
+      await loadCollections();
+      if (appState.collections != null && appState.collections.isNotEmpty) {
+        await loadCollection(appState.collections.first.id);
+      }
+    } catch (e) {
+      showSnackbar('Could not load collections, sorry...');
     }
   }
 

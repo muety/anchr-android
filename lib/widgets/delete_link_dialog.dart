@@ -31,7 +31,7 @@ class DeleteLinkDialog extends AlertDialog {
         FlatButton(
           child: const Text('Yes'),
           onPressed: () {
-            onDelete(link, context: context);
+            onDelete(link);
             Navigator.of(context).pop();
           },
         ),
