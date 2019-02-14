@@ -26,3 +26,4 @@ samples, guidance on mobile development, and a full API reference.
 * Login Page
 * Content receiver
 * String constants
+* Refresh token

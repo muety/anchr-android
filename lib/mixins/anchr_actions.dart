@@ -1,31 +1,52 @@
 import 'package:anchr_android/models/app_state.dart';
 import 'package:anchr_android/models/link.dart';
+import 'package:anchr_android/services/auth_service.dart';
 import 'package:anchr_android/services/collection_service.dart';
 import 'package:anchr_android/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AnchrState<T extends StatefulWidget> extends State<T> {
   final AppState appState;
   final collectionService = CollectionService();
+  final authService = AuthService();
+  SharedPreferences preferences;
 
   AnchrState(this.appState);
 
   ScaffoldState get scaffold;
 
-  void showSnackbar(String text) {
-    Utils.showSnackbar(text, scaffoldState: scaffold);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  void _loadPreferences() async {
+    this.preferences = await SharedPreferences.getInstance();
+    if (this.preferences.getString("user.token") != null) {
+      _updateServiceToken(this.preferences.getString("user.token"));
+    }
+  }
+
+  void showSnackbar(String text) => Utils.showSnackbar(text, scaffoldState: scaffold);
+
+  void _updateServiceToken(String token) {
+    collectionService.safeToken = token;
+    authService.safeToken = token;
   }
 }
 
 mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
   Future<dynamic> loadCollections() {
     return collectionService.listCollections()
-        .then((collections) {
-          if (collections != null) {
-            setState(() => appState.collections = collections);
-          }
-        })
-        .whenComplete(() => setState(() => appState.isLoading = false));
+          .then((collections) {
+            if (collections != null) {
+              setState(() => appState.collections = collections);
+            }
+          })
+          .whenComplete(() => setState(() => appState.isLoading = false));
   }
 
   Future<dynamic> loadCollection(String id) {
@@ -48,6 +69,18 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
         .then((link) {
           showSnackbar('Link added');
           setState(() => appState.activeCollection.links.add(link));
+        });
+  }
+
+  Future<dynamic> login(String userMail, String password) {
+    return authService.login(userMail, password)
+        .then((token) {
+          preferences.setString("user.token", token);
+          return token;
+        })
+        .then((token) {
+          _updateServiceToken(token);
+          return token;
         });
   }
 }

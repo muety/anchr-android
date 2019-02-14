@@ -7,7 +7,8 @@ import 'package:anchr_android/services/api_service.dart';
 class CollectionService extends ApiService {
   static final CollectionService _instance = new CollectionService._internal();
 
-  factory CollectionService() {
+  factory CollectionService({String token}) {
+    _instance.safeToken = token;
     return _instance;
   }
 
@@ -16,8 +17,7 @@ class CollectionService extends ApiService {
   Future<List<LinkCollection>> listCollections() async {
     final res = await super.get('/collection?short=true');
     if (res.statusCode == 200) {
-      return (json.decode(res.body) as List<dynamic>
-      )
+      return (json.decode(res.body) as List<dynamic>)
           .map((c) => LinkCollection.fromJson(c))
           .where((c) => c.name != null)
           .toList();

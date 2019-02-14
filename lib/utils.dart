@@ -17,6 +17,11 @@ abstract class Utils {
     return parsedUrl != null && parsedUrl.scheme.isNotEmpty;
   }
 
+  static bool validateEmail(String input) {
+    final RegExp regex = RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+    return regex.hasMatch(input);
+  }
+
   /**
    * Show a notification. Requires a Scaffold to be present.
    * You must either pass a ScaffoldState directly or use it in a context where a Scaffold widget is available.
