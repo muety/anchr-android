@@ -79,8 +79,8 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                           hintText: 'E.g. https://duckduckgo.com',
                           labelText: 'Link',
                         ),
-                        onSaved: (url) => targetUrl = url,
-                        validator: (url) => Utils.validateUrl(url) ? null : 'Not a valid URL.'),
+                        onSaved: (url) => targetUrl = url.trim(),
+                        validator: (url) => Utils.validateUrl(url.trim()) ? null : 'Not a valid URL.'),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),

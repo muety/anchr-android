@@ -42,6 +42,7 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
   Future<dynamic> loadCollections() {
     return collectionService.listCollections().then((collections) {
       if (collections != null) {
+        collections.sort();
         setState(() => appState.collections = collections);
       }
     }).whenComplete(() => setState(() => appState.isLoading = false));
@@ -60,6 +61,7 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
       showSnackbar('Collection added');
       setState(() {
         appState.collections.add(collection);
+        appState.collections.sort();
         appState.activeCollection = collection;
       });
     });
@@ -75,12 +77,13 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
   Future<dynamic> addLink(String collectionId, Link link) {
     return collectionService.addLink(appState.activeCollection.id, link).then((link) {
       showSnackbar('Link added');
-      setState(() => appState.activeCollection.links.add(link));
+      setState(() => appState.activeCollection.links.insert(0, link));
     });
   }
 
   Future<dynamic> login(String userMail, String password) {
     return authService.login(userMail, password).then((token) {
+      preferences.setString("user.mail", userMail);
       preferences.setString("user.token", token);
       return token;
     }).then((token) {

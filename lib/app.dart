@@ -26,7 +26,9 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
 
   void _loadPrefs() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() => isLoggedIn = prefs.getString("user.mail") != null && prefs.getString("user.token") != null);
+    setState(() {
+      isLoggedIn = prefs.getString("user.mail") != null && prefs.getString("user.token") != null;
+    });
   }
 
   @override

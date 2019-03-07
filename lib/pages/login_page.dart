@@ -49,8 +49,8 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                         hintText: 'E.g. you@example.org',
                         labelText: 'E-Mail',
                       ),
-                      onSaved: (val) => userMail = val,
-                      validator: (val) => Utils.validateEmail(val) ? null : 'Not a valid e-mail address.'),
+                      onSaved: (val) => userMail = val.trim(),
+                      validator: (val) => Utils.validateEmail(val.trim()) ? null : 'Not a valid e-mail address.'),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -61,8 +61,8 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                         labelText: 'Passwort',
                       ),
                       obscureText: true,
-                      onSaved: (val) => userPassword = val,
-                      validator: (val) => val.isNotEmpty ? null : 'Please enter a password.'),
+                      onSaved: (val) => userPassword = val.trim(),
+                      validator: (val) => val.trim().isNotEmpty ? null : 'Please enter a password.'),
                 ),
                 Container(
                   width: screenSize.width,
