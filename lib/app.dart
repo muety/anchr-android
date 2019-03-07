@@ -19,7 +19,6 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
 
   _AnchrAppState(AppState appState) : super(appState);
 
-
   @override
   void initState() {
     _loadPrefs();
@@ -39,17 +38,14 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     return MaterialApp(
         title: 'Anchr.io',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.teal,
-          accentColor: Color(0xFFDD5237)
-        ),
+        theme: ThemeData(primarySwatch: Colors.teal, accentColor: Color(0xFFDD5237)),
         home: isLoggedIn ? defaultCollectionsPage : defaultLoginPage,
-        routes: <String, WidgetBuilder> { //5
+        routes: <String, WidgetBuilder>{
+          //5
           CollectionsPage.routeName: (BuildContext context) => defaultCollectionsPage, //6
           AddLinkPage.routeName: (BuildContext context) => defaultAddLinkPage, //7
           LoginPage.routeName: (BuildContext context) => defaultAddLinkPage //7
-        }
-    );
+        });
   }
 
   @override

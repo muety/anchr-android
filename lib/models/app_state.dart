@@ -6,12 +6,7 @@ class AppState {
   List<LinkCollection> collections;
   LinkCollection activeCollection;
 
-  AppState({
-    this.collections = const [],
-    this.activeCollection,
-    this.isLoading = false,
-    this.user
-  });
+  AppState({this.collections = const [], this.activeCollection, this.isLoading = false, this.user});
 
   factory AppState.loading() => AppState(isLoading: true);
 
@@ -21,10 +16,10 @@ class AppState {
 
   AppState copyWith({List<LinkCollection> collections, LinkCollection activeCollection, String user, bool isLoading}) {
     return AppState(
-        collections: collections ?? this.collections,
-        activeCollection: activeCollection ?? this.activeCollection,
-        user: user ?? this.user,
-        isLoading: isLoading ?? (collections == null && activeCollection == null),
+      collections: collections ?? this.collections,
+      activeCollection: activeCollection ?? this.activeCollection,
+      user: user ?? this.user,
+      isLoading: isLoading ?? (collections == null && activeCollection == null),
     );
   }
 }

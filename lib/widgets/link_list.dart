@@ -14,25 +14,27 @@ class LinkList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (links == null || links.isEmpty) {
       return Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SvgPicture.asset('assets/no_content.svg', width: 200,),
-              const Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: const Text('No Data :\'-('),
-              )
-            ]
-        ),
+        width: MediaQuery.of(context).size.width,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+          SvgPicture.asset(
+            'assets/no_content.svg',
+            width: 200,
+          ),
+          const Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: const Text('No Data :\'-('),
+          )
+        ]),
       );
     }
 
     return ListView(
-      children: links.map((l) => LinkItem(link: l, deleteLink: deleteLink,)).toList(),
+      children: links
+          .map((l) => LinkItem(
+                link: l,
+                deleteLink: deleteLink,
+              ))
+          .toList(),
     );
   }
 }

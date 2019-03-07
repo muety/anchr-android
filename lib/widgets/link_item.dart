@@ -14,43 +14,39 @@ class LinkItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Row(
-          children: <Widget>[
-            Expanded(
-                child: ListTile(
-                  title: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text(link.description.isEmpty ? '<no description>' : link.description),
-                  ),
-                  subtitle: Text(
-                    link.url,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  onTap: () => Utils.launchURL(link.url),
-                )
-            ),
-            Padding(
-              child: ButtonTheme(
-                  child: FlatButton(
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                      size: 24,
-                    ),
-                    onPressed: () => showDialog(
-                        context: context,
-                        builder: DeleteLinkDialog(
-                          link: link,
-                          onDelete: deleteLink,
-                        ).builder
-                    ),
-                  ),
-                  minWidth: 24
+      children: <Widget>[
+        Expanded(
+            child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(link.description.isEmpty ? '<no description>' : link.description),
+          ),
+          subtitle: Text(
+            link.url,
+            overflow: TextOverflow.ellipsis,
+          ),
+          onTap: () => Utils.launchURL(link.url),
+        )),
+        Padding(
+          child: ButtonTheme(
+              child: FlatButton(
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 24,
+                ),
+                onPressed: () => showDialog(
+                    context: context,
+                    builder: DeleteLinkDialog(
+                      link: link,
+                      onDelete: deleteLink,
+                    ).builder),
               ),
-              padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-            ),
-          ],
-          crossAxisAlignment: CrossAxisAlignment.end,
-        )
-    );
+              minWidth: 24),
+          padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+        ),
+      ],
+      crossAxisAlignment: CrossAxisAlignment.end,
+    ));
   }
 }

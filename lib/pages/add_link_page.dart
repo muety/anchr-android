@@ -60,17 +60,16 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                         decoration: const InputDecoration(
                             icon: const Icon(Icons.list),
                             labelText: 'Collection',
-                            contentPadding: const EdgeInsets.only(top: 20)
-                        ),
-                        items: appState.collections.map((c) =>
-                            DropdownMenuItem<String>(
-                              key: Key(c.id),
-                              child: Text(c.name),
-                              value: c.id,
-                            )).toList(growable: false),
+                            contentPadding: const EdgeInsets.only(top: 20)),
+                        items: appState.collections
+                            .map((c) => DropdownMenuItem<String>(
+                                  key: Key(c.id),
+                                  child: Text(c.name),
+                                  value: c.id,
+                                ))
+                            .toList(growable: false),
                         onChanged: (id) => setState(() => targetCollectionId = id),
-                      )
-                  ),
+                      )),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: TextFormField(
@@ -81,8 +80,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                           labelText: 'Link',
                         ),
                         onSaved: (url) => targetUrl = url,
-                        validator: (url) => Utils.validateUrl(url) ? null : 'Not a valid URL.'
-                    ),
+                        validator: (url) => Utils.validateUrl(url) ? null : 'Not a valid URL.'),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -93,8 +91,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                           hintText: 'Describe the link',
                           labelText: 'Description',
                         ),
-                        onSaved: (description) => targetDescription = description
-                    ),
+                        onSaved: (description) => targetDescription = description),
                   ),
                   Container(
                     width: screenSize.width,
@@ -108,10 +105,8 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                     ),
                   ),
                 ],
-              )
-          ),
-        )
-    );
+              )),
+        ));
   }
 
   void _submit() {

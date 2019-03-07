@@ -1,5 +1,6 @@
 import 'package:anchr_android/mixins/anchr_actions.dart';
 import 'package:anchr_android/models/app_state.dart';
+import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/widgets/collection_drawer.dart';
 import 'package:anchr_android/widgets/link_list.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,6 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
 
   _CollectionsPageState(AppState appState) : super(appState);
 
-
   @override
   void initState() {
     super.initState();
@@ -36,6 +36,8 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
         appState: appState,
         onCollectionSelect: (id) =>
             loadCollection(id).catchError((e) => showSnackbar('Could not load collection, sorry...')),
+        onAddCollection: (name) => addCollection(LinkCollection(name: name, links: []))
+            .catchError((e) => showSnackbar('Failed to add collection, sorry...')),
       ),
       appBar: AppBar(
         title: Text(appState.title),

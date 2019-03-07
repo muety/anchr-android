@@ -1,5 +1,6 @@
 import 'package:anchr_android/models/app_state.dart';
 import 'package:anchr_android/models/link.dart';
+import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/services/auth_service.dart';
 import 'package:anchr_android/services/collection_service.dart';
 import 'package:anchr_android/utils.dart';
@@ -15,7 +16,6 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
   AnchrState(this.appState);
 
   ScaffoldState get scaffold;
-
 
   @override
   void initState() {
@@ -40,47 +40,52 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
 
 mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
   Future<dynamic> loadCollections() {
-    return collectionService.listCollections()
-          .then((collections) {
-            if (collections != null) {
-              setState(() => appState.collections = collections);
-            }
-          })
-          .whenComplete(() => setState(() => appState.isLoading = false));
+    return collectionService.listCollections().then((collections) {
+      if (collections != null) {
+        setState(() => appState.collections = collections);
+      }
+    }).whenComplete(() => setState(() => appState.isLoading = false));
   }
 
   Future<dynamic> loadCollection(String id) {
     setState(() => appState.isLoading = true);
-    return collectionService.getCollection(id)
+    return collectionService
+        .getCollection(id)
         .then((activeCollection) => setState(() => appState.activeCollection = activeCollection))
         .whenComplete(() => setState(() => appState.isLoading = false));
   }
 
+  Future<dynamic> addCollection(LinkCollection collection) {
+    return collectionService.addCollection(collection).then((collection) {
+      showSnackbar('Collection added');
+      setState(() {
+        appState.collections.add(collection);
+        appState.activeCollection = collection;
+      });
+    });
+  }
+
   Future<dynamic> deleteLink(Link link) {
-    return collectionService.deleteLink(appState.activeCollection.id, link.id)
-        .then((_) {
-          showSnackbar('Link deleted');
-          setState(() => appState.activeCollection.links.remove(link));
-        });
+    return collectionService.deleteLink(appState.activeCollection.id, link.id).then((_) {
+      showSnackbar('Link deleted');
+      setState(() => appState.activeCollection.links.remove(link));
+    });
   }
 
   Future<dynamic> addLink(String collectionId, Link link) {
-    return collectionService.addLink(appState.activeCollection.id, link)
-        .then((link) {
-          showSnackbar('Link added');
-          setState(() => appState.activeCollection.links.add(link));
-        });
+    return collectionService.addLink(appState.activeCollection.id, link).then((link) {
+      showSnackbar('Link added');
+      setState(() => appState.activeCollection.links.add(link));
+    });
   }
 
   Future<dynamic> login(String userMail, String password) {
-    return authService.login(userMail, password)
-        .then((token) {
-          preferences.setString("user.token", token);
-          return token;
-        })
-        .then((token) {
-          _updateServiceToken(token);
-          return token;
-        });
+    return authService.login(userMail, password).then((token) {
+      preferences.setString("user.token", token);
+      return token;
+    }).then((token) {
+      _updateServiceToken(token);
+      return token;
+    });
   }
 }

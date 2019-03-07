@@ -18,7 +18,8 @@ abstract class Utils {
   }
 
   static bool validateEmail(String input) {
-    final RegExp regex = RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+    final RegExp regex = RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
     return regex.hasMatch(input);
   }
 
@@ -27,7 +28,7 @@ abstract class Utils {
    * You must either pass a ScaffoldState directly or use it in a context where a Scaffold widget is available.
    * Will do nothing if no Scaffold can be found.
    */
-  static void showSnackbar(String text, { BuildContext context, ScaffoldState scaffoldState }) {
+  static void showSnackbar(String text, {BuildContext context, ScaffoldState scaffoldState}) {
     scaffoldState = scaffoldState ?? context.ancestorStateOfType(TypeMatcher<ScaffoldState>());
     if (scaffoldState != null) {
       scaffoldState.showSnackBar(SnackBar(content: Text(text)));

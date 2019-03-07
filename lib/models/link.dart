@@ -8,10 +8,7 @@ class Link {
 
   factory Link.fromJson(Map<String, dynamic> json) {
     return Link(
-        id: json['_id'],
-        url: json['url'],
-        description: json['description'],
-        date: DateTime.parse(json['date'])
+        id: json['_id'], url: json['url'], description: json['description'], date: DateTime.parse(json['date'])
     );
   }
 }

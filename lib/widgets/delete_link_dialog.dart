@@ -13,14 +13,12 @@ class DeleteLinkDialog extends AlertDialog {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title: const Text('Delete link?'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              const Text('Are you sure you want to delete this link from the collection?')
-            ],
-          ),
+      title: const Text('Delete link?'),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[const Text('Are you sure you want to delete this link from the collection?')],
         ),
+      ),
       actions: <Widget>[
         FlatButton(
           child: const Text('Cancel'),

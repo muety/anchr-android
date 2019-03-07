@@ -9,6 +9,7 @@ abstract class ApiService {
   ApiService();
 
   set token(String token) => this._token = token;
+
   set safeToken(String token) => this._token = token ?? this._token;
 
   Future<http.Response> get(String resourcePath) {
@@ -24,9 +25,6 @@ abstract class ApiService {
   }
 
   Map<String, String> _getHeaders() {
-    return {
-      'Authorization': 'Bearer $_token',
-      'Content-Type': 'application/json'
-    };
+    return {'Authorization': 'Bearer $_token', 'Content-Type': 'application/json'};
   }
 }

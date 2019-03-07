@@ -26,9 +26,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery
-        .of(context)
-        .size;
+    final Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
         key: _scaffoldKey,
@@ -52,8 +50,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                         labelText: 'E-Mail',
                       ),
                       onSaved: (val) => userMail = val,
-                      validator: (val) => Utils.validateEmail(val) ? null : 'Not a valid e-mail address.'
-                  ),
+                      validator: (val) => Utils.validateEmail(val) ? null : 'Not a valid e-mail address.'),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -65,8 +62,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                       ),
                       obscureText: true,
                       onSaved: (val) => userPassword = val,
-                      validator: (val) => val.isNotEmpty ? null : 'Please enter a password.'
-                  ),
+                      validator: (val) => val.isNotEmpty ? null : 'Please enter a password.'),
                 ),
                 Container(
                   width: screenSize.width,
@@ -74,9 +70,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: RaisedButton(
                       child: const Text('Login', style: TextStyle(color: Colors.white)),
-                      color: Theme
-                          .of(context)
-                          .primaryColor,
+                      color: Theme.of(context).primaryColor,
                       onPressed: _submit,
                     ),
                   ),

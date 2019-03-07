@@ -19,10 +19,8 @@ samples, guidance on mobile development, and a full API reference.
 * State handling architecture inspired by [vanilla](https://github.com/brianegan/flutter_architecture_samples/tree/master/example/vanilla).
 
 ## To Do
-* Caching
-* Add collections
 * Delete collections
-* Login Page
+* Caching
 * Content receiver
 * String constants
 * Refresh token

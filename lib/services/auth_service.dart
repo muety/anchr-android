@@ -13,10 +13,7 @@ class AuthService extends ApiService {
   AuthService._internal();
 
   Future<String> login(String email, String password) async {
-    final data = {
-      'email': email,
-      'password': password
-    };
+    final data = {'email': email, 'password': password};
     final res = await super.post('/auth/token', data);
     if (res.statusCode != 200) {
       throw Exception(res.body);
