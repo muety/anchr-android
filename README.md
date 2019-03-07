@@ -20,7 +20,6 @@ samples, guidance on mobile development, and a full API reference.
 
 ## To Do
 * Caching
-* Add links
 * Add collections
 * Delete collections
 * Login Page

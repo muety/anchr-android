@@ -117,7 +117,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
   void _submit() {
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
-      collectionService.addLink(targetCollectionId, Link(url: targetUrl, description: targetDescription))
+      addLink(targetCollectionId, Link(url: targetUrl, description: targetDescription))
           .then((_) => Navigator.of(context).pop())
           .catchError((e) => showSnackbar('Could not add link, sorry...'));
     }
