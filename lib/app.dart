@@ -1,8 +1,10 @@
-import 'package:anchr_android/mixins/anchr_actions.dart';
-import 'package:anchr_android/models/app_state.dart';
+import 'package:anchr_android/database/collection_db_helper.dart';
+import 'package:anchr_android/database/link_db_helper.dart';
 import 'package:anchr_android/pages/add_link_page.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/pages/login_page.dart';
+import 'package:anchr_android/state/anchr_actions.dart';
+import 'package:anchr_android/state/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +23,12 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
 
   @override
   void initState() {
+    _init();
+  }
+
+  void _init() async {
+    await CollectionDbHelper().open('collection.db');
+    await LinkDbHelper().open('link.db');
     _loadPrefs();
   }
 

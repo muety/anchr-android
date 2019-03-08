@@ -1,6 +1,6 @@
-import 'package:anchr_android/models/app_state.dart';
 import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/pages/login_page.dart';
+import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/widgets/add_collection_dialog.dart';
 import 'package:flutter/material.dart';
 

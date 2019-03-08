@@ -1,6 +1,6 @@
-import 'package:anchr_android/mixins/anchr_actions.dart';
-import 'package:anchr_android/models/app_state.dart';
 import 'package:anchr_android/models/link_collection.dart';
+import 'package:anchr_android/state/anchr_actions.dart';
+import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/widgets/collection_drawer.dart';
 import 'package:anchr_android/widgets/link_list.dart';
 import 'package:flutter/material.dart';

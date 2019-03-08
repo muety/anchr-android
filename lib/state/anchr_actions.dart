@@ -1,8 +1,8 @@
-import 'package:anchr_android/models/app_state.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/services/auth_service.dart';
 import 'package:anchr_android/services/collection_service.dart';
+import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,11 +1,15 @@
 import 'dart:convert';
 
+import 'package:anchr_android/database/collection_db_helper.dart';
+import 'package:anchr_android/database/link_db_helper.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/services/api_service.dart';
 
 class CollectionService extends ApiService {
   static final CollectionService _instance = new CollectionService._internal();
+  final CollectionDbHelper collectionDbHelper = CollectionDbHelper();
+  final LinkDbHelper linkDbHelper = LinkDbHelper();
 
   factory CollectionService({String token}) {
     _instance.safeToken = token;
@@ -15,23 +19,33 @@ class CollectionService extends ApiService {
   CollectionService._internal();
 
   Future<List<LinkCollection>> listCollections() async {
-    final res = await super.get('/collection?short=true');
-    if (res.statusCode == 200) {
-      return (json.decode(res.body) as List<dynamic>)
-          .map((c) => LinkCollection.fromJson(c))
-          .where((c) => c.name != null)
-          .toList();
-    } else {
-      throw Exception(res.body);
+    try {
+      final res = await super.get('/collection?short=true');
+      if (res.statusCode == 200) {
+        List<LinkCollection> collections = (json.decode(res.body) as List<dynamic>)
+            .map((c) => LinkCollection.fromJson(c))
+            .where((c) => c.name != null)
+            .toList();
+        collectionDbHelper.insertBatch(collections);
+        return collections;
+      } else throw Exception(res.body);
+    } catch (e) {
+      return collectionDbHelper.findAll();
     }
   }
 
   Future<LinkCollection> getCollection(String id) async {
-    final res = await super.get('/collection/$id');
-    if (res.statusCode == 200) {
-      return LinkCollection.fromJson(json.decode(res.body));
-    } else {
-      throw Exception(res.body);
+    try {
+      final res = await super.get('/collection/$id');
+      if (res.statusCode == 200) {
+        LinkCollection collection = LinkCollection.fromJson(json.decode(res.body));
+        linkDbHelper.insertBatch(collection.links, collection.id);
+        return collection;
+      } else throw Exception(res.body);
+    } catch (e) {
+        LinkCollection collection = await collectionDbHelper.findOne(id);
+        collection.links = await linkDbHelper.findAllByCollection(id);
+        return collection;
     }
   }
 
