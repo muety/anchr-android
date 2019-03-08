@@ -93,4 +93,9 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
       return token;
     });
   }
+
+  Future<dynamic> logout() {
+    preferences.clear();
+    return Future.value(null);
+  }
 }

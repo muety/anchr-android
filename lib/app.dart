@@ -46,7 +46,7 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
           //5
           CollectionsPage.routeName: (BuildContext context) => defaultCollectionsPage, //6
           AddLinkPage.routeName: (BuildContext context) => defaultAddLinkPage, //7
-          LoginPage.routeName: (BuildContext context) => defaultAddLinkPage //7
+          LoginPage.routeName: (BuildContext context) => defaultLoginPage //7
         });
   }
 

@@ -1,5 +1,6 @@
 import 'package:anchr_android/models/app_state.dart';
 import 'package:anchr_android/models/types.dart';
+import 'package:anchr_android/pages/login_page.dart';
 import 'package:anchr_android/widgets/add_collection_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -7,8 +8,9 @@ class CollectionDrawer extends StatefulWidget {
   final AppState appState;
   final Function(String collectionId) onCollectionSelect;
   final AddCollection onAddCollection;
+  final OnLogout onLogout;
 
-  const CollectionDrawer({Key key, this.appState, this.onCollectionSelect, this.onAddCollection}) : super(key: key);
+  const CollectionDrawer({Key key, this.appState, this.onCollectionSelect, this.onAddCollection, this.onLogout}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CollectionDrawerState();
@@ -25,8 +27,32 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
 
   Widget _getDrawerItem(BuildContext ctx, int idx) {
     if (idx == 0) {
-      return Container(
-        child: ListTile(title: Text('Collections', style: Theme.of(ctx).textTheme.title.copyWith(color: Colors.white))),
+      return DrawerHeader(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              child: Text('Collections', style: Theme.of(ctx).textTheme.title.copyWith(color: Colors.white)),
+              padding: const EdgeInsets.only(bottom: 8),
+            ),
+            Padding(
+              child: Text(widget.appState.user, style: Theme.of(ctx).textTheme.body1.copyWith(color: Colors.white)),
+              padding: const EdgeInsets.only(bottom: 16),
+            ),
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  RaisedButton(
+                    child: const Text('Logout'),
+                    onPressed: () => widget.onLogout().then((_) => Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, (_) => false)),
+                    color: Theme.of(ctx).accentColor,
+                  )
+                ],
+                mainAxisAlignment: MainAxisAlignment.end,
+              ),
+            )
+          ],
+        ),
         decoration: BoxDecoration(color: Theme.of(ctx).primaryColor),
       );
     } else if (idx == widget.appState.collections.length + 1) {

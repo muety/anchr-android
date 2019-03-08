@@ -39,6 +39,7 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
             loadCollection(id).catchError((e) => showSnackbar('Could not load collection, sorry...')),
         onAddCollection: (name) => addCollection(LinkCollection(name: name, links: []))
             .catchError((e) => showSnackbar('Failed to add collection, sorry...')),
+        onLogout: logout,
       ),
       appBar: AppBar(
         title: Text(appState.title),
