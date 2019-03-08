@@ -15,9 +15,6 @@ dependencies:
   flutter_svg: ^0.10.3
   shared_preferences: ^0.4.3
   sqflite: ^1.1.0
-  share:
-    git:
-      url: https://github.com/d-silveira/flutter-share.git
 
 dev_dependencies:
   flutter_test:

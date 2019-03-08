@@ -23,19 +23,17 @@ class CollectionService extends ApiService {
 
   Future<List<LinkCollection>> listCollections() async {
     try {
-      return _listCollectionsOnline().timeout(Duration(seconds: timeoutSecs), onTimeout: throw TimeoutException('Timeout'));
+      return _listCollectionsOnline().timeout(Duration(seconds: timeoutSecs), onTimeout: () => _listCollectionsOffline());
     } catch (e) {
-      return collectionDbHelper.findAll();
+      return _listCollectionsOffline();
     }
   }
 
   Future<LinkCollection> getCollection(String id) async {
     try {
-      return _getCollectionOnline(id).timeout(Duration(seconds: timeoutSecs), onTimeout: throw TimeoutException('Timeout'));
+      return _getCollectionOnline(id).timeout(Duration(seconds: timeoutSecs), onTimeout: () => _getCollectionOffline(id));
     } catch (e) {
-        LinkCollection collection = await collectionDbHelper.findOne(id);
-        collection.links = await linkDbHelper.findAllByCollection(id);
-        return collection;
+        return _getCollectionOffline(id);
     }
   }
 
@@ -96,6 +94,16 @@ class CollectionService extends ApiService {
       linkDbHelper.insertBatch(collection.links, collection.id);
       return collection;
     } else throw Exception(res.body);
+  }
+
+  Future<List<LinkCollection>> _listCollectionsOffline() async {
+    return collectionDbHelper.findAll();
+  }
+
+  Future<LinkCollection> _getCollectionOffline(String id) async {
+    LinkCollection collection = await collectionDbHelper.findOne(id);
+    collection.links = await linkDbHelper.findAllByCollection(id);
+    return collection;
   }
 
 }
