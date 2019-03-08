@@ -64,7 +64,6 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
       showSnackbar('Collection added');
       setState(() {
         appState.collections.add(collection);
-        appState.collections.sort();
         appState.activeCollection = collection;
       });
     });
