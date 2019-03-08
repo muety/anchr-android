@@ -15,8 +15,6 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
 
   AnchrState(this.appState);
 
-  ScaffoldState get scaffold;
-
   @override
   void initState() {
     super.initState();
@@ -30,7 +28,7 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
     }
   }
 
-  void showSnackbar(String text) => Utils.showSnackbar(text, scaffoldState: scaffold);
+  void showSnackbar(String text) => Utils.showSnackbar(text, scaffoldState: appState.currentState);
 
   void _updateServiceToken(String token) {
     collectionService.safeToken = token;
@@ -50,13 +48,10 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
 
   Future<dynamic> loadCollection(String id) {
     setState(() => appState.isLoading = true);
-    return collectionService
-        .getCollection(id)
-        .then((activeCollection) {
-          setState(() => appState.activeCollection = activeCollection);
-          preferences.setString('collection.last_active', activeCollection.id);
-        })
-        .whenComplete(() => setState(() => appState.isLoading = false));
+    return collectionService.getCollection(id).then((activeCollection) {
+      setState(() => appState.activeCollection = activeCollection);
+      setLastActiveCollection(appState.activeCollection.id);
+    }).whenComplete(() => setState(() => appState.isLoading = false));
   }
 
   Future<dynamic> addCollection(LinkCollection collection) {
@@ -77,9 +72,9 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
   }
 
   Future<dynamic> addLink(String collectionId, Link link) {
-    return collectionService.addLink(appState.activeCollection.id, link).then((link) {
+    return collectionService.addLink(collectionId, link).then((link) {
       showSnackbar('Link added');
-      setState(() => appState.activeCollection.links.insert(0, link));
+      setState(() => appState.collections.firstWhere((c) => c.id == collectionId).links.insert(0, link));
     });
   }
 
@@ -98,4 +93,6 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     preferences.clear();
     return Future.value(null);
   }
+
+  void setLastActiveCollection(String id) => preferences.setString('collection.last_active', id);
 }

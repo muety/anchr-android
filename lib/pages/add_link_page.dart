@@ -1,4 +1,5 @@
 import 'package:anchr_android/models/link.dart';
+import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/utils.dart';
@@ -21,6 +22,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
 
   _AddLinkPageState(AppState appState) : super(appState);
 
+  bool isInitialPage = false;
   bool attemptedToLoad = false;
   String targetCollectionId;
   String targetUrl;
@@ -32,14 +34,19 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
 
     if (appState.collections.isEmpty && !attemptedToLoad) {
       loadCollections()
+          .then((_) => loadCollection(appState.collections.first.id))
           .then((_) => setState(() => targetCollectionId = appState.activeCollection.id))
           .catchError((e) => showSnackbar('Could not load collections, sorry...'));
       attemptedToLoad = true;
+      isInitialPage = true;
     }
 
     if (targetCollectionId == null && appState.hasData) {
       targetCollectionId = appState.activeCollection.id;
     }
+
+    appState.currentContext = _scaffoldKey.currentContext;
+    appState.currentState = _scaffoldKey.currentState;
 
     return Scaffold(
         key: _scaffoldKey,
@@ -113,11 +120,14 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
       addLink(targetCollectionId, Link(url: targetUrl, description: targetDescription))
-          .then((_) => Navigator.of(context).pop())
+          .then((_) {
+            if (!isInitialPage) Navigator.of(context).pop();
+            else {
+              Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName);
+              setLastActiveCollection(targetCollectionId);
+            }
+          })
           .catchError((e) => showSnackbar('Could not add link, sorry...'));
     }
   }
-
-  @override
-  ScaffoldState get scaffold => _scaffoldKey.currentState;
 }

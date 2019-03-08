@@ -31,6 +31,9 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
 
   @override
   Widget build(BuildContext context) {
+    appState.currentContext = _scaffoldKey.currentContext;
+    appState.currentState = _scaffoldKey.currentState;
+
     return Scaffold(
       key: _scaffoldKey,
       drawer: CollectionDrawer(
@@ -90,7 +93,4 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
       showSnackbar('Could not load collections, sorry...');
     }
   }
-
-  @override
-  ScaffoldState get scaffold => _scaffoldKey.currentState;
 }

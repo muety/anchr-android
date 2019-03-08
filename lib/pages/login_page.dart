@@ -28,6 +28,9 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
 
+    appState.currentContext = _scaffoldKey.currentContext;
+    appState.currentState = _scaffoldKey.currentState;
+
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -89,7 +92,4 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
           .catchError((e) => showSnackbar('Could not log in, sorry...'));
     }
   }
-
-  @override
-  ScaffoldState get scaffold => _scaffoldKey.currentState;
 }
