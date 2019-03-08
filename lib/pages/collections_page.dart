@@ -4,6 +4,7 @@ import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/widgets/collection_drawer.dart';
 import 'package:anchr_android/widgets/link_list.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CollectionsPage extends StatefulWidget {
   static const String routeName = '/collection';
@@ -76,10 +77,13 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
   }
 
   void _initData() async {
+    final prefs = await SharedPreferences.getInstance();
     try {
       await loadCollections();
       if (appState.collections != null && appState.collections.isNotEmpty) {
-        await loadCollection(appState.collections.first.id);
+        var lastActive = prefs.getString('collection.last_active');
+        var loadId = appState.collections.any((c) => c.id == lastActive) ? lastActive : appState.collections.first.id;
+        await loadCollection(loadId);
       }
     } catch (e) {
       showSnackbar('Could not load collections, sorry...');

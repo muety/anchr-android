@@ -52,7 +52,10 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     setState(() => appState.isLoading = true);
     return collectionService
         .getCollection(id)
-        .then((activeCollection) => setState(() => appState.activeCollection = activeCollection))
+        .then((activeCollection) {
+          setState(() => appState.activeCollection = activeCollection);
+          preferences.setString('collection.last_active', activeCollection.id);
+        })
         .whenComplete(() => setState(() => appState.isLoading = false));
   }
 
