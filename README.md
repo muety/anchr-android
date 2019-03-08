@@ -19,8 +19,8 @@ samples, guidance on mobile development, and a full API reference.
 * State handling architecture inspired by [vanilla](https://github.com/brianegan/flutter_architecture_samples/tree/master/example/vanilla).
 
 ## To Do
-* Delete collections
-* Caching
+* Add ability to delete collections
+* Improve database helpers (e.g. hide one-to-many relation between collections and links from the outside)
 * Content receiver
-* String constants
-* Refresh token
+* Define all strings as constants
+* Automatically refresh token

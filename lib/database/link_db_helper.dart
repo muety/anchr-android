@@ -73,4 +73,8 @@ class LinkDbHelper {
   Future<void> deleteAllByCollection(String collectionId) async {
     await db.delete(tableName, where: '$columnCollectionId = ?', whereArgs: [collectionId]);
   }
+
+  Future<void> deleteById(String id) async {
+    await db.delete(tableName, where: '$columnId = ?', whereArgs: [id]);
+  }
 }

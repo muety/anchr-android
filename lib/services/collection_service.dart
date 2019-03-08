@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:anchr_android/database/collection_db_helper.dart';
@@ -8,6 +9,8 @@ import 'package:anchr_android/services/api_service.dart';
 
 class CollectionService extends ApiService {
   static final CollectionService _instance = new CollectionService._internal();
+
+  static const int timeoutSecs = 5;
   final CollectionDbHelper collectionDbHelper = CollectionDbHelper();
   final LinkDbHelper linkDbHelper = LinkDbHelper();
 
@@ -20,15 +23,7 @@ class CollectionService extends ApiService {
 
   Future<List<LinkCollection>> listCollections() async {
     try {
-      final res = await super.get('/collection?short=true');
-      if (res.statusCode == 200) {
-        List<LinkCollection> collections = (json.decode(res.body) as List<dynamic>)
-            .map((c) => LinkCollection.fromJson(c))
-            .where((c) => c.name != null)
-            .toList();
-        collectionDbHelper.insertBatch(collections);
-        return collections;
-      } else throw Exception(res.body);
+      return _listCollectionsOnline().timeout(Duration(seconds: timeoutSecs), onTimeout: throw TimeoutException('Timeout'));
     } catch (e) {
       return collectionDbHelper.findAll();
     }
@@ -36,12 +31,7 @@ class CollectionService extends ApiService {
 
   Future<LinkCollection> getCollection(String id) async {
     try {
-      final res = await super.get('/collection/$id');
-      if (res.statusCode == 200) {
-        LinkCollection collection = LinkCollection.fromJson(json.decode(res.body));
-        linkDbHelper.insertBatch(collection.links, collection.id);
-        return collection;
-      } else throw Exception(res.body);
+      return _getCollectionOnline(id).timeout(Duration(seconds: timeoutSecs), onTimeout: throw TimeoutException('Timeout'));
     } catch (e) {
         LinkCollection collection = await collectionDbHelper.findOne(id);
         collection.links = await linkDbHelper.findAllByCollection(id);
@@ -58,7 +48,10 @@ class CollectionService extends ApiService {
     if (res.statusCode != 201) {
       throw Exception(res.body);
     }
-    return LinkCollection.fromJson(json.decode(res.body));
+    collection = LinkCollection.fromJson(json.decode(res.body));
+    collectionDbHelper.insert(collection);
+    linkDbHelper.insertBatch(collection.links, collection.id);
+    return collection;
   }
 
   Future<Null> deleteLink(String collectionId, String linkId) async {
@@ -66,6 +59,7 @@ class CollectionService extends ApiService {
     if (res.statusCode != 200) {
       throw Exception(res.body);
     }
+    linkDbHelper.deleteById(linkId);
   }
 
   Future<Link> addLink(String collectionId, Link link) async {
@@ -78,6 +72,30 @@ class CollectionService extends ApiService {
     if (res.statusCode != 201) {
       throw Exception(res.body);
     }
-    return Link.fromJson(json.decode(res.body));
+    link = Link.fromJson(json.decode(res.body));
+    linkDbHelper.insert(link, collectionId);
+    return link;
   }
+
+  Future<List<LinkCollection>> _listCollectionsOnline() async {
+    final res = await super.get('/collection?short=true');
+    if (res.statusCode == 200) {
+      List<LinkCollection> collections = (json.decode(res.body) as List<dynamic>)
+          .map((c) => LinkCollection.fromJson(c))
+          .where((c) => c.name != null)
+          .toList();
+      collectionDbHelper.insertBatch(collections);
+      return collections;
+    } else throw Exception(res.body);
+  }
+
+  Future<LinkCollection> _getCollectionOnline(String id) async {
+    final res = await super.get('/collection/$id');
+    if (res.statusCode == 200) {
+      LinkCollection collection = LinkCollection.fromJson(json.decode(res.body));
+      linkDbHelper.insertBatch(collection.links, collection.id);
+      return collection;
+    } else throw Exception(res.body);
+  }
+
 }
