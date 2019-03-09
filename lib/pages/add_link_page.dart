@@ -9,8 +9,9 @@ class AddLinkPage extends StatefulWidget {
   static const String routeName = '/add';
   static const String title = 'Add new link';
   final AppState appState;
+  final Map<dynamic, dynamic> linkData;
 
-  AddLinkPage(this.appState, {Key key}) : super(key: key);
+  AddLinkPage(this.appState, {this.linkData, Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AddLinkPageState(appState);
@@ -81,6 +82,9 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: TextFormField(
                         key: Key('link'),
+                        initialValue: widget.linkData != null && widget.linkData.containsKey('text')
+                            ? widget.linkData['text']
+                            : '',
                         decoration: const InputDecoration(
                           icon: const Icon(Icons.link),
                           hintText: 'E.g. https://duckduckgo.com',
@@ -93,6 +97,9 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: TextFormField(
                         key: Key('description'),
+                        initialValue: widget.linkData != null && widget.linkData.containsKey('subject')
+                            ? widget.linkData['subject']
+                            : '',
                         decoration: const InputDecoration(
                           icon: const Icon(Icons.text_fields),
                           hintText: 'Describe the link',
@@ -119,15 +126,14 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
   void _submit() {
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
-      addLink(targetCollectionId, Link(url: targetUrl, description: targetDescription))
-          .then((_) {
-            if (!isInitialPage) Navigator.of(context).pop();
-            else {
-              Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName);
-              setLastActiveCollection(targetCollectionId);
-            }
-          })
-          .catchError((e) => showSnackbar('Could not add link, sorry...'));
+      addLink(targetCollectionId, Link(url: targetUrl, description: targetDescription)).then((_) {
+        if (!isInitialPage)
+          Navigator.of(context).pop();
+        else {
+          Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName);
+          setLastActiveCollection(targetCollectionId);
+        }
+      }).catchError((e) => showSnackbar('Could not add link, sorry...'));
     }
   }
 }

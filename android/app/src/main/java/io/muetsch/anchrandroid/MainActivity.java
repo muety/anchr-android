@@ -21,31 +21,36 @@ public class MainActivity extends FlutterActivity {
         super.onCreate(savedInstanceState);
         GeneratedPluginRegistrant.registerWith(this);
 
-        Intent intent = getIntent();
+        handleSendIntent(getIntent());
+
+        new MethodChannel(getFlutterView(), "app.channel.shared.data").setMethodCallHandler(
+                new MethodCallHandler() {
+                    @Override
+                    public void onMethodCall(MethodCall call, MethodChannel.Result result) {
+                        if (call.method.contentEquals("getSharedData")) {
+                            result.success(sharedData);
+                            sharedData.clear();
+                        }
+                    }
+                }
+        );
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleSendIntent(intent);
+    }
+
+    private void handleSendIntent(Intent intent) {
         String action = intent.getAction();
         String type = intent.getType();
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
-                handleSendText(intent); // Handle text being sent
+                sharedData.put("subject", intent.getStringExtra(Intent.EXTRA_SUBJECT));
+                sharedData.put("text", intent.getStringExtra(Intent.EXTRA_TEXT));
             }
         }
-
-        new MethodChannel(getFlutterView(), "app.channel.shared.data").setMethodCallHandler(
-            new MethodCallHandler() {
-                @Override
-                public void onMethodCall(MethodCall call, MethodChannel.Result result) {
-                    if (call.method.contentEquals("getSharedData")) {
-                        result.success(sharedData);
-                        sharedData.clear();
-                    }
-                }
-            }
-        );
-    }
-
-    void handleSendText(Intent intent) {
-        sharedData.put("subject", intent.getStringExtra(Intent.EXTRA_SUBJECT));
-        sharedData.put("text", intent.getStringExtra(Intent.EXTRA_TEXT));
     }
 }

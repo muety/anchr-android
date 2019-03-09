@@ -19,7 +19,7 @@ class AnchrApp extends StatefulWidget {
 class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
   static const platform = const MethodChannel('app.channel.shared.data');
 
-  Map<dynamic, dynamic> sharedData;
+  Map<dynamic, dynamic> sharedData = Map();
   bool isLoggedIn = false;
 
   _AnchrAppState(AppState appState) : super(appState);
@@ -33,23 +33,26 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     await CollectionDbHelper().open('collection.db');
     await LinkDbHelper().open('link.db');
     await _loadPrefs();
-    await _getSharedData();
+    var data = await _getSharedData();
+    setState(() => sharedData = data);
 
     SystemChannels.lifecycle.setMessageHandler((msg) {
       if (msg.contains('resumed')) {
-        _getSharedData();
-        Navigator.of(appState.currentContext).pushNamed(AddLinkPage.routeName);
+        _getSharedData().then((d) {
+          if (d.isEmpty) return;
+          Navigator.of(appState.currentContext).pushNamedAndRemoveUntil(
+              AddLinkPage.routeName, (Route<dynamic> route) => route.settings.name != AddLinkPage.routeName,
+              arguments: d);
+        });
       }
     });
   }
 
-  Future<void> _getSharedData() async {
-    var data = await platform.invokeMethod("getSharedData");
-    setState(() => sharedData = data);
-    return data;
+  Future<Map> _getSharedData() async {
+    return await platform.invokeMethod("getSharedData");
   }
 
-  Future<void> _loadPrefs() async {
+  Future<SharedPreferences> _loadPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       isLoggedIn = prefs.getString("user.mail") != null && prefs.getString("user.token") != null;
@@ -59,14 +62,20 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
 
   @override
   Widget build(BuildContext context) {
+    var linkData = Map.from(sharedData);
+    sharedData.clear();
+
     final CollectionsPage defaultCollectionsPage = CollectionsPage(appState);
-    final AddLinkPage defaultAddLinkPage = AddLinkPage(appState);
+    final AddLinkPage defaultAddLinkPage = AddLinkPage(appState, linkData: linkData);
     final LoginPage defaultLoginPage = LoginPage(appState);
 
     StatefulWidget startingPage;
-    if (!isLoggedIn) startingPage = defaultLoginPage;
-    else if (sharedData != null && sharedData.length > 0) startingPage = defaultAddLinkPage;
-    else startingPage = defaultCollectionsPage;
+    if (!isLoggedIn)
+      startingPage = defaultLoginPage;
+    else if (linkData != null && linkData.length > 0)
+      startingPage = defaultAddLinkPage;
+    else
+      startingPage = defaultCollectionsPage;
 
     return MaterialApp(
         title: 'Anchr.io',
@@ -76,8 +85,16 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
         routes: <String, WidgetBuilder>{
           //5
           CollectionsPage.routeName: (BuildContext context) => defaultCollectionsPage, //6
-          AddLinkPage.routeName: (BuildContext context) => defaultAddLinkPage, //7
           LoginPage.routeName: (BuildContext context) => defaultLoginPage //7
+        },
+        onGenerateRoute: (RouteSettings settings) {
+          switch (settings.name) {
+            case AddLinkPage.routeName:
+              var linkData = (settings.arguments is Map) ? settings.arguments : null;
+              return MaterialPageRoute(
+                  settings: settings, builder: (context) => AddLinkPage(appState, linkData: linkData));
+              break;
+          }
         });
   }
 }
