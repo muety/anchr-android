@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 abstract class ApiService {
-  static const String _apiUrl = "http://ferdinand-muetsch.de:3005/api";
+  static const String _apiUrl = "https://anchr.io/api";
   String _token;
 
   ApiService();
