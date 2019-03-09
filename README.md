@@ -21,6 +21,5 @@ samples, guidance on mobile development, and a full API reference.
 ## To Do
 * Add ability to delete collections
 * Improve database helpers (e.g. hide one-to-many relation between collections and links from the outside)
-* Receive share intent
 * Define all strings as constants
 * Automatically refresh token

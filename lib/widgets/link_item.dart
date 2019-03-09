@@ -12,46 +12,59 @@ class LinkItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Row(
-          children: <Widget>[
-            Expanded(
-                child: ListTile(
-                  title: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      link.description.isEmpty ? '<no description>' : link.description,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis
-                    ),
-                  ),
-                  subtitle: Text(
-                    link.url,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  onTap: () => Utils.launchURL(link.url),
-                )
-            ),
-            Padding(
-              child: ButtonTheme(
-                  child: FlatButton(
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                      size: 24,
-                    ),
-                    onPressed: () => showDialog(
-                        context: context,
-                        builder: DeleteLinkDialog(
-                          link: link,
-                          onDelete: deleteLink,
-                        ).builder),
-                  ),
-                  minWidth: 24),
-              padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-            ),
-          ],
-          crossAxisAlignment: CrossAxisAlignment.end,
-    ));
+    return Row(
+      children: <Widget>[
+        Expanded(
+            child: ListTile(
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(link.description.isEmpty ? '<no description>' : link.description,
+                      maxLines: 1, overflow: TextOverflow.ellipsis),
+                ),
+                subtitle: Text(
+                  link.url,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                onTap: () => Utils.launchURL(link.url),
+                onLongPress: () => showMenu(
+                            context: context,
+                            items: <PopupMenuEntry>[
+                              PopupMenuItem(
+                                value: 0,
+                                child: Row(
+                                  children: <Widget>[
+                                    Icon(Icons.delete),
+                                    Text("Delete"),
+                                  ],
+                                ),
+                              ),
+                            ],
+                            position: buttonMenuPosition(context))
+                        .then((val) {
+                          if (val == 0) {
+                            showDialog(
+                                context: context,
+                                builder: DeleteLinkDialog(
+                                  link: link,
+                                  onDelete: deleteLink,
+                                ).builder);
+                          }
+                    }))),
+      ],
+      crossAxisAlignment: CrossAxisAlignment.end,
+    );
+  }
+
+  RelativeRect buttonMenuPosition(BuildContext c) {
+    final RenderBox bar = c.findRenderObject();
+    final RenderBox overlay = Overlay.of(c).context.findRenderObject();
+    final RelativeRect position = RelativeRect.fromRect(
+      Rect.fromPoints(
+        bar.localToGlobal(bar.size.topCenter(Offset.fromDirection(0)), ancestor: overlay),
+        bar.localToGlobal(bar.size.topCenter(Offset.fromDirection(0)), ancestor: overlay),
+      ),
+      Offset.zero & overlay.size,
+    );
+    return position;
   }
 }
