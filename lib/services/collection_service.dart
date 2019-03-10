@@ -23,17 +23,17 @@ class CollectionService extends ApiService {
 
   Future<List<LinkCollection>> listCollections() async {
     try {
-      return _listCollectionsOnline().timeout(Duration(seconds: timeoutSecs), onTimeout: () => _listCollectionsOffline());
+      return await _listCollectionsOnline().timeout(Duration(seconds: timeoutSecs), onTimeout: () => _listCollectionsOffline());
     } catch (e) {
-      return _listCollectionsOffline();
+      return await _listCollectionsOffline();
     }
   }
 
   Future<LinkCollection> getCollection(String id) async {
     try {
-      return _getCollectionOnline(id).timeout(Duration(seconds: timeoutSecs), onTimeout: () => _getCollectionOffline(id));
+      return await _getCollectionOnline(id).timeout(Duration(seconds: timeoutSecs), onTimeout: () => _getCollectionOffline(id));
     } catch (e) {
-        return _getCollectionOffline(id);
+      return await _getCollectionOffline(id);
     }
   }
 
