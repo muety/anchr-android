@@ -1,5 +1,6 @@
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/types.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/utils.dart';
 import 'package:anchr_android/widgets/delete_link_dialog.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class LinkItem extends StatelessWidget {
             child: ListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(link.description.isEmpty ? '<no description>' : link.description,
+                  child: Text(link.description.isEmpty ? Strings.labelNoLinkDescription : link.description,
                       maxLines: 1, overflow: TextOverflow.ellipsis),
                 ),
                 subtitle: Text(
@@ -33,8 +34,8 @@ class LinkItem extends StatelessWidget {
                                 value: 0,
                                 child: Row(
                                   children: <Widget>[
-                                    Icon(Icons.delete),
-                                    Text("Delete"),
+                                    const Icon(Icons.delete),
+                                    const Text(Strings.labelDeleteButton),
                                   ],
                                 ),
                               ),

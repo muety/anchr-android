@@ -1,4 +1,6 @@
 import 'package:anchr_android/models/link_collection.dart';
+import 'package:anchr_android/pages/add_link_page.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/widgets/collection_drawer.dart';
@@ -17,7 +19,6 @@ class CollectionsPage extends StatefulWidget {
 }
 
 class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrActions {
-  static const defaultTitle = 'Collection';
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool refreshing = false;
 
@@ -39,9 +40,9 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
       drawer: CollectionDrawer(
         appState: appState,
         onCollectionSelect: (id) =>
-            loadCollection(id).catchError((e) => showSnackbar('Could not load collection, sorry...')),
+            loadCollection(id).catchError((e) => showSnackbar(Strings.errorLoadCollection)),
         onAddCollection: (name) => addCollection(LinkCollection(name: name, links: []))
-            .catchError((e) => showSnackbar('Failed to add collection, sorry...')),
+            .catchError((e) => showSnackbar(Strings.errorAddCollection)),
         onLogout: logout,
       ),
       appBar: AppBar(
@@ -55,14 +56,14 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
           return RefreshIndicator(
             child: LinkList(
               links: widget.appState.activeCollection?.links,
-              deleteLink: (link) => deleteLink(link).catchError((e) => showSnackbar('Could not delete link, sorry...')),
+              deleteLink: (link) => deleteLink(link).catchError((e) => showSnackbar(Strings.errorDeleteLink)),
             ),
             onRefresh: () async {
               refreshing = true;
               try {
                 await loadCollection(appState.activeCollection.id);
               } catch (e) {
-                showSnackbar('Could not load collection, sorry...');
+                showSnackbar(Strings.errorLoadCollection);
               } finally {
                 refreshing = false;
               }
@@ -72,9 +73,8 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed('/add');
+          Navigator.of(context).pushNamed(AddLinkPage.routeName);
         },
-        tooltip: 'Add Link',
         child: const Icon(Icons.add),
       ),
     );
@@ -85,12 +85,12 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
     try {
       await loadCollections();
       if (appState.collections != null && appState.collections.isNotEmpty) {
-        var lastActive = prefs.getString('collection.last_active');
+        var lastActive = prefs.getString(Strings.keyLastActiveCollectionPref);
         var loadId = appState.collections.any((c) => c.id == lastActive) ? lastActive : appState.collections.first.id;
         await loadCollection(loadId);
       }
     } catch (e) {
-      showSnackbar('Could not load collections, sorry...');
+      showSnackbar(Strings.errorLoadCollections);
     }
   }
 }

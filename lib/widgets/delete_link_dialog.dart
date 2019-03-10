@@ -1,5 +1,6 @@
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/types.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:flutter/material.dart';
 
 class DeleteLinkDialog extends AlertDialog {
@@ -13,21 +14,21 @@ class DeleteLinkDialog extends AlertDialog {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Delete link?'),
+      title: const Text(Strings.titleDeleteLinkDialog),
       content: SingleChildScrollView(
         child: ListBody(
-          children: <Widget>[const Text('Are you sure you want to delete this link from the collection?')],
+          children: <Widget>[const Text(Strings.msgConfirmDeleteLink)],
         ),
       ),
       actions: <Widget>[
         FlatButton(
-          child: const Text('Cancel'),
+          child: const Text(Strings.labelCancelButton),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         FlatButton(
-          child: const Text('Yes'),
+          child: const Text(Strings.labelYesButton),
           onPressed: () {
             onDelete(link);
             Navigator.of(context).pop();

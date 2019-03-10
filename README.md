@@ -19,7 +19,9 @@ samples, guidance on mobile development, and a full API reference.
 * State handling architecture inspired by [vanilla](https://github.com/brianegan/flutter_architecture_samples/tree/master/example/vanilla).
 
 ## To Do
-* Add ability to delete collections
+* Fix offline mode
+* Change icon and app name
 * Improve database helpers (e.g. hide one-to-many relation between collections and links from the outside)
-* Define all strings as constants
 * Automatically refresh token
+* Implement `Last-Modified` checking
+* Add ability to delete collections

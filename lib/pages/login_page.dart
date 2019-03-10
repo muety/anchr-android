@@ -1,4 +1,5 @@
 import 'package:anchr_android/pages/collections_page.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/utils.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName = '/login';
-  static const String title = 'Log in';
   final AppState appState;
 
   const LoginPage(this.appState, {Key key}) : super(key: key);
@@ -34,7 +34,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(LoginPage.title),
+          title: Text(Strings.titleLoginPage),
         ),
         body: Form(
           key: _formKey,
@@ -49,11 +49,11 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                       key: Key('email'),
                       decoration: const InputDecoration(
                         icon: const Icon(Icons.person),
-                        hintText: 'E.g. you@example.org',
-                        labelText: 'E-Mail',
+                        hintText: Strings.labelEmailInputHint,
+                        labelText: Strings.labelEmailInput,
                       ),
                       onSaved: (val) => userMail = val.trim(),
-                      validator: (val) => Utils.validateEmail(val.trim()) ? null : 'Not a valid e-mail address.'),
+                      validator: (val) => Utils.validateEmail(val.trim()) ? null : Strings.errorInvalidEmail),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -61,18 +61,18 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                       key: Key('password'),
                       decoration: const InputDecoration(
                         icon: const Icon(Icons.lock),
-                        labelText: 'Passwort',
+                        labelText: Strings.labelPasswordInput,
                       ),
                       obscureText: true,
                       onSaved: (val) => userPassword = val.trim(),
-                      validator: (val) => val.trim().isNotEmpty ? null : 'Please enter a password.'),
+                      validator: (val) => val.trim().isNotEmpty ? null : Strings.errorNoPassword),
                 ),
                 Container(
                   width: screenSize.width,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: RaisedButton(
-                      child: const Text('Login', style: TextStyle(color: Colors.white)),
+                      child: const Text(Strings.labelLoginButton, style: TextStyle(color: Colors.white)),
                       color: Theme.of(context).primaryColor,
                       onPressed: _submit,
                     ),
@@ -89,7 +89,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
       _formKey.currentState.save();
       login(userMail, userPassword)
           .then((_) => Navigator.pushReplacementNamed(context, CollectionsPage.routeName))
-          .catchError((e) => showSnackbar('Could not log in, sorry...'));
+          .catchError((e) => showSnackbar(Strings.errorLogin));
     }
   }
 }

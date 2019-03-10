@@ -1,5 +1,7 @@
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/types.dart';
+import 'package:anchr_android/resources/assets.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/widgets/link_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,12 +19,12 @@ class LinkList extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
           SvgPicture.asset(
-            'assets/no_content.svg',
+            Assets.iconNoContent,
             width: 200,
           ),
           const Padding(
             padding: const EdgeInsets.all(8.0),
-            child: const Text('No Data :\'-('),
+            child: const Text(Strings.labelNoData),
           )
         ]),
       );

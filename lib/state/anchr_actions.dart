@@ -1,5 +1,6 @@
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/services/auth_service.dart';
 import 'package:anchr_android/services/collection_service.dart';
 import 'package:anchr_android/state/app_state.dart';
@@ -23,8 +24,8 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
 
   void _loadPreferences() async {
     this.preferences = await SharedPreferences.getInstance();
-    if (this.preferences.getString("user.token") != null) {
-      _updateServiceToken(this.preferences.getString("user.token"));
+    if (this.preferences.getString(Strings.keyUserTokenPref) != null) {
+      _updateServiceToken(this.preferences.getString(Strings.keyUserTokenPref));
     }
   }
 
@@ -56,7 +57,7 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
 
   Future<dynamic> addCollection(LinkCollection collection) {
     return collectionService.addCollection(collection).then((collection) {
-      showSnackbar('Collection added');
+      showSnackbar(Strings.msgCollectionAdded);
       setState(() {
         appState.collections.add(collection);
         appState.activeCollection = collection;
@@ -66,22 +67,23 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
 
   Future<dynamic> deleteLink(Link link) {
     return collectionService.deleteLink(appState.activeCollection.id, link.id).then((_) {
-      showSnackbar('Link deleted');
+      showSnackbar(Strings.msgLinkDeleted);
       setState(() => appState.activeCollection.links.remove(link));
     });
   }
 
   Future<dynamic> addLink(String collectionId, Link link) {
     return collectionService.addLink(collectionId, link).then((link) {
-      showSnackbar('Link added');
+      showSnackbar(Strings.msgLinkAdded);
       setState(() => appState.collections.firstWhere((c) => c.id == collectionId).links.insert(0, link));
     });
   }
 
   Future<dynamic> login(String userMail, String password) {
     return authService.login(userMail, password).then((token) {
-      preferences.setString("user.mail", userMail);
-      preferences.setString("user.token", token);
+      preferences.setString(Strings.keyUserMailPref, userMail);
+      preferences.setString(Strings.keyUserTokenPref, token);
+      appState.user = userMail;
       return token;
     }).then((token) {
       _updateServiceToken(token);
@@ -91,8 +93,9 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
 
   Future<dynamic> logout() {
     preferences.clear();
+    appState.user = null;
     return Future.value(null);
   }
 
-  void setLastActiveCollection(String id) => preferences.setString('collection.last_active', id);
+  void setLastActiveCollection(String id) => preferences.setString(Strings.keyLastActiveCollectionPref, id);
 }

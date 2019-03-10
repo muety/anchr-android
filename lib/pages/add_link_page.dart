@@ -1,5 +1,6 @@
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/pages/collections_page.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/utils.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 
 class AddLinkPage extends StatefulWidget {
   static const String routeName = '/add';
-  static const String title = 'Add new link';
   final AppState appState;
   final Map<dynamic, dynamic> linkData;
 
@@ -37,7 +37,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
       loadCollections()
           .then((_) => loadCollection(appState.collections.first.id))
           .then((_) => setState(() => targetCollectionId = appState.activeCollection.id))
-          .catchError((e) => showSnackbar('Could not load collections, sorry...'));
+          .catchError((e) => showSnackbar(Strings.errorLoadCollections));
       attemptedToLoad = true;
       isInitialPage = true;
     }
@@ -52,7 +52,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(AddLinkPage.title),
+          title: const Text(Strings.titleAddNewLinkPage),
         ),
         body: Form(
           key: _formKey,
@@ -67,7 +67,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                         value: targetCollectionId,
                         decoration: const InputDecoration(
                             icon: const Icon(Icons.list),
-                            labelText: 'Collection',
+                            labelText: Strings.labelCollectionInput,
                             contentPadding: const EdgeInsets.only(top: 20)),
                         items: appState.collections
                             .map((c) => DropdownMenuItem<String>(
@@ -82,28 +82,28 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: TextFormField(
                         key: Key('link'),
-                        initialValue: widget.linkData != null && widget.linkData.containsKey('text')
-                            ? widget.linkData['text']
+                        initialValue: widget.linkData != null && widget.linkData.containsKey(Strings.keySharedLinkUrl)
+                            ? widget.linkData[Strings.keySharedLinkUrl]
                             : '',
                         decoration: const InputDecoration(
                           icon: const Icon(Icons.link),
-                          hintText: 'E.g. https://duckduckgo.com',
-                          labelText: 'Link',
+                          hintText: Strings.labelLinkInputHint,
+                          labelText: Strings.labelLinkInput,
                         ),
                         onSaved: (url) => targetUrl = url.trim(),
-                        validator: (url) => Utils.validateUrl(url.trim()) ? null : 'Not a valid URL.'),
+                        validator: (url) => Utils.validateUrl(url.trim()) ? null : Strings.errorInvalidUrl),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: TextFormField(
                         key: Key('description'),
-                        initialValue: widget.linkData != null && widget.linkData.containsKey('subject')
-                            ? widget.linkData['subject']
+                        initialValue: widget.linkData != null && widget.linkData.containsKey(Strings.keySharedLinkTitle)
+                            ? widget.linkData[Strings.keySharedLinkTitle]
                             : '',
                         decoration: const InputDecoration(
                           icon: const Icon(Icons.text_fields),
-                          hintText: 'Describe the link',
-                          labelText: 'Description',
+                          hintText: Strings.labelLinkDescriptionInputHint,
+                          labelText: Strings.labelLinkDescriptionInput,
                         ),
                         onSaved: (description) => targetDescription = description),
                   ),
@@ -112,7 +112,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: RaisedButton(
-                        child: const Text('Save', style: TextStyle(color: Colors.white)),
+                        child: const Text(Strings.labelSaveButton, style: TextStyle(color: Colors.white)),
                         color: Theme.of(context).primaryColor,
                         onPressed: _submit,
                       ),
@@ -133,7 +133,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
           Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName);
           setLastActiveCollection(targetCollectionId);
         }
-      }).catchError((e) => showSnackbar('Could not add link, sorry...'));
+      }).catchError((e) => showSnackbar(Strings.errorAddLink));
     }
   }
 }

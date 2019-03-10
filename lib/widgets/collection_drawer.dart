@@ -1,5 +1,6 @@
 import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/pages/login_page.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/widgets/add_collection_dialog.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              child: Text('Collections', style: Theme.of(ctx).textTheme.title.copyWith(color: Colors.white)),
+              child: Text(Strings.titleDrawer, style: Theme.of(ctx).textTheme.title.copyWith(color: Colors.white)),
               padding: const EdgeInsets.only(bottom: 8),
             ),
             Padding(
@@ -43,7 +44,7 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
               child: Column(
                 children: <Widget>[
                   RaisedButton(
-                    child: const Text('Logout'),
+                    child: const Text(Strings.labelLogoutButton),
                     onPressed: () => widget.onLogout().then((_) => Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, (_) => false)),
                     color: Theme.of(ctx).accentColor,
                   )
@@ -57,7 +58,7 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
       );
     } else if (idx == widget.appState.collections.length + 1) {
       return ListTile(
-        title: const Text('Add collection'),
+        title: const Text(Strings.labelAddCollectionButton),
         leading: Icon(Icons.add),
         onTap: () => showDialog(
             context: context,

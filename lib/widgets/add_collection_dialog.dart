@@ -1,5 +1,6 @@
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/models/types.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:flutter/material.dart';
 
 class AddCollectionDialog extends AlertDialog {
@@ -15,22 +16,22 @@ class AddCollectionDialog extends AlertDialog {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('New Collection'),
+      title: const Text(Strings.titleNewCollectionDialog),
       content: SingleChildScrollView(
           child: Form(
               key: _formKey,
               child: ListBody(
                 children: <Widget>[
-                  const Text('Please choose a name for the new collection.'),
+                  const Text(Strings.msgChooseCollectionName),
                   Row(children: <Widget>[
                     Expanded(
                         child: TextFormField(
                           autofocus: true,
                           autovalidate: true,
-                          validator: (name) => _validateName(name) ? null : 'Name not valid or already existing',
+                          validator: (name) => _validateName(name) ? null : Strings.errorInvalidName,
                           decoration: const InputDecoration(
-                            hintText: 'Name',
-                            labelText: 'Collection Name',
+                            hintText: Strings.labelCollectionNameInputHint,
+                            labelText: Strings.labelCollectionNameInput,
                           ),
                           onSaved: (val) => newName = val,
                     ))
@@ -39,13 +40,13 @@ class AddCollectionDialog extends AlertDialog {
               ))),
       actions: <Widget>[
         FlatButton(
-          child: const Text('Cancel'),
+          child: const Text(Strings.labelCancelButton),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         FlatButton(
-          child: const Text('Add'),
+          child: const Text(Strings.labelAddButton),
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();

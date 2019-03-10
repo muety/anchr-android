@@ -3,6 +3,7 @@ import 'package:anchr_android/database/link_db_helper.dart';
 import 'package:anchr_android/pages/add_link_page.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/pages/login_page.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AnchrApp extends StatefulWidget {
-  final AppState appState = AppState.loading().copyWith(user: 'mail@ferdinand-muetsch.de');
-
   @override
-  State<AnchrApp> createState() => _AnchrAppState(appState);
+  State<AnchrApp> createState() => _AnchrAppState(AppState.loading());
 }
 
 class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
@@ -30,8 +29,8 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
   }
 
   void _init() async {
-    await CollectionDbHelper().open('collection.db');
-    await LinkDbHelper().open('link.db');
+    await CollectionDbHelper().open(Strings.keyDbCollections);
+    await LinkDbHelper().open(Strings.keyDbLinks);
     await _loadPrefs();
     var data = await _getSharedData();
     setState(() => sharedData = data);
@@ -49,13 +48,16 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
   }
 
   Future<Map> _getSharedData() async {
-    return await platform.invokeMethod("getSharedData");
+    return await platform.invokeMethod('getSharedData');
   }
 
   Future<SharedPreferences> _loadPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      isLoggedIn = prefs.getString("user.mail") != null && prefs.getString("user.token") != null;
+      final userMail = prefs.getString(Strings.keyUserMailPref);
+      final userToken = prefs.getString(Strings.keyUserTokenPref);
+      isLoggedIn = userMail != null && userToken != null;
+      appState.user = userMail;
     });
     return prefs;
   }
@@ -78,7 +80,7 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
       startingPage = defaultCollectionsPage;
 
     return MaterialApp(
-        title: 'Anchr.io',
+        title: Strings.title,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.teal, accentColor: Color(0xFFDD5237)),
         home: startingPage,

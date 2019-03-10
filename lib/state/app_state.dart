@@ -1,4 +1,5 @@
 import 'package:anchr_android/models/link_collection.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:flutter/material.dart';
 
 class AppState {
@@ -13,7 +14,7 @@ class AppState {
 
   factory AppState.loading() => AppState(isLoading: true);
 
-  String get title => this.activeCollection?.name ?? 'Collections';
+  String get title => this.activeCollection?.name ?? Strings.titleCollectionPage;
 
   bool get hasData => _collections != null && _collections.length > 0 && this.activeCollection != null;
 
