@@ -37,6 +37,7 @@ class Strings {
   static const msgLinkAdded = 'Link added';
   static const msgChooseCollectionName = 'Please choose a name for the new collection.';
   static const msgConfirmDeleteLink = 'Are you sure you want to delete this link from the collection?';
+  static const msgSignUp = '💡 If you do not have an Anchr account, yet, please sign up at';
 
   // Error messages
   static const errorLoadCollections = 'Could not load collections, sorry...';
@@ -58,4 +59,7 @@ class Strings {
   static const keyUserMailPref = 'user.mail';
   static const keyDbCollections = 'collection.db';
   static const keyDbLinks = 'link.db';
+
+  // Other
+  static const urlAnchr = 'https://anchr.io';
 }

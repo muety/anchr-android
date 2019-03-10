@@ -3,6 +3,7 @@ import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/utils.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -78,6 +79,17 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: RichText(
+                      text: TextSpan(children: <TextSpan>[
+                    TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+                    TextSpan(
+                        text: ' anchr.io.',
+                        style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                        recognizer: TapGestureRecognizer()..onTap = () => Utils.launchURL(Strings.urlAnchr))
+                  ])),
+                )
               ],
             ),
           ),
