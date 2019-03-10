@@ -30,17 +30,6 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
   }
 
   void _init() async {
-    await CollectionDbHelper().open(Strings.keyDbCollections);
-    await LinkDbHelper().open(Strings.keyDbLinks);
-    await _loadPrefs();
-
-    if (isLoggedIn) {
-      await renewToken();
-    }
-
-    var data = await _getSharedData();
-    setState(() => sharedData = data);
-
     SystemChannels.lifecycle.setMessageHandler((msg) {
       if (msg.contains('resumed')) {
         _getSharedData().then((d) {
@@ -51,6 +40,19 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
         });
       }
     });
+
+    onUnauthorizedCallback = _onUnauthorized;
+
+    await CollectionDbHelper().open(Strings.keyDbCollections);
+    await LinkDbHelper().open(Strings.keyDbLinks);
+    await _loadPrefs();
+
+    var data = await _getSharedData();
+    setState(() => sharedData = data);
+
+    if (isLoggedIn) {
+      await renewToken();
+    }
   }
 
   Future<Map> _getSharedData() async {
@@ -66,6 +68,11 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
       appState.user = userMail;
     });
     return prefs;
+  }
+
+  _onUnauthorized() {
+    logout();
+    Navigator.of(appState.currentContext).pushNamedAndRemoveUntil(LoginPage.routeName, (_) => false);
   }
 
   @override

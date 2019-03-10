@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/services/api_service.dart';
 
 class AuthService extends ApiService {
   static final AuthService _instance = new AuthService._internal();
 
-  factory AuthService({String token}) {
+  factory AuthService({String token, OnUnauthorized onUnauthorized}) {
     _instance.safeToken = token;
+    _instance.safeOnUnauthorized = onUnauthorized;
     return _instance;
   }
 

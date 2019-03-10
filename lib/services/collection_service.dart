@@ -5,6 +5,7 @@ import 'package:anchr_android/database/collection_db_helper.dart';
 import 'package:anchr_android/database/link_db_helper.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
+import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/services/api_service.dart';
 
 class CollectionService extends ApiService {
@@ -14,8 +15,9 @@ class CollectionService extends ApiService {
   final CollectionDbHelper collectionDbHelper = CollectionDbHelper();
   final LinkDbHelper linkDbHelper = LinkDbHelper();
 
-  factory CollectionService({String token}) {
+  factory CollectionService({String token, OnUnauthorized onUnauthorized}) {
     _instance.safeToken = token;
+    _instance.safeOnUnauthorized = onUnauthorized;
     return _instance;
   }
 

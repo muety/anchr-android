@@ -2,6 +2,7 @@ import 'package:anchr_android/database/collection_db_helper.dart';
 import 'package:anchr_android/database/link_db_helper.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
+import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/services/auth_service.dart';
 import 'package:anchr_android/services/collection_service.dart';
@@ -12,14 +13,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AnchrState<T extends StatefulWidget> extends State<T> {
   final AppState appState;
-  final collectionService = CollectionService();
-  final authService = AuthService();
+  final CollectionService collectionService = CollectionService();
+  final AuthService authService = AuthService();
   final CollectionDbHelper collectionDbHelper = CollectionDbHelper();
   final LinkDbHelper linkDbHelper = LinkDbHelper();
 
   SharedPreferences preferences;
 
   AnchrState(this.appState);
+
+  set onUnauthorizedCallback(OnUnauthorized cb) {
+    authService.onUnauthorized = cb;
+    collectionService.onUnauthorized = cb;
+  }
 
   @override
   void initState() {
