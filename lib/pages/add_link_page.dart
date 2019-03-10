@@ -23,7 +23,6 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
 
   _AddLinkPageState(AppState appState) : super(appState);
 
-  bool isInitialPage = false;
   bool attemptedToLoad = false;
   String targetCollectionId;
   String targetUrl;
@@ -39,7 +38,6 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
           .then((_) => setState(() => targetCollectionId = appState.activeCollection.id))
           .catchError((e) => showSnackbar(Strings.errorLoadCollections));
       attemptedToLoad = true;
-      isInitialPage = true;
     }
 
     if (targetCollectionId == null && appState.hasData) {
@@ -127,11 +125,12 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
       addLink(targetCollectionId, Link(url: targetUrl, description: targetDescription)).then((_) {
-        if (!isInitialPage)
+        if (widget.linkData == null || widget.linkData.isEmpty) {
           Navigator.of(context).pop();
+        }
         else {
-          Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName);
           setLastActiveCollection(targetCollectionId);
+          Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName);
         }
       }).catchError((e) => showSnackbar(Strings.errorAddLink));
     }

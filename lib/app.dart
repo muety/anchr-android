@@ -82,7 +82,6 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
   @override
   Widget build(BuildContext context) {
     var linkData = Map.from(sharedData);
-    sharedData.clear();
 
     final SplashPage defaultSplashPage = SplashPage();
     final CollectionsPage defaultCollectionsPage = CollectionsPage(appState);
@@ -95,6 +94,7 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
         startingPage = defaultLoginPage;
       } else if (linkData != null && linkData.length > 0) {
         startingPage = defaultAddLinkPage;
+        sharedData.clear();
       } else {
         startingPage = defaultCollectionsPage;
       }
