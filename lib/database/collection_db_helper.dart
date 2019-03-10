@@ -1,15 +1,15 @@
+import 'package:anchr_android/database/database_helper.dart';
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:sqflite/sqflite.dart';
 
-class CollectionDbHelper {
+class CollectionDbHelper extends DatabaseHelper {
   static final CollectionDbHelper _helper = new CollectionDbHelper._internal();
+  static const int _schemaVersion = 1;
   static const String tableName = 'collection';
   static const String columnId = '_id';
   static const String columnName = 'name';
   static const String columnOwnerId = 'owner';
   static const String columnShared = 'shared';
-
-  Database db;
 
   factory CollectionDbHelper() {
     return _helper;
@@ -17,7 +17,8 @@ class CollectionDbHelper {
 
   CollectionDbHelper._internal();
 
-  _onCreate(Database db, int version) async {
+  @override
+  onCreate(Database db, int version) async {
     await db.execute('''
         create table $tableName ( 
           $columnId text primary key, 
@@ -28,23 +29,20 @@ class CollectionDbHelper {
         ''');
   }
 
-  _onUpgrade(Database db, int oldVersion, int newVersion) async {
+  @override
+  onUpgrade(Database db, int oldVersion, int newVersion) async {
     switch (oldVersion) {
       case 1:
         break;
     }
   }
 
-  Future open(String path) async {
-    db = await openDatabase(path, version: 1, onCreate: _onCreate, onUpgrade: _onUpgrade);
-  }
-
-  Future<void> insert(LinkCollection collection) async {
+  Future insert(LinkCollection collection) async {
     Map<String, dynamic> collectionMap = collection.toJson();
     await db.insert(tableName, collectionMap, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<void> insertBatch(List<LinkCollection> collections) async {
+  Future insertBatch(List<LinkCollection> collections) async {
     final batch = db.batch();
     collections.forEach((c) {
       Map<String, dynamic> collectionMap = c.toJson();
@@ -71,7 +69,10 @@ class CollectionDbHelper {
     return null;
   }
 
-  Future<void> deleteAll() async {
+  Future deleteAll() async {
     await db.delete(tableName);
   }
+
+  @override
+  int get schemaVersion => _schemaVersion;
 }

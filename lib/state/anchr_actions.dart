@@ -1,3 +1,5 @@
+import 'package:anchr_android/database/collection_db_helper.dart';
+import 'package:anchr_android/database/link_db_helper.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/resources/strings.dart';
@@ -12,6 +14,9 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
   final AppState appState;
   final collectionService = CollectionService();
   final authService = AuthService();
+  final CollectionDbHelper collectionDbHelper = CollectionDbHelper();
+  final LinkDbHelper linkDbHelper = LinkDbHelper();
+
   SharedPreferences preferences;
 
   AnchrState(this.appState);
@@ -92,10 +97,16 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
   }
 
   Future<dynamic> logout() {
-    preferences.clear();
-    appState.user = null;
+    _clearAll();
     return Future.value(null);
   }
 
   void setLastActiveCollection(String id) => preferences.setString(Strings.keyLastActiveCollectionPref, id);
+
+  void _clearAll() {
+    linkDbHelper.delete();
+    collectionDbHelper.delete();
+    preferences.clear();
+    appState.user = null;
+  }
 }

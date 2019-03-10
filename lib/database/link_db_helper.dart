@@ -1,8 +1,10 @@
+import 'package:anchr_android/database/database_helper.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:sqflite/sqflite.dart';
 
-class LinkDbHelper {
+class LinkDbHelper extends DatabaseHelper {
   static final LinkDbHelper _helper = new LinkDbHelper._internal();
+  static const int _schemaVersion = 1;
   static const String tableName = 'link';
   static const String columnId = '_id';
   static const String columnUrl = 'url';
@@ -10,15 +12,14 @@ class LinkDbHelper {
   static const String columnDate = 'date';
   static const String columnCollectionId = 'collectionId';
 
-  Database db;
-
   factory LinkDbHelper() {
     return _helper;
   }
 
   LinkDbHelper._internal();
 
-  _onCreate(Database db, int version) async {
+  @override
+  onCreate(Database db, int version) async {
     await db.execute('''
         create table $tableName ( 
           $columnId text primary key, 
@@ -30,24 +31,21 @@ class LinkDbHelper {
         ''');
   }
 
-  _onUpgrade(Database db, int oldVersion, int newVersion) async {
+  @override
+  onUpgrade(Database db, int oldVersion, int newVersion) async {
     switch (oldVersion) {
       case 1:
         break;
     }
   }
 
-  Future open(String path) async {
-    db = await openDatabase(path, version: 1, onCreate: _onCreate, onUpgrade: _onUpgrade);
-  }
-
-  Future<void> insert(Link link, String collectionId) async {
+  Future insert(Link link, String collectionId) async {
     Map<String, dynamic> linkMap = link.toJson();
     linkMap[columnCollectionId] = collectionId;
     await db.insert(tableName, linkMap, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<void> insertBatch(List<Link> links, String collectionId) async {
+  Future insertBatch(List<Link> links, String collectionId) async {
     final batch = db.batch();
     links.forEach((l) {
       Map<String, dynamic> linkMap = l.toJson();
@@ -70,11 +68,18 @@ class LinkDbHelper {
     return maps.map((l) => Link.fromJson(l)).toList();
   }
 
-  Future<void> deleteAllByCollection(String collectionId) async {
+  Future deleteAllByCollection(String collectionId) async {
     await db.delete(tableName, where: '$columnCollectionId = ?', whereArgs: [collectionId]);
   }
 
-  Future<void> deleteById(String id) async {
+  Future deleteById(String id) async {
     await db.delete(tableName, where: '$columnId = ?', whereArgs: [id]);
   }
+
+  Future deleteAll() async {
+    await db.delete(tableName);
+  }
+
+  @override
+  int get schemaVersion => _schemaVersion;
 }
