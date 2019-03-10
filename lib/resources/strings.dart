@@ -29,6 +29,7 @@ class Strings {
   static const labelAddCollectionButton = 'Add collection';
   static const labelNoLinkDescription = '<no description>';
   static const labelNoData = 'No Data :\'-(';
+  static const labelLoading = 'Loading ...';
 
   // Alert messages
   static const msgCollectionAdded = 'Collection added';

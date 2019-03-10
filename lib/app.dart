@@ -3,6 +3,7 @@ import 'package:anchr_android/database/link_db_helper.dart';
 import 'package:anchr_android/pages/add_link_page.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/pages/login_page.dart';
+import 'package:anchr_android/pages/splash_page.dart';
 import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
@@ -19,6 +20,7 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
   static const platform = const MethodChannel('app.channel.shared.data');
 
   Map<dynamic, dynamic> sharedData = Map();
+  bool initialized = false;
   bool isLoggedIn = false;
 
   _AnchrAppState(AppState appState) : super(appState);
@@ -53,6 +55,8 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     if (isLoggedIn) {
       await renewToken();
     }
+
+    setState(() => initialized = true);
   }
 
   Future<Map> _getSharedData() async {
@@ -80,17 +84,23 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     var linkData = Map.from(sharedData);
     sharedData.clear();
 
+    final SplashPage defaultSplashPage = SplashPage();
     final CollectionsPage defaultCollectionsPage = CollectionsPage(appState);
     final AddLinkPage defaultAddLinkPage = AddLinkPage(appState, linkData: linkData);
     final LoginPage defaultLoginPage = LoginPage(appState);
 
-    StatefulWidget startingPage;
-    if (!isLoggedIn)
-      startingPage = defaultLoginPage;
-    else if (linkData != null && linkData.length > 0)
-      startingPage = defaultAddLinkPage;
-    else
-      startingPage = defaultCollectionsPage;
+    Widget startingPage;
+    if (initialized) {
+      if (!isLoggedIn) {
+        startingPage = defaultLoginPage;
+      } else if (linkData != null && linkData.length > 0) {
+        startingPage = defaultAddLinkPage;
+      } else {
+        startingPage = defaultCollectionsPage;
+      }
+    } else {
+      startingPage = defaultSplashPage;
+    }
 
     return MaterialApp(
         title: Strings.title,
