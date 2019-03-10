@@ -25,6 +25,7 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
 
   @override
   void initState() {
+    super.initState();
     _init();
   }
 
@@ -32,6 +33,11 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     await CollectionDbHelper().open(Strings.keyDbCollections);
     await LinkDbHelper().open(Strings.keyDbLinks);
     await _loadPrefs();
+
+    if (isLoggedIn) {
+      await renewToken();
+    }
+
     var data = await _getSharedData();
     setState(() => sharedData = data);
 

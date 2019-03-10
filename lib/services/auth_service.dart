@@ -20,4 +20,12 @@ class AuthService extends ApiService {
     }
     return json.decode(res.body)['token'];
   }
+
+  Future<String> renew() async {
+    final res = await super.post('/auth/renew', {});
+    if (res.statusCode != 200) {
+      throw Exception(res.body);
+    }
+    return json.decode(res.body)['token'];
+  }
 }

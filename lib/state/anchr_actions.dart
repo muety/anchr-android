@@ -96,6 +96,13 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     });
   }
 
+  Future<dynamic> renewToken() {
+    return authService.renew().then((token) {
+      preferences.setString(Strings.keyUserTokenPref, token);
+      _updateServiceToken(token);
+    });
+  }
+
   Future<dynamic> logout() {
     _clearAll();
     return Future.value(null);
