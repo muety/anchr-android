@@ -23,6 +23,17 @@ Android client for Anchr.io link collections, built with **[Flutter](https://flu
 * State handling architecture inspired by [vanilla](https://github.com/brianegan/flutter_architecture_samples/tree/master/example/vanilla).
 * Generate launcher icon: `flutter packages pub run flutter_launcher_icons:main`
 
+### Release
+* Have your keystore and password ready, e.g. `~/.android/keystore.jks`
+* Make sure you have `android/key.properties`, which looks like so
+```
+storePassword=shhh
+keyPassword=shhh
+keyAlias=some_alias_eg_anchr
+storeFile=/home/you/.android/keystore.jks
+```
+* `flutter build apk --release`
+
 ## To Do
 There is still plenty of space for improvements. Those include:
 
