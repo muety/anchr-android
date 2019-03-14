@@ -5,7 +5,7 @@
 
 Android client for Anchr.io link collections, built with **[Flutter](https://flutter.dev)**. This project is in an **early development phase** and therefore not yet feature-complete or free of bugs.
 
-[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/n1try)
+[![Google Play](https://anchr.io/i/ZPaVo.png)](https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid)
 
 ## Prerequisites
 * An existing [Anchr.io](https://anchr.io) account. You can't create one using the app.
@@ -51,3 +51,5 @@ Feel free to contribute!
 
 ## License
 GNU General Public License v3 (GPL-3) @ [Ferdinand Mütsch](https://ferdinand-muetsch.de)
+
+[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/n1try)
