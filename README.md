@@ -1,4 +1,5 @@
 # Anchr for Android
+[![Say thanks](https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg)](https://saythanks.io/to/n1try)
 
 ![](https://anchr.io/i/ccrHg.png)
 
@@ -25,8 +26,9 @@ Android client for Anchr.io link collections, built with **[Flutter](https://flu
 ## To Do
 There is still plenty of space for improvements. Those include:
 
-* Add ability to delete collections
 * Add ability to sign up
+* Add ability to delete collections
+* Add ability to share collections
 * Improve database helpers (e.g. hide one-to-many relation between collections and links from the outside)
 * Enhance offline mode
   * Show cached content while initial request is pending
