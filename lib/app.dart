@@ -59,9 +59,7 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     setState(() => initialized = true);
   }
 
-  Future<Map> _getSharedData() async {
-    return await platform.invokeMethod('getSharedData');
-  }
+  Future<Map> _getSharedData() async => await platform.invokeMethod('getSharedData');
 
   Future<SharedPreferences> _loadPrefs() async {
     final prefs = await SharedPreferences.getInstance();

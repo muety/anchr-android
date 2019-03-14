@@ -19,6 +19,10 @@ abstract class ApiService {
 
   set safeOnUnauthorized(OnUnauthorized cb) => this._onUnauthorized = cb ?? this._onUnauthorized;
 
+  Future<http.Response> head(String resourcePath) {
+    return http.head(_apiUrl + resourcePath, headers: _getHeaders()).then((res) => _checkUnauthorized(res));
+  }
+
   Future<http.Response> get(String resourcePath) {
     return http.get(_apiUrl + resourcePath, headers: _getHeaders()).then((res) => _checkUnauthorized(res));
   }

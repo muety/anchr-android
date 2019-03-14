@@ -6,7 +6,9 @@ import 'package:anchr_android/database/link_db_helper.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/models/types.dart';
+import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/services/api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CollectionService extends ApiService {
   static final CollectionService _instance = new CollectionService._internal();
@@ -14,10 +16,12 @@ class CollectionService extends ApiService {
   static const int timeoutSecs = 5;
   final CollectionDbHelper collectionDbHelper = CollectionDbHelper();
   final LinkDbHelper linkDbHelper = LinkDbHelper();
+  SharedPreferences sharedPreferences;
 
-  factory CollectionService({String token, OnUnauthorized onUnauthorized}) {
+  factory CollectionService({String token, OnUnauthorized onUnauthorized, SharedPreferences prefs}) {
     _instance.safeToken = token;
     _instance.safeOnUnauthorized = onUnauthorized;
+    _instance.sharedPreferences = prefs;
     return _instance;
   }
 
@@ -25,7 +29,16 @@ class CollectionService extends ApiService {
 
   Future<List<LinkCollection>> listCollections() async {
     try {
-      return await _listCollectionsOnline().timeout(Duration(seconds: timeoutSecs), onTimeout: () => _listCollectionsOffline());
+      final lastKnownEtag = sharedPreferences.getString(Strings.keyCollectionsEtag);
+      final latestEtag = await _getCollectionsEtag();
+      sharedPreferences.setString(Strings.keyCollectionsEtag, latestEtag);
+
+      if (lastKnownEtag == latestEtag) {
+        return await _listCollectionsOffline();
+      } else {
+        return await _listCollectionsOnline()
+            .timeout(Duration(seconds: timeoutSecs), onTimeout: () => _listCollectionsOffline());
+      }
     } catch (e) {
       return await _listCollectionsOffline();
     }
@@ -33,17 +46,24 @@ class CollectionService extends ApiService {
 
   Future<LinkCollection> getCollection(String id) async {
     try {
-      return await _getCollectionOnline(id).timeout(Duration(seconds: timeoutSecs), onTimeout: () => _getCollectionOffline(id));
+      final lastKnownEtag = sharedPreferences.getString(Strings.keyCollectionEtagPrefix + id);
+      final latestEtag = await _getCollectionEtag(id);
+      sharedPreferences.setString(Strings.keyCollectionEtagPrefix + id, latestEtag);
+
+      if (lastKnownEtag == latestEtag) {
+        return await _getCollectionOffline(id);
+      } else {
+        return await _getCollectionOnline(id)
+            .timeout(Duration(seconds: timeoutSecs), onTimeout: () => _getCollectionOffline(id));
+      }
+
     } catch (e) {
       return await _getCollectionOffline(id);
     }
   }
 
   Future<LinkCollection> addCollection(LinkCollection collection) async {
-    final data = {
-      'name': collection.name,
-      'links': collection.links
-    };
+    final data = {'name': collection.name, 'links': collection.links};
     final res = await super.post('/collection', data);
     if (res.statusCode != 201) {
       throw Exception(res.body);
@@ -63,11 +83,7 @@ class CollectionService extends ApiService {
   }
 
   Future<Link> addLink(String collectionId, Link link) async {
-    final data = {
-      'collId': collectionId,
-      'description': link.description,
-      'url': link.url
-    };
+    final data = {'collId': collectionId, 'description': link.description, 'url': link.url};
     final res = await super.post('/collection/$collectionId/links', data);
     if (res.statusCode != 201) {
       throw Exception(res.body);
@@ -75,6 +91,22 @@ class CollectionService extends ApiService {
     link = Link.fromJson(json.decode(res.body));
     linkDbHelper.insert(link, collectionId);
     return link;
+  }
+
+  Future<String> _getCollectionsEtag() async {
+    final res = await super.head('/collection?short=true');
+    if (res.statusCode == 200)
+      return res.headers['etag'];
+    else
+      throw Exception(res.body);
+  }
+
+  Future<String> _getCollectionEtag(String id) async {
+    final res = await super.head('/collection/$id');
+    if (res.statusCode == 200)
+      return res.headers['etag'];
+    else
+      throw Exception(res.body);
   }
 
   Future<List<LinkCollection>> _listCollectionsOnline() async {
@@ -86,7 +118,8 @@ class CollectionService extends ApiService {
           .toList();
       collectionDbHelper.insertBatch(collections);
       return collections;
-    } else throw Exception(res.body);
+    } else
+      throw Exception(res.body);
   }
 
   Future<LinkCollection> _getCollectionOnline(String id) async {
@@ -95,7 +128,8 @@ class CollectionService extends ApiService {
       LinkCollection collection = LinkCollection.fromJson(json.decode(res.body));
       linkDbHelper.insertBatch(collection.links, collection.id);
       return collection;
-    } else throw Exception(res.body);
+    } else
+      throw Exception(res.body);
   }
 
   Future<List<LinkCollection>> _listCollectionsOffline() async {
@@ -107,5 +141,4 @@ class CollectionService extends ApiService {
     collection.links = await linkDbHelper.findAllByCollection(id);
     return collection;
   }
-
 }

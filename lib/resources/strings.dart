@@ -59,6 +59,8 @@ class Strings {
   static const keyUserMailPref = 'user.mail';
   static const keyDbCollections = 'collection.db';
   static const keyDbLinks = 'link.db';
+  static const keyCollectionsEtag = 'etag.collections';
+  static const keyCollectionEtagPrefix = 'etag.collection.';
 
   // Other
   static const urlAnchr = 'https://anchr.io';

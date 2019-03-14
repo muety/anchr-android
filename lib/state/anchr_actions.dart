@@ -38,6 +38,7 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
     if (this.preferences.getString(Strings.keyUserTokenPref) != null) {
       _updateServiceToken(this.preferences.getString(Strings.keyUserTokenPref));
     }
+    collectionService.sharedPreferences = this.preferences;
   }
 
   void showSnackbar(String text) => Utils.showSnackbar(text, scaffoldState: appState.currentState);

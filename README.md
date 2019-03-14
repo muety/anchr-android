@@ -30,7 +30,6 @@ There is still plenty of space for improvements. Those include:
 * Improve database helpers (e.g. hide one-to-many relation between collections and links from the outside)
 * Enhance offline mode
   * Show cached content while initial request is pending
-* Implement `Last-Modified` checking (_requires backend changes_)
 * Implement refresh tokens (_requires backend changes_)
 * Add tests
 * Clean up code
