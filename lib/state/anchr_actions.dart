@@ -107,7 +107,7 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     return authService.renew().then((token) {
       preferences.setString(Strings.keyUserTokenPref, token);
       _updateServiceToken(token);
-    });
+    }).catchError((e) {});
   }
 
   Future<dynamic> logout() {
