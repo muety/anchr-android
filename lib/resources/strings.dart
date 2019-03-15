@@ -5,7 +5,7 @@ class Strings {
   static const titleCollectionPage = 'Collection';
   static const titleLoginPage = 'Log In';
   static const titleAboutPage = 'About & Privacy';
-  static const titleLicencesPage = 'Open-Source Licenses';
+  static const titleLicensesPage = 'Open-Source Licenses';
   static const titleNewCollectionDialog = 'New Collection';
   static const titleDeleteLinkDialog = 'Delete link?';
   static const titleDrawer = 'Collections';
@@ -33,7 +33,7 @@ class Strings {
   static const labelNoData = 'No Data :\'-(';
   static const labelLoading = 'Loading ...';
   static const labelAboutButton = 'About & Privacy';
-  static const labelLicencesButton = 'Licenses';
+  static const labelLicensesButton = 'Licenses';
   static const labelViewCodeButton = 'View source code';
   static const labelViewLegal = 'View legal statement & privacy';
   static const labelCustomLicense = 'Custom License';
@@ -81,7 +81,7 @@ class Strings {
   All technical infrastructure is operated by Ferdinand Mütsch, however, he does not take responsibility for content that is shared through this service by a user.
   ''';
 
-  static const txtLicencesIntro = '''
+  static const txtLicensesIntro = '''
   This project is published under the "GNU General Public License v3.0" and uses the following third-party open-source software. Licenses can be viewed by clicking the respective hyperlink. Nested dependencies are not listed here, since every third-party project is responsible for adhering to its license by itself. 
   ''';
 }

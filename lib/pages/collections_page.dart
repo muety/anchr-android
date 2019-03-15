@@ -52,7 +52,7 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
             onSelected: (val) => _onOptionSelected(val, context),
             itemBuilder: (ctx) => [
               PopupMenuItem(value: 0, child: const Text(Strings.labelAboutButton)),
-              PopupMenuItem(value: 1, child: const Text(Strings.labelLicencesButton))
+              PopupMenuItem(value: 1, child: const Text(Strings.labelLicensesButton))
             ],
           )
         ],
