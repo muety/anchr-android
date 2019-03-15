@@ -83,12 +83,13 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                   padding: const EdgeInsets.only(top: 16),
                   child: RichText(
                       text: TextSpan(children: <TextSpan>[
-                    TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
-                    TextSpan(
-                        text: ' anchr.io.',
-                        style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-                        recognizer: TapGestureRecognizer()..onTap = () => Utils.launchURL(Strings.urlAnchr))
-                  ])),
+                        TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+                        TextSpan(
+                            text: ' anchr.io.',
+                            style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                            recognizer: TapGestureRecognizer()..onTap = () => Utils.launchURL(Strings.urlAnchr))
+                      ]
+                      )),
                 )
               ],
             ),

@@ -1,4 +1,5 @@
 import 'package:anchr_android/models/link_collection.dart';
+import 'package:anchr_android/pages/about_page.dart';
 import 'package:anchr_android/pages/add_link_page.dart';
 import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
@@ -39,14 +40,22 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
       key: _scaffoldKey,
       drawer: CollectionDrawer(
         appState: appState,
-        onCollectionSelect: (id) =>
-            loadCollection(id).catchError((e) => showSnackbar(Strings.errorLoadCollection)),
+        onCollectionSelect: (id) => loadCollection(id).catchError((e) => showSnackbar(Strings.errorLoadCollection)),
         onAddCollection: (name) => addCollection(LinkCollection(name: name, links: []))
             .catchError((e) => showSnackbar(Strings.errorAddCollection)),
         onLogout: logout,
       ),
       appBar: AppBar(
         title: Text(appState.title),
+        actions: <Widget>[
+          PopupMenuButton(
+            onSelected: (val) => _onOptionSelected(val, context),
+            itemBuilder: (ctx) => [
+              PopupMenuItem(value: 0, child: const Text(Strings.labelAboutButton)),
+              PopupMenuItem(value: 1, child: const Text(Strings.labelLicencesButton))
+            ],
+          )
+        ],
       ),
       body: Center(
         child: () {
@@ -80,7 +89,7 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
     );
   }
 
-  void _initData() async {
+  _initData() async {
     final prefs = await SharedPreferences.getInstance();
     try {
       await loadCollections();
@@ -91,6 +100,17 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
       }
     } catch (e) {
       showSnackbar(Strings.errorLoadCollections);
+    }
+  }
+
+  _onOptionSelected(int val, BuildContext ctx) {
+    switch(val) {
+      case 0:
+        Navigator.of(ctx).pushNamed(AboutPage.routeName);
+        break;
+      case 1:
+        showLicensePage(context: ctx);
+        break;
     }
   }
 }

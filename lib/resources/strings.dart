@@ -4,6 +4,8 @@ class Strings {
   static const titleAddNewLinkPage = 'Add new link';
   static const titleCollectionPage = 'Collection';
   static const titleLoginPage = 'Log In';
+  static const titleAboutPage = 'About & Privacy';
+  static const titleLicencesPage = 'Open-Source Licenses';
   static const titleNewCollectionDialog = 'New Collection';
   static const titleDeleteLinkDialog = 'Delete link?';
   static const titleDrawer = 'Collections';
@@ -30,6 +32,11 @@ class Strings {
   static const labelNoLinkDescription = '<no description>';
   static const labelNoData = 'No Data :\'-(';
   static const labelLoading = 'Loading ...';
+  static const labelAboutButton = 'About & Privacy';
+  static const labelLicencesButton = 'Licenses';
+  static const labelViewCodeButton = 'View source code';
+  static const labelViewLegal = 'View legal statement & privacy';
+  static const labelCustomLicense = 'Custom License';
 
   // Alert messages
   static const msgCollectionAdded = 'Collection added';
@@ -64,4 +71,17 @@ class Strings {
 
   // Other
   static const urlAnchr = 'https://anchr.io';
+  static const urlGithub = 'https://github.com/n1try/anchr-android';
+  static const urlLegal = 'https://anchr.io/#/terms';
+
+  // Texts
+  static const txtAbout = '''
+  Anchr for Android was created by Ferdinand Mütsch (mail@ferdinand-muetsch.de) in 2019 as a private, non-profit open-source project. It consumes the web service available at anchr.io, which is open-source and free to use as well.
+  
+  All technical infrastructure is operated by Ferdinand Mütsch, however, he does not take responsibility for content that is shared through this service by a user.
+  ''';
+
+  static const txtLicencesIntro = '''
+  This project is published under the "GNU General Public License v3.0" and uses the following third-party open-source software. Licenses can be viewed by clicking the respective hyperlink. Nested dependencies are not listed here, since every third-party project is responsible for adhering to its license by itself. 
+  ''';
 }

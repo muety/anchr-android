@@ -1,5 +1,6 @@
 import 'package:anchr_android/database/collection_db_helper.dart';
 import 'package:anchr_android/database/link_db_helper.dart';
+import 'package:anchr_android/pages/about_page.dart';
 import 'package:anchr_android/pages/add_link_page.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/pages/login_page.dart';
@@ -82,6 +83,7 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     var linkData = Map.from(sharedData);
 
     final SplashPage defaultSplashPage = SplashPage();
+    final AboutPage defaultAboutPage = AboutPage();
     final CollectionsPage defaultCollectionsPage = CollectionsPage(appState);
     final AddLinkPage defaultAddLinkPage = AddLinkPage(appState, linkData: linkData);
     final LoginPage defaultLoginPage = LoginPage(appState);
@@ -107,8 +109,9 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
         home: startingPage,
         routes: <String, WidgetBuilder>{
           //5
-          CollectionsPage.routeName: (BuildContext context) => defaultCollectionsPage, //6
-          LoginPage.routeName: (BuildContext context) => defaultLoginPage //7
+          CollectionsPage.routeName: (BuildContext context) => defaultCollectionsPage,
+          LoginPage.routeName: (BuildContext context) => defaultLoginPage,
+          AboutPage.routeName: (BuildContext context) => defaultAboutPage
         },
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
