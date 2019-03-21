@@ -88,25 +88,28 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     final AddLinkPage defaultAddLinkPage = AddLinkPage(appState, linkData: linkData);
     final LoginPage defaultLoginPage = LoginPage(appState);
 
-    Widget startingPage;
-    if (initialized) {
-      if (!isLoggedIn) {
-        startingPage = defaultLoginPage;
-      } else if (linkData != null && linkData.length > 0) {
-        startingPage = defaultAddLinkPage;
-        sharedData.clear();
+    Widget getPage() {
+      Widget startingPage;
+      if (initialized) {
+        if (!isLoggedIn) {
+          startingPage = defaultLoginPage;
+        } else if (linkData != null && linkData.length > 0) {
+          startingPage = defaultAddLinkPage;
+          sharedData.clear();
+        } else {
+          startingPage = defaultCollectionsPage;
+        }
       } else {
-        startingPage = defaultCollectionsPage;
+        startingPage = defaultSplashPage;
       }
-    } else {
-      startingPage = defaultSplashPage;
+      return startingPage;
     }
 
     return MaterialApp(
         title: Strings.title,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.teal, accentColor: Color(0xFFDD5237)),
-        home: startingPage,
+        home: getPage(),
         routes: <String, WidgetBuilder>{
           //5
           CollectionsPage.routeName: (BuildContext context) => defaultCollectionsPage,
