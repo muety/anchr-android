@@ -3,6 +3,7 @@ import 'package:anchr_android/pages/login_page.dart';
 import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/widgets/add_collection_dialog.dart';
+import 'package:anchr_android/widgets/delete_collection_dialog.dart';
 import 'package:flutter/material.dart';
 
 class CollectionDrawer extends StatefulWidget {
@@ -10,8 +11,11 @@ class CollectionDrawer extends StatefulWidget {
   final Function(String collectionId) onCollectionSelect;
   final AddCollection onAddCollection;
   final OnLogout onLogout;
+  final DeleteCollection onDeleteCollection;
 
-  const CollectionDrawer({Key key, this.appState, this.onCollectionSelect, this.onAddCollection, this.onLogout}) : super(key: key);
+  const CollectionDrawer(
+      {Key key, this.appState, this.onCollectionSelect, this.onAddCollection, this.onLogout, this.onDeleteCollection})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CollectionDrawerState();
@@ -45,7 +49,9 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
                 children: <Widget>[
                   RaisedButton(
                     child: const Text(Strings.labelLogoutButton),
-                    onPressed: () => widget.onLogout().then((_) => Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, (_) => false)),
+                    onPressed: () => widget
+                        .onLogout()
+                        .then((_) => Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, (_) => false)),
                     color: Theme.of(ctx).accentColor,
                   )
                 ],
@@ -72,11 +78,27 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
     } else {
       final item = widget.appState.collections[idx - 1];
       return ListTile(
-        title: Text(item.name),
-        onTap: () {
-          widget.onCollectionSelect(item.id);
-          Navigator.pop(ctx);
-        },
+          title: Text(item.name),
+          onTap: () {
+            widget.onCollectionSelect(item.id);
+            Navigator.pop(ctx);
+          },
+          onLongPress: () => showModalBottomSheet(
+              context: context,
+              builder: (context) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ListTile(
+                          leading: const Icon(Icons.delete),
+                          title: const Text(Strings.labelDeleteButton),
+                          onTap: () => showDialog(
+                              context: context,
+                              builder: DeleteCollectionDialog(
+                                collection: item,
+                                onDelete: widget.onDeleteCollection,
+                              ).builder))
+                    ],
+                  ))
       );
     }
   }

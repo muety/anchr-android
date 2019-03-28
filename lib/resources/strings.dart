@@ -8,6 +8,7 @@ class Strings {
   static const titleLicensesPage = 'Open-Source Licenses';
   static const titleNewCollectionDialog = 'New Collection';
   static const titleDeleteLinkDialog = 'Delete link?';
+  static const titleDeleteCollectionDialog = 'Delete collection?';
   static const titleDrawer = 'Collections';
 
   // Text labels
@@ -40,10 +41,12 @@ class Strings {
 
   // Alert messages
   static const msgCollectionAdded = 'Collection added';
+  static const msgCollectionDeleted = 'Collection deleted';
   static const msgLinkDeleted = 'Link deleted';
   static const msgLinkAdded = 'Link added';
   static const msgChooseCollectionName = 'Please choose a name for the new collection.';
   static const msgConfirmDeleteLink = 'Are you sure you want to delete this link from the collection?';
+  static const msgConfirmDeleteCollection = 'Are you sure you want to delete this collection?';
   static const msgSignUp = '💡 If you do not have an Anchr account, yet, please sign up at';
 
   // Error messages

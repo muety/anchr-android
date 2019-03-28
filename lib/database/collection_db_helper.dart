@@ -69,6 +69,10 @@ class CollectionDbHelper extends DatabaseHelper {
     return null;
   }
 
+  Future deleteById(String id) async {
+    await db.delete(tableName, where: '$columnId = ?', whereArgs: [id]);
+  }
+
   Future deleteAll() async {
     await db.delete(tableName);
   }

@@ -74,6 +74,14 @@ class CollectionService extends ApiService {
     return collection;
   }
 
+  Future<Null> deleteCollection(String collectionId) async {
+    final res = await super.delete('/collection/$collectionId');
+    if (res.statusCode != 200) {
+      throw Exception(res.body);
+    }
+    collectionDbHelper.deleteById(collectionId);
+  }
+
   Future<Null> deleteLink(String collectionId, String linkId) async {
     final res = await super.delete('/collection/$collectionId/links/$linkId');
     if (res.statusCode != 200) {

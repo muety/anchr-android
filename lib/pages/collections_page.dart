@@ -39,10 +39,12 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
     return Scaffold(
       key: _scaffoldKey,
       drawer: CollectionDrawer(
+        key: GlobalKey(debugLabel: "foo"),
         appState: appState,
         onCollectionSelect: (id) => loadCollection(id).catchError((e) => showSnackbar(Strings.errorLoadCollection)),
         onAddCollection: (name) => addCollection(LinkCollection(name: name, links: []))
             .catchError((e) => showSnackbar(Strings.errorAddCollection)),
+        onDeleteCollection: deleteCollection,
         onLogout: logout,
       ),
       appBar: AppBar(

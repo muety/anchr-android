@@ -17,55 +17,35 @@ class LinkItem extends StatelessWidget {
       children: <Widget>[
         Expanded(
             child: ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(link.description.isEmpty ? Strings.labelNoLinkDescription : link.description,
-                      maxLines: 1, overflow: TextOverflow.ellipsis),
-                ),
-                subtitle: Text(
-                  link.url,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                onTap: () => Utils.launchURL(link.url),
-                onLongPress: () => showMenu(
-                            context: context,
-                            items: <PopupMenuEntry>[
-                              PopupMenuItem(
-                                value: 0,
-                                child: Row(
-                                  children: <Widget>[
-                                    const Icon(Icons.delete),
-                                    const Text(Strings.labelDeleteButton),
-                                  ],
-                                ),
-                              ),
-                            ],
-                            position: buttonMenuPosition(context))
-                        .then((val) {
-                          if (val == 0) {
-                            showDialog(
-                                context: context,
-                                builder: DeleteLinkDialog(
-                                  link: link,
-                                  onDelete: deleteLink,
-                                ).builder);
-                          }
-                    }))),
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(link.description.isEmpty ? Strings.labelNoLinkDescription : link.description,
+                maxLines: 1, overflow: TextOverflow.ellipsis),
+          ),
+          subtitle: Text(
+            link.url,
+            overflow: TextOverflow.ellipsis,
+          ),
+          onTap: () => Utils.launchURL(link.url),
+          onLongPress: () => showModalBottomSheet(
+              context: context,
+              builder: (context) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ListTile(
+                          leading: const Icon(Icons.delete),
+                          title: const Text(Strings.labelDeleteButton),
+                          onTap: () => showDialog(
+                              context: context,
+                              builder: DeleteLinkDialog(
+                                link: link,
+                                onDelete: deleteLink,
+                              ).builder))
+                    ],
+                  )),
+        )),
       ],
       crossAxisAlignment: CrossAxisAlignment.end,
     );
-  }
-
-  RelativeRect buttonMenuPosition(BuildContext c) {
-    final RenderBox bar = c.findRenderObject();
-    final RenderBox overlay = Overlay.of(c).context.findRenderObject();
-    final RelativeRect position = RelativeRect.fromRect(
-      Rect.fromPoints(
-        bar.localToGlobal(bar.size.topCenter(Offset.fromDirection(0)), ancestor: overlay),
-        bar.localToGlobal(bar.size.topCenter(Offset.fromDirection(0)), ancestor: overlay),
-      ),
-      Offset.zero & overlay.size,
-    );
-    return position;
   }
 }

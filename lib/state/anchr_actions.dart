@@ -77,6 +77,19 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     });
   }
 
+  Future<dynamic> deleteCollection(LinkCollection collection) {
+    return collectionService.deleteCollection(collection.id).then((_) {
+      showSnackbar(Strings.msgCollectionDeleted);
+      setState(() {
+        appState.collections.remove(collection);
+        if (appState.activeCollection == collection) {
+          // TODO: What if last collection was deleted?
+          this.loadCollection(appState.collections[0].id);
+        }
+      });
+    });
+  }
+
   Future<dynamic> deleteLink(Link link) {
     return collectionService.deleteLink(appState.activeCollection.id, link.id).then((_) {
       showSnackbar(Strings.msgLinkDeleted);
