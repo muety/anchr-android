@@ -54,7 +54,11 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     setState(() => sharedData = data);
 
     if (isLoggedIn) {
-      await renewToken();
+      try {
+        await renewToken();
+      } catch (e) {
+        setState(() => isLoggedIn = false);
+      }
     }
 
     setState(() => initialized = true);
