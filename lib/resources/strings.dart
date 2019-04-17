@@ -25,6 +25,7 @@ class Strings {
   static const labelSaveButton = 'Save';
   static const labelAddButton = 'Add';
   static const labelDeleteButton = 'Delete';
+  static const labelCopyButton = 'Copy Link';
   static const labelLoginButton = 'Login';
   static const labelLogoutButton = 'Logout';
   static const labelCancelButton = 'Cancel';
@@ -48,6 +49,7 @@ class Strings {
   static const msgConfirmDeleteLink = 'Are you sure you want to delete this link from the collection?';
   static const msgConfirmDeleteCollection = 'Are you sure you want to delete this collection?';
   static const msgSignUp = '💡 If you do not have an Anchr account, yet, please sign up at';
+  static const msgLinkCopied = 'Copied to clipboard';
 
   // Error messages
   static const errorLoadCollections = 'Could not load collections, sorry...';
