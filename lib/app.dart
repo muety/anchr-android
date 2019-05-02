@@ -1,5 +1,3 @@
-import 'package:anchr_android/database/collection_db_helper.dart';
-import 'package:anchr_android/database/link_db_helper.dart';
 import 'package:anchr_android/pages/about_page.dart';
 import 'package:anchr_android/pages/add_link_page.dart';
 import 'package:anchr_android/pages/collections_page.dart';
@@ -10,7 +8,6 @@ import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AnchrApp extends StatefulWidget {
   @override
@@ -46,16 +43,14 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
 
     onUnauthorizedCallback = _onUnauthorized;
 
-    await CollectionDbHelper().open(Strings.keyDbCollections);
-    await LinkDbHelper().open(Strings.keyDbLinks);
-    await _loadPrefs();
-
+    await initApp();
     var data = await _getSharedData();
     setState(() => sharedData = data);
 
-    if (isLoggedIn) {
+    if (_isLoggedIn()) {
       try {
         await renewToken();
+        setState(() => isLoggedIn = true);
       } catch (e) {
         setState(() => isLoggedIn = false);
       }
@@ -66,15 +61,10 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
 
   Future<Map> _getSharedData() async => await platform.invokeMethod('getSharedData');
 
-  Future<SharedPreferences> _loadPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      final userMail = prefs.getString(Strings.keyUserMailPref);
-      final userToken = prefs.getString(Strings.keyUserTokenPref);
-      isLoggedIn = userMail != null && userToken != null;
-      appState.user = userMail;
-    });
-    return prefs;
+  bool _isLoggedIn() {
+    final userMail = preferences.getString(Strings.keyUserMailPref);
+    final userToken = preferences.getString(Strings.keyUserTokenPref);
+    return userMail != null && userToken != null;
   }
 
   _onUnauthorized() {

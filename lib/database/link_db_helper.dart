@@ -21,7 +21,7 @@ class LinkDbHelper extends DatabaseHelper {
   @override
   onCreate(Database db, int version) async {
     await db.execute('''
-        create table $tableName ( 
+        create table if not exists $tableName ( 
           $columnId text primary key, 
           $columnUrl text not null,
           $columnDescription text,
@@ -82,4 +82,7 @@ class LinkDbHelper extends DatabaseHelper {
 
   @override
   int get schemaVersion => _schemaVersion;
+
+  @override
+  String get table => tableName;
 }

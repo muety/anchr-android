@@ -33,12 +33,24 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
     _loadPreferences();
   }
 
-  void _loadPreferences() async {
+  Future<dynamic> _loadPreferences() async {
     this.preferences = await SharedPreferences.getInstance();
+    collectionService.sharedPreferences = this.preferences;
+  }
+
+  Future<dynamic> initApp() async {
+    if (this.preferences == null) await _loadPreferences();
+
     if (this.preferences.getString(Strings.keyUserTokenPref) != null) {
       _updateServiceToken(this.preferences.getString(Strings.keyUserTokenPref));
     }
-    collectionService.sharedPreferences = this.preferences;
+
+    if (this.preferences.getString(Strings.keyUserMailPref) != null) {
+      appState.user = this.preferences.getString(Strings.keyUserMailPref);
+    }
+
+    await CollectionDbHelper().open(Strings.keyDbCollections);
+    await LinkDbHelper().open(Strings.keyDbLinks);
   }
 
   void showSnackbar(String text) => Utils.showSnackbar(text, scaffoldState: appState.currentState);
@@ -104,15 +116,11 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     });
   }
 
-  Future<dynamic> login(String userMail, String password) {
+  Future<void> login(String userMail, String password) {
     return authService.login(userMail, password).then((token) {
       preferences.setString(Strings.keyUserMailPref, userMail);
       preferences.setString(Strings.keyUserTokenPref, token);
-      appState.user = userMail;
-      return token;
-    }).then((token) {
-      _updateServiceToken(token);
-      return token;
+      return this.initApp();
     });
   }
 
@@ -120,7 +128,7 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     return authService.renew().then((token) {
       preferences.setString(Strings.keyUserTokenPref, token);
       _updateServiceToken(token);
-    }).catchError((e) {});
+    });
   }
 
   Future<dynamic> logout() {
@@ -130,9 +138,9 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
 
   void setLastActiveCollection(String id) => preferences.setString(Strings.keyLastActiveCollectionPref, id);
 
-  void _clearAll() {
-    linkDbHelper.delete();
-    collectionDbHelper.delete();
+  void _clearAll() async {
+    await linkDbHelper.delete();
+    await collectionDbHelper.delete();
     preferences.clear();
     appState.user = null;
   }

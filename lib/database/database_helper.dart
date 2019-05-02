@@ -8,10 +8,12 @@ abstract class DatabaseHelper {
   }
 
   Future delete() async {
-    return deleteDatabase(db.path);
+    return db.delete(table);
   }
 
   int get schemaVersion;
+
+  String get table;
 
   onCreate(Database db, int version);
 

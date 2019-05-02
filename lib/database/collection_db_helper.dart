@@ -20,7 +20,7 @@ class CollectionDbHelper extends DatabaseHelper {
   @override
   onCreate(Database db, int version) async {
     await db.execute('''
-        create table $tableName ( 
+        create table if not exists $tableName ( 
           $columnId text primary key, 
           $columnName text not null,
           $columnOwnerId text,
@@ -79,4 +79,7 @@ class CollectionDbHelper extends DatabaseHelper {
 
   @override
   int get schemaVersion => _schemaVersion;
+
+  @override
+  String get table => tableName;
 }
