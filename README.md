@@ -32,7 +32,8 @@ keyPassword=shhh
 keyAlias=some_alias_eg_anchr
 storeFile=/home/you/.android/keystore.jks
 ```
-* `flutter build apk --release`
+* `flutter build apk --release` to build an APK
+* `flutter build appbundle --release` to build an AppBundle (**recommended**)
 
 ## To Do
 There is still plenty of space for improvements. Those include:
