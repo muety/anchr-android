@@ -30,17 +30,6 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
   }
 
   void _init() async {
-    SystemChannels.lifecycle.setMessageHandler((msg) {
-      if (msg.contains('resumed')) {
-        _getSharedData().then((d) {
-          if (d.isEmpty) return;
-          Navigator.of(appState.currentContext).pushNamedAndRemoveUntil(
-              AddLinkPage.routeName, (Route<dynamic> route) => route.settings.name != AddLinkPage.routeName,
-              arguments: d);
-        });
-      }
-    });
-
     onUnauthorizedCallback = _onUnauthorized;
 
     await initApp();
@@ -57,9 +46,21 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     }
 
     setState(() => initialized = true);
+
+    SystemChannels.lifecycle.setMessageHandler((msg) async {
+      if (!msg.contains('resumed')) return;
+      _handleSharedData(await _getSharedData());
+    });
   }
 
   Future<Map> _getSharedData() async => await platform.invokeMethod('getSharedData');
+
+  _handleSharedData(data) {
+    if (data.isEmpty) return;
+    Navigator.of(appState.currentContext).pushNamedAndRemoveUntil(
+        AddLinkPage.routeName, (Route<dynamic> route) => route.settings.name != AddLinkPage.routeName,
+        arguments: data);
+  }
 
   bool _isLoggedIn() {
     final userMail = preferences.getString(Strings.keyUserMailPref);
