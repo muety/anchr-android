@@ -51,6 +51,6 @@ There is still plenty of space for improvements. Those include:
 Feel free to contribute!
 
 ## License
-GNU General Public License v3 (GPL-3) @ [Ferdinand Mütsch](https://ferdinand-muetsch.de)
+GNU General Public License v3 (GPL-3) @ [Ferdinand Mütsch](https://muetsch.io)
 
 [![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/n1try)
