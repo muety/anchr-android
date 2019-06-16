@@ -72,7 +72,7 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
             onRefresh: () async {
               refreshing = true;
               try {
-                await loadCollection(appState.activeCollection.id);
+                await loadCollection(appState.activeCollection.id, force: true);
               } catch (e) {
                 showSnackbar(Strings.errorLoadCollection);
               } finally {
