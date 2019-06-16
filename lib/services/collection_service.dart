@@ -44,13 +44,14 @@ class CollectionService extends ApiService {
     }
   }
 
-  Future<LinkCollection> getCollection(String id) async {
+  Future<LinkCollection> getCollection(String id, { force: false }) async {
     try {
       final lastKnownEtag = sharedPreferences.getString(Strings.keyCollectionEtagPrefix + id);
       final latestEtag = await _getCollectionEtag(id);
       sharedPreferences.setString(Strings.keyCollectionEtagPrefix + id, latestEtag);
 
-      if (lastKnownEtag == latestEtag) {
+      if (!force && lastKnownEtag == latestEtag) {
+        if (force) await linkDbHelper.deleteAllByCollection(id);
         return await _getCollectionOffline(id);
       } else {
         return await _getCollectionOnline(id)

@@ -71,9 +71,9 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     }).whenComplete(() => setState(() => appState.isLoading = false));
   }
 
-  Future<dynamic> loadCollection(String id) {
+  Future<dynamic> loadCollection(String id, { force: false }) {
     setState(() => appState.isLoading = true);
-    return collectionService.getCollection(id).then((activeCollection) {
+    return collectionService.getCollection(id, force: force).then((activeCollection) {
       setState(() => appState.activeCollection = activeCollection);
       setLastActiveCollection(appState.activeCollection.id);
     }).whenComplete(() => setState(() => appState.isLoading = false));
