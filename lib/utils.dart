@@ -29,7 +29,8 @@ abstract class Utils {
    * Will do nothing if no Scaffold can be found.
    */
   static void showSnackbar(String text, {BuildContext context, ScaffoldState scaffoldState}) {
-    scaffoldState = scaffoldState ?? context.ancestorStateOfType(TypeMatcher<ScaffoldState>());
+    if (scaffoldState == null || context == null) return;
+    scaffoldState = context.ancestorStateOfType(TypeMatcher<ScaffoldState>());
     if (scaffoldState != null) {
       scaffoldState.showSnackBar(SnackBar(content: Text(text)));
     }

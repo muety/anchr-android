@@ -5,6 +5,7 @@ import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddLinkPage extends StatefulWidget {
   static const String routeName = '/add';
@@ -33,10 +34,16 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
     final Size screenSize = MediaQuery.of(context).size;
 
     if (appState.collections.isEmpty && !attemptedToLoad) {
-      loadCollections()
-          .then((_) => loadCollection(appState.collections.first.id))
-          .then((_) => setState(() => targetCollectionId = appState.activeCollection.id))
-          .catchError((e) => showSnackbar(Strings.errorLoadCollections));
+      SharedPreferences.getInstance().then((_) {
+        loadCollections()
+            .then((_) {
+              var lastActive = preferences.getString(Strings.keyLastActiveCollectionPref);
+              var loadId = appState.collections.any((c) => c.id == lastActive) ? lastActive : appState.collections.first.id;
+              loadCollection(loadId);
+            })
+            .then((_) => setState(() => targetCollectionId = appState.activeCollection.id))
+            .catchError((e) => showSnackbar(Strings.errorLoadCollections));
+      });
       attemptedToLoad = true;
     }
 
@@ -68,11 +75,12 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                             labelText: Strings.labelCollectionInput,
                             contentPadding: const EdgeInsets.only(top: 20)),
                         items: appState.collections
-                            .map((c) => DropdownMenuItem<String>(
-                                  key: Key(c.id),
-                                  child: Text(c.name),
-                                  value: c.id,
-                                ))
+                            .map((c) =>
+                            DropdownMenuItem<String>(
+                              key: Key(c.id),
+                              child: Text(c.name),
+                              value: c.id,
+                            ))
                             .toList(growable: false),
                         onChanged: (id) => setState(() => targetCollectionId = id),
                       )),
