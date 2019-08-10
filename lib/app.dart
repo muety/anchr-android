@@ -39,9 +39,9 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     if (_isLoggedIn()) {
       try {
         await renewToken();
-        setState(() => isLoggedIn = true);
       } catch (e) {
-        setState(() => isLoggedIn = false);
+      } finally {
+        setState(() => isLoggedIn = true);
       }
     }
 
