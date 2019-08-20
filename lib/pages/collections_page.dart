@@ -1,3 +1,4 @@
+import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/pages/about_page.dart';
 import 'package:anchr_android/pages/add_link_page.dart';
@@ -21,6 +22,11 @@ class CollectionsPage extends StatefulWidget {
 
 class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrActions {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final FocusNode _searchFocus = new FocusNode();
+  final TextEditingController _searchController = new TextEditingController();
+
+  String searchVal = "";
+  bool searching = false;
   bool refreshing = false;
 
   _CollectionsPageState(AppState appState) : super(appState);
@@ -29,6 +35,52 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
   void initState() {
     super.initState();
     _initData();
+    _searchFocus.addListener(() => setState(() {
+      searching = _searchFocus.hasFocus;
+      _searchController.clear();
+    }));
+    _searchController.addListener(() => setState(() => searchVal = _searchController.text));
+  }
+
+  List<Link> getFilteredLinks() {
+    List<Link> filteredLinks = [...appState.activeCollection?.links];
+    filteredLinks?.retainWhere((Link l) => searchVal.isEmpty
+        || l.description.toLowerCase().contains(searchVal.toLowerCase())
+        || l.url.toLowerCase().contains(searchVal));
+    return filteredLinks;
+  }
+
+  List<Widget> _getAppBarActions() {
+    List<Widget> widgetList = [
+      PopupMenuButton(
+        onSelected: (val) => _onOptionSelected(val, context),
+        itemBuilder: (ctx) => [
+          PopupMenuItem(value: 0, child: const Text(Strings.labelAboutButton)),
+          PopupMenuItem(value: 1, child: const Text(Strings.labelLicensesButton))
+        ],
+      )
+    ];
+
+    if (searching) {
+      widgetList.insert(
+          0,
+          IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: () {
+              _searchController.clear();
+              _searchFocus.unfocus();
+            },
+          ));
+    } else {
+      widgetList.insert(
+          0,
+          IconButton(
+            icon: Icon(Icons.search, color: Colors.white),
+            onPressed: () => FocusScope.of(context).requestFocus(_searchFocus),
+          ));
+    }
+
+    return widgetList;
   }
 
   @override
@@ -39,7 +91,7 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
     return Scaffold(
       key: _scaffoldKey,
       drawer: CollectionDrawer(
-        key: GlobalKey(debugLabel: "foo"),
+        key: GlobalKey(),
         appState: appState,
         onCollectionSelect: (id) => loadCollection(id).catchError((e) => showSnackbar(Strings.errorLoadCollection)),
         onAddCollection: (name) => addCollection(LinkCollection(name: name, links: []))
@@ -48,16 +100,28 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
         onLogout: logout,
       ),
       appBar: AppBar(
-        title: Text(appState.title),
-        actions: <Widget>[
-          PopupMenuButton(
-            onSelected: (val) => _onOptionSelected(val, context),
-            itemBuilder: (ctx) => [
-              PopupMenuItem(value: 0, child: const Text(Strings.labelAboutButton)),
-              PopupMenuItem(value: 1, child: const Text(Strings.labelLicensesButton))
-            ],
-          )
-        ],
+        title: Builder(
+          builder: (BuildContext context) {
+            if (searching) {
+              return TextField(
+                  focusNode: _searchFocus,
+                  autofocus: true,
+                  showCursor: true,
+                  controller: _searchController,
+                  textInputAction: TextInputAction.unspecified,
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.white)),
+                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.white)),
+                    hintText: "Filter ...",
+                    hintStyle: TextStyle(color: Colors.white),
+                  ));
+            } else {
+              return Text(appState.title);
+            }
+          },
+        ),
+        actions: _getAppBarActions(),
       ),
       body: Center(
         child: () {
@@ -66,7 +130,7 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
           }
           return RefreshIndicator(
             child: LinkList(
-              links: widget.appState.activeCollection?.links,
+              links: getFilteredLinks(),
               deleteLink: (link) => deleteLink(link).catchError((e) => showSnackbar(Strings.errorDeleteLink)),
             ),
             onRefresh: () async {
@@ -106,7 +170,7 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
   }
 
   _onOptionSelected(int val, BuildContext ctx) {
-    switch(val) {
+    switch (val) {
       case 0:
         Navigator.of(ctx).pushNamed(AboutPage.routeName);
         break;
