@@ -6,6 +6,7 @@ import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/services/auth_service.dart';
 import 'package:anchr_android/services/collection_service.dart';
+import 'package:anchr_android/services/remote_service.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/utils.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class AnchrState<T extends StatefulWidget> extends State<T> {
   final AppState appState;
   final CollectionService collectionService = CollectionService();
+  final RemoteService remoteService = RemoteService();
   final AuthService authService = AuthService();
   final CollectionDbHelper collectionDbHelper = CollectionDbHelper();
   final LinkDbHelper linkDbHelper = LinkDbHelper();
@@ -114,6 +116,10 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
       showSnackbar(Strings.msgLinkAdded);
       setState(() => appState.collections.firstWhere((c) => c.id == collectionId).links.insert(0, link));
     });
+  }
+
+  Future<String> getPageTitle(String url) {
+    return remoteService.fetchPageTitle(url);
   }
 
   Future<void> login(String userMail, String password) {

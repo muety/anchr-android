@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/resources/strings.dart';
@@ -21,13 +23,52 @@ class AddLinkPage extends StatefulWidget {
 class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _linkInputController = new TextEditingController();
+  final TextEditingController _descriptionInputController = new TextEditingController();
 
   _AddLinkPageState(AppState appState) : super(appState);
 
   bool attemptedToLoad = false;
   String targetCollectionId;
-  String targetUrl;
-  String targetDescription;
+  String _mostRecentUrl = '';
+  Timer _linkDebounce;
+
+  @override
+  void initState() {
+    super.initState();
+    _linkInputController.addListener(_onLinkEdit);
+
+    _linkInputController.text = widget.linkData != null && widget.linkData.containsKey(Strings.keySharedLinkUrl)
+        ? widget.linkData[Strings.keySharedLinkUrl]
+        : '';
+
+    _descriptionInputController.text = widget.linkData != null && widget.linkData.containsKey(Strings.keySharedLinkTitle)
+        ? widget.linkData[Strings.keySharedLinkTitle]
+        : '';
+  }
+
+  @override
+  void dispose() {
+    _linkInputController.removeListener(_onLinkEdit);
+    _linkInputController.dispose();
+    _descriptionInputController.dispose();
+    super.dispose();
+  }
+
+  void _onLinkEdit() {
+    if (_linkDebounce?.isActive ?? false) _linkDebounce.cancel();
+
+    final url = _linkInputController.text.trim();
+    if (url == _mostRecentUrl || _descriptionInputController.text.isNotEmpty || !Utils.validateUrl(url)) return;
+
+    _linkDebounce = Timer(const Duration(milliseconds: 500), () async {
+      if (_descriptionInputController.text.isNotEmpty) return;
+      String pageTitle = await getPageTitle(url);
+      setState(() => _descriptionInputController.text = pageTitle);
+    });
+
+    _mostRecentUrl = url;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,12 +116,11 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                             labelText: Strings.labelCollectionInput,
                             contentPadding: const EdgeInsets.only(top: 20)),
                         items: appState.collections
-                            .map((c) =>
-                            DropdownMenuItem<String>(
-                              key: Key(c.id),
-                              child: Text(c.name),
-                              value: c.id,
-                            ))
+                            .map((c) => DropdownMenuItem<String>(
+                                  key: Key(c.id),
+                                  child: Text(c.name),
+                                  value: c.id,
+                                ))
                             .toList(growable: false),
                         onChanged: (id) => setState(() => targetCollectionId = id),
                       )),
@@ -88,30 +128,25 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: TextFormField(
                         key: Key('link'),
-                        initialValue: widget.linkData != null && widget.linkData.containsKey(Strings.keySharedLinkUrl)
-                            ? widget.linkData[Strings.keySharedLinkUrl]
-                            : '',
+                        controller: _linkInputController,
                         decoration: const InputDecoration(
                           icon: const Icon(Icons.link),
                           hintText: Strings.labelLinkInputHint,
                           labelText: Strings.labelLinkInput,
                         ),
-                        onSaved: (url) => targetUrl = url.trim(),
                         validator: (url) => Utils.validateUrl(url.trim()) ? null : Strings.errorInvalidUrl),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: TextFormField(
                         key: Key('description'),
-                        initialValue: widget.linkData != null && widget.linkData.containsKey(Strings.keySharedLinkTitle)
-                            ? widget.linkData[Strings.keySharedLinkTitle]
-                            : '',
+                        controller: _descriptionInputController,
                         decoration: const InputDecoration(
                           icon: const Icon(Icons.text_fields),
                           hintText: Strings.labelLinkDescriptionInputHint,
                           labelText: Strings.labelLinkDescriptionInput,
                         ),
-                        onSaved: (description) => targetDescription = description),
+                    ),
                   ),
                   Container(
                     width: screenSize.width,
@@ -132,14 +167,14 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
   void _submit() {
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
-      addLink(targetCollectionId, Link(url: targetUrl, description: targetDescription)).then((_) {
+      addLink(targetCollectionId, Link(
+          url: _linkInputController.text.trim(),
+          description: _descriptionInputController.text
+      )).then((_) {
         if (widget.linkData == null || widget.linkData.isEmpty) {
-          Navigator.of(context).pop();
-        }
-        else {
           setLastActiveCollection(targetCollectionId);
-          Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName);
         }
+        Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName);
       }).catchError((e) => showSnackbar(Strings.errorAddLink));
     }
   }
