@@ -36,18 +36,19 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
     super.initState();
     _initData();
     _searchFocus.addListener(() => setState(() {
-      searching = _searchFocus.hasFocus;
-      _searchController.clear();
-    }));
+          searching = _searchFocus.hasFocus;
+          _searchController.clear();
+        }));
     _searchController.addListener(() => setState(() => searchVal = _searchController.text));
   }
 
   List<Link> getFilteredLinks() {
-    List<Link> filteredLinks = [...appState.activeCollection?.links];
-    filteredLinks?.retainWhere((Link l) => searchVal.isEmpty
-        || l.description.toLowerCase().contains(searchVal.toLowerCase())
-        || l.url.toLowerCase().contains(searchVal));
-    return filteredLinks;
+    return appState.activeCollection != null
+        ? appState.activeCollection.links.where((Link l) =>
+            searchVal.isEmpty ||
+            l.description.toLowerCase().contains(searchVal.toLowerCase()) ||
+            l.url.toLowerCase().contains(searchVal)).toList(growable: false)
+        : [];
   }
 
   List<Widget> _getAppBarActions() {
