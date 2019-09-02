@@ -1,7 +1,7 @@
 name: anchr_android
 description: Android client for Anchr.io link collections
 
-version: 1.0.13+14
+version: 1.0.14+15
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -16,6 +16,7 @@ dependencies:
   shared_preferences: ^0.4.3
   sqflite: ^1.1.0
   fluttertoast: ^3.0.3
+  package_info: ^0.4.0+6
 
 dev_dependencies:
   flutter_test:

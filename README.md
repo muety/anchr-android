@@ -39,7 +39,6 @@ storeFile=/home/you/.android/keystore.jks
 There is still plenty of space for improvements. Those include:
 
 * Add ability to sign up
-* Add ability to delete collections
 * Add ability to share collections
 * Improve database helpers (e.g. hide one-to-many relation between collections and links from the outside)
 * Enhance offline mode
