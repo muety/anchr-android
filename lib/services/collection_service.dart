@@ -48,10 +48,9 @@ class CollectionService extends ApiService {
     try {
       final lastKnownEtag = sharedPreferences.getString(Strings.keyCollectionEtagPrefix + id);
       final latestEtag = await _getCollectionEtag(id);
-      sharedPreferences.setString(Strings.keyCollectionEtagPrefix + id, latestEtag);
+      await sharedPreferences.setString(Strings.keyCollectionEtagPrefix + id, latestEtag);
 
       if (!force && lastKnownEtag == latestEtag) {
-        if (force) await linkDbHelper.deleteAllByCollection(id);
         return await _getCollectionOffline(id);
       } else {
         return await _getCollectionOnline(id)
@@ -119,23 +118,31 @@ class CollectionService extends ApiService {
   }
 
   Future<List<LinkCollection>> _listCollectionsOnline() async {
-    final res = await super.get('/collection?short=true');
+    final res = (await Future.wait([
+      super.get('/collection?short=true'),
+      collectionDbHelper.deleteAll()
+    ]))[0];
+
     if (res.statusCode == 200) {
       List<LinkCollection> collections = (json.decode(res.body) as List<dynamic>)
           .map((c) => LinkCollection.fromJson(c))
           .where((c) => c.name != null)
           .toList();
-      collectionDbHelper.insertBatch(collections);
+      await collectionDbHelper.insertBatch(collections);
       return collections;
     } else
       throw Exception(res.body);
   }
 
   Future<LinkCollection> _getCollectionOnline(String id) async {
-    final res = await super.get('/collection/$id');
+    final res = (await Future.wait([
+      super.get('/collection/$id'),
+      linkDbHelper.deleteAllByCollection(id)
+    ]))[0];
+
     if (res.statusCode == 200) {
       LinkCollection collection = LinkCollection.fromJson(json.decode(res.body));
-      linkDbHelper.insertBatch(collection.links, collection.id);
+      await linkDbHelper.insertBatch(collection.links, collection.id);
       return collection;
     } else
       throw Exception(res.body);
