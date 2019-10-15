@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" ?>
+<rdf:RDF xml:lang="en" xmlns="http://usefulinc.com/ns/doap#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:asfext="http://projects.apache.org/ns/asfext#" xmlns:foaf="http://xmlns.com/foaf/0.1/">
+
+    <Project>
+        <name>Anchr for Android</name>
+        <created>2019-02-02</created>
+        <shortdesc xml:lang="en">Bookmarks Manager for android</shortdesc>
+        <description xml:lang="en">Official Android client for Anchr.io link- and bookmark collections.</description>
+        <homepage rdf:resource="https://anchr.io" />
+        <download-page rdf:resource="https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid" />
+        <bug-database rdf:resource="https://github.com/n1try/anchr-android/issues" />
+        <license rdf:resource="https://github.com/n1try/anchr-android/LICENSE" />
+        <language>en</language>
+        <programming-language>Dart</programming-language>
+        <programming-language>Java</programming-language>
+        <programming-language>Objective-C</programming-language>
+        <os>Android</os>
+
+        <category rdf:resource="http://projects.apache.org/category/app" />
+
+        <maintainer>
+            <foaf:Person>
+                <foaf:name>Ferdinand Mütsch</foaf:name>
+                <foaf:homepage rdf:resource="https://muetsch.io/" />
+            </foaf:Person>
+        </maintainer>
+
+        <repository>
+            <GitRepository>
+                <browse rdf:resource="https://github.com/n1try/anchr-android" />
+                <location rdf:resource="https://github.com/n1try/anchr-android.git" />
+            </GitRepository>
+        </repository>
+    </Project>
+
+</rdf:RDF>
