@@ -5,7 +5,7 @@
     <Project>
         <name>Anchr for Android</name>
         <created>2019-02-02</created>
-        <shortdesc xml:lang="en">Bookmarks Manager for android</shortdesc>
+        <shortdesc xml:lang="en">Bookmarks Manager for Android</shortdesc>
         <description xml:lang="en">Official Android client for Anchr.io link- and bookmark collections.</description>
         <homepage rdf:resource="https://anchr.io" />
         <download-page rdf:resource="https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid" />
