@@ -52,15 +52,15 @@ class Strings {
   static const msgLinkCopied = 'Copied to clipboard';
 
   // Error messages
-  static const errorLoadCollections = 'Could not load collections, sorry...';
-  static const errorLoadCollection = 'Could not load collection, sorry...';
-  static const errorAddCollection = 'Failed to add collection, sorry...';
-  static const errorAddLink = 'Could not add link, sorry...';
-  static const errorDeleteLink = 'Could not delete link, sorry...';
+  static const errorLoadCollections = 'Failed to load collections';
+  static const errorLoadCollection = 'Failed to load collection';
+  static const errorAddCollection = 'Failed to add collection';
+  static const errorAddLink = 'Failed to add link';
+  static const errorDeleteLink = 'Failed to delete link';
   static const errorInvalidUrl = 'Not a valid URL.';
   static const errorInvalidEmail = 'Not a valid e-mail address.';
   static const errorNoPassword = 'Please enter a password.';
-  static const errorLogin = 'Could not log in, sorry...';
+  static const errorLogin = 'Failed to log in. Is your password correct?';
   static const errorInvalidName = 'Name not valid or already existing';
 
   // Keys

@@ -20,6 +20,8 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  BuildContext currentContext;
+
   String userMail;
   String userPassword;
 
@@ -28,6 +30,8 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+
+    currentContext = context;
 
     appState.currentContext = _scaffoldKey.currentContext;
     appState.currentState = _scaffoldKey.currentState;
