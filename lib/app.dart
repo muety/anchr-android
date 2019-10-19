@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:anchr_android/models/exception.dart';
 import 'package:anchr_android/pages/about_page.dart';
 import 'package:anchr_android/pages/add_link_page.dart';
 import 'package:anchr_android/pages/collections_page.dart';
@@ -39,9 +42,17 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     if (_isLoggedIn()) {
       try {
         await renewToken();
-      } catch (e) {
-      } finally {
         setState(() => isLoggedIn = true);
+        // There is two kinds of failures here:
+        // 1. No network connection (SocketException) -> keep going, load collections page and use cache
+        // 2. Token expired (UnauthorizedException) -> go to login page
+        // Originally, _onUnauthorized was supposed to handle redirection to login page. However, for some
+        // buggy reason, appState.currentContext is not yet set at this time, so nothing can be popped from navigator.
+        // TODO: Fix this and make it more consistent.
+      } on SocketException {
+        setState(() => isLoggedIn = true);
+      } on UnauthorizedException {
+        setState(() => isLoggedIn = false);
       }
     }
 
@@ -70,7 +81,9 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
 
   _onUnauthorized() {
     logout();
-    Navigator.of(appState.currentContext).pushNamedAndRemoveUntil(LoginPage.routeName, (_) => false);
+    if (appState.currentContext != null) {
+      Navigator.of(appState.currentContext).pushNamedAndRemoveUntil(LoginPage.routeName, (_) => false);
+    }
   }
 
   @override

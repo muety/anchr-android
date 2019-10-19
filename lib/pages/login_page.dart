@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:anchr_android/models/exception.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
@@ -20,8 +23,6 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  BuildContext currentContext;
-
   String userMail;
   String userPassword;
 
@@ -30,8 +31,6 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-
-    currentContext = context;
 
     appState.currentContext = _scaffoldKey.currentContext;
     appState.currentState = _scaffoldKey.currentState;
@@ -106,6 +105,8 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
       _formKey.currentState.save();
       login(userMail, userPassword)
           .then((_) => Navigator.pushReplacementNamed(context, CollectionsPage.routeName))
+          .catchError((e) => showSnackbar(Strings.errorLoginUnauthorized), test: (Object o) => o is UnauthorizedException)
+          .catchError((e) => showSnackbar(Strings.errorLoginNoConnection), test: (Object o) => o is SocketException)
           .catchError((e) => showSnackbar(Strings.errorLogin));
     }
   }

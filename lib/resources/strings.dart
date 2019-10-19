@@ -60,7 +60,9 @@ class Strings {
   static const errorInvalidUrl = 'Not a valid URL.';
   static const errorInvalidEmail = 'Not a valid e-mail address.';
   static const errorNoPassword = 'Please enter a password.';
-  static const errorLogin = 'Failed to log in. Is your password correct?';
+  static const errorLogin = 'Failed to log in. Something went wrong.';
+  static const errorLoginUnauthorized = 'Failed to log in. Is your password correct?';
+  static const errorLoginNoConnection = 'Failed to log in. No internet connection.';
   static const errorInvalidName = 'Name not valid or already existing';
 
   // Keys

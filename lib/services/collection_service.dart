@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:anchr_android/database/collection_db_helper.dart';
 import 'package:anchr_android/database/link_db_helper.dart';
+import 'package:anchr_android/models/exception.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/models/types.dart';
@@ -66,7 +67,7 @@ class CollectionService extends ApiService {
     final data = {'name': collection.name, 'links': collection.links};
     final res = await super.post('/collection', data);
     if (res.statusCode != 201) {
-      throw Exception(res.body);
+      throw WebServiceException(message: res.body);
     }
     collection = LinkCollection.fromJson(json.decode(res.body));
     collectionDbHelper.insert(collection);
@@ -77,7 +78,7 @@ class CollectionService extends ApiService {
   Future<Null> deleteCollection(String collectionId) async {
     final res = await super.delete('/collection/$collectionId');
     if (res.statusCode != 200) {
-      throw Exception(res.body);
+      throw WebServiceException(message: res.body);
     }
     collectionDbHelper.deleteById(collectionId);
   }
@@ -85,7 +86,7 @@ class CollectionService extends ApiService {
   Future<Null> deleteLink(String collectionId, String linkId) async {
     final res = await super.delete('/collection/$collectionId/links/$linkId');
     if (res.statusCode != 200) {
-      throw Exception(res.body);
+      throw WebServiceException(message: res.body);
     }
     linkDbHelper.deleteById(linkId);
   }
@@ -94,7 +95,7 @@ class CollectionService extends ApiService {
     final data = {'collId': collectionId, 'description': link.description, 'url': link.url};
     final res = await super.post('/collection/$collectionId/links', data);
     if (res.statusCode != 201) {
-      throw Exception(res.body);
+      throw WebServiceException(message: res.body);
     }
     link = Link.fromJson(json.decode(res.body));
     linkDbHelper.insert(link, collectionId);
@@ -106,7 +107,7 @@ class CollectionService extends ApiService {
     if (res.statusCode == 200)
       return res.headers['etag'];
     else
-      throw Exception(res.body);
+      throw WebServiceException(message: res.body);
   }
 
   Future<String> _getCollectionEtag(String id) async {
@@ -114,7 +115,7 @@ class CollectionService extends ApiService {
     if (res.statusCode == 200)
       return res.headers['etag'];
     else
-      throw Exception(res.body);
+      throw WebServiceException(message: res.body);
   }
 
   Future<List<LinkCollection>> _listCollectionsOnline() async {
@@ -131,7 +132,7 @@ class CollectionService extends ApiService {
       await collectionDbHelper.insertBatch(collections);
       return collections;
     } else
-      throw Exception(res.body);
+      throw WebServiceException(message: res.body);
   }
 
   Future<LinkCollection> _getCollectionOnline(String id) async {
@@ -145,7 +146,7 @@ class CollectionService extends ApiService {
       await linkDbHelper.insertBatch(collection.links, collection.id);
       return collection;
     } else
-      throw Exception(res.body);
+      throw WebServiceException(message: res.body);
   }
 
   Future<List<LinkCollection>> _listCollectionsOffline() async {
