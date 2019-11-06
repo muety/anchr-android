@@ -23,6 +23,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  String serverUrl;
   String userMail;
   String userPassword;
 
@@ -47,6 +48,18 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: TextFormField(
+                      key: Key('server'),
+                      decoration: const InputDecoration(
+                        icon: const Icon(Icons.person),
+                        hintText: Strings.labelServerInputHint,
+                        labelText: Strings.labelServerInput,
+                      ),
+                      onSaved: (val) => serverUrl = Utils.sanitizeApiUrl(val),
+                      validator: (val) => Utils.validateUrl(val.trim()) ? null : Strings.errorInvalidUrl),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
@@ -88,9 +101,9 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                       text: TextSpan(children: <TextSpan>[
                         TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
                         TextSpan(
-                            text: ' anchr.io.',
+                            text: ' github.com/n1try/anchr.',
                             style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-                            recognizer: TapGestureRecognizer()..onTap = () => Utils.launchURL(Strings.urlAnchr))
+                            recognizer: TapGestureRecognizer()..onTap = () => Utils.launchURL(Strings.urlAnchrGithub))
                       ]
                       )),
                 )
@@ -103,7 +116,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
   void _submit() {
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
-      login(userMail, userPassword)
+      login(serverUrl, userMail, userPassword)
           .then((_) => Navigator.pushReplacementNamed(context, CollectionsPage.routeName))
           .catchError((e) => showSnackbar(Strings.errorLoginUnauthorized), test: (Object o) => o is UnauthorizedException)
           .catchError((e) => showSnackbar(Strings.errorLoginNoConnection), test: (Object o) => o is SocketException)

@@ -8,7 +8,7 @@ Android client for Anchr.io link collections, built with **[Flutter](https://flu
 [![Google Play](https://anchr.io/i/ZPaVo.png)](https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid)
 
 ## Prerequisites
-* An existing [Anchr.io](https://anchr.io) account. You can't create one using the app.
+* A hosted instance of [Anchr](https://github.com/n1try/anchr) and a registered account.
 * Flutter and Dart to be installed
 * Android Studio (or VSCode)
 * An Android device or emulator

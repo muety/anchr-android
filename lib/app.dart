@@ -35,7 +35,11 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
   void _init() async {
     onUnauthorizedCallback = _onUnauthorized;
 
-    await initApp();
+    if (!await initApp()) {
+      logout();
+      setState(() => isLoggedIn = false);
+    }
+
     var data = await _getSharedData();
     setState(() => sharedData = data);
 

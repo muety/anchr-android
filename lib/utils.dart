@@ -23,6 +23,13 @@ abstract class Utils {
     return regex.hasMatch(input);
   }
 
+  static String sanitizeApiUrl(String url) {
+    if (!url.endsWith('/')) {
+      url += '/';
+    }
+    return url + 'api';
+  }
+
   /**
    * Show a notification. Requires a Scaffold to be present.
    * You must either pass a ScaffoldState directly or use it in a context where a Scaffold widget is available.

@@ -5,11 +5,15 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 abstract class ApiService {
-  static const String _apiUrl = "https://anchr.io/api";
+  static String _apiUrl;
   OnUnauthorized _onUnauthorized;
   String _token;
 
   ApiService();
+
+  get apiUrl => _apiUrl;
+
+  set apiUrl(String url) => _apiUrl = url;
 
   set token(String token) => this._token = token;
 

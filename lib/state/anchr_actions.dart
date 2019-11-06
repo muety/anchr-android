@@ -40,8 +40,14 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
     collectionService.sharedPreferences = this.preferences;
   }
 
-  Future<dynamic> initApp() async {
+  Future<bool> initApp() async {
     if (this.preferences == null) await _loadPreferences();
+
+    if (this.preferences.getString(Strings.keyUserServerPref) != null) {
+      authService.apiUrl = this.preferences.getString(Strings.keyUserServerPref);
+    } else {
+      return false;
+    }
 
     if (this.preferences.getString(Strings.keyUserTokenPref) != null) {
       _updateServiceToken(this.preferences.getString(Strings.keyUserTokenPref));
@@ -53,6 +59,8 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
 
     await CollectionDbHelper().open(Strings.keyDbCollections);
     await LinkDbHelper().open(Strings.keyDbLinks);
+
+    return true;
   }
 
   void showSnackbar(String text) => Utils.showSnackbar(text, scaffoldState: appState.currentState);
@@ -122,11 +130,13 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     return remoteService.fetchPageTitle(url);
   }
 
-  Future<void> login(String userMail, String password) {
+  Future<void> login(String serverUrl, String userMail, String password) {
+    preferences.setString(Strings.keyUserServerPref, serverUrl);
+    authService.apiUrl = serverUrl;
     return authService.login(userMail, password).then((token) {
       preferences.setString(Strings.keyUserMailPref, userMail);
       preferences.setString(Strings.keyUserTokenPref, token);
-      return this.initApp();
+      this.initApp();
     });
   }
 

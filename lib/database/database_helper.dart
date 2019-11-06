@@ -8,7 +8,9 @@ abstract class DatabaseHelper {
   }
 
   Future delete() async {
-    return db.delete(table);
+    if (db != null) {
+      return db.delete(table);
+    }
   }
 
   int get schemaVersion;
