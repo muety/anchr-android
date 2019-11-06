@@ -53,7 +53,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                   child: TextFormField(
                       key: Key('server'),
                       decoration: const InputDecoration(
-                        icon: const Icon(Icons.person),
+                        icon: const Icon(Icons.cloud),
                         hintText: Strings.labelServerInputHint,
                         labelText: Strings.labelServerInput,
                       ),
