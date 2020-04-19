@@ -3,11 +3,9 @@ import 'package:anchr_android/models/link.dart';
 class LinkCollection with Comparable {
   String id;
   String name;
-  String ownerId;
-  bool shared;
   List<Link> links;
 
-  LinkCollection({this.id, this.name, this.ownerId, this.shared, this.links});
+  LinkCollection({this.id, this.name, this.links});
 
   factory LinkCollection.fromJson(Map<String, dynamic> json) {
     List<Link> links =
@@ -17,13 +15,11 @@ class LinkCollection with Comparable {
     return LinkCollection(
         id: json['_id'],
         name: json['name'],
-        ownerId: json.containsKey('owner') ? json['owner'] : null,
-        shared: json.containsKey('shared') ? json['shared'] : null,
         links: links);
   }
 
   Map<String, dynamic> toJson() {
-    return {'_id': id, 'name': name, 'owner': ownerId, 'shared': shared, 'links': links.map((l) => l.toJson())};
+    return {'_id': id, 'name': name, 'links': links.map((l) => l.toJson())};
   }
 
   @override
