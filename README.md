@@ -5,7 +5,7 @@
 
 Android client for Anchr.io link collections, built with **[Flutter](https://flutter.dev)**. This project is in an **early development phase** and therefore not yet feature-complete or free of bugs.
 
-[![Google Play](https://anchr.io/i/ZPaVo.png)](https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid)
+[![Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid&utm_source=github)
 
 ## Prerequisites
 * A hosted instance of [Anchr](https://github.com/n1try/anchr) and a registered account.
