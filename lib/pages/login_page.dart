@@ -6,6 +6,7 @@ import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/utils.dart';
+import 'package:device_info/device_info.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -129,10 +130,28 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
   }
 
   void _submit() {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
+
       login(serverUrl, userMail, userPassword)
           .then((_) {
+
+            deviceInfo.androidInfo.then((info) {
+              StringBuffer sb = StringBuffer();
+              sb.writeln("SDK Version: ${info.version.sdkInt}");
+              sb.writeln("Android ID: ${info.androidId}");
+              sb.writeln("Brand: ${info.brand}");
+              sb.writeln("Device: ${info.device}");
+              sb.writeln("Manufacturer: ${info.manufacturer}");
+              sb.writeln("Model: ${info.model}");
+              sb.writeln("Physical device: ${info.isPhysicalDevice}");
+
+              FLog.info(text: "Device Info:\n${sb.toString()}");
+            });
+
+
             FLog.info(text: "User $userMail logged in.");
             Navigator.pushReplacementNamed(context, CollectionsPage.routeName);
           })
