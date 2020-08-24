@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 abstract class Utils {
@@ -24,10 +25,11 @@ abstract class Utils {
   }
 
   static String sanitizeApiUrl(String url) {
-    if (!url.endsWith('/')) {
-      url += '/';
-    }
-    return url + 'api';
+    return Uri.parse(url.trim() + '/api').toString();
+  }
+
+  static String formatResponse(Response res) {
+    return "Request: ${res.request.method} ${res.request.url}; Response: ${res.statusCode}: ${res.body}";
   }
 
   /**

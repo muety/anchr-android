@@ -4,6 +4,7 @@ class Strings {
   static const titleAddNewLinkPage = 'Add new link';
   static const titleCollectionPage = 'Collection';
   static const titleLoginPage = 'Log In';
+  static const titleLogsPage = 'Logs';
   static const titleAboutPage = 'About & Privacy';
   static const titleLicensesPage = 'Open-Source Licenses';
   static const titleNewCollectionDialog = 'New Collection';
@@ -36,6 +37,7 @@ class Strings {
   static const labelNoLinkDescription = '<no description>';
   static const labelNoData = 'No Data :\'-(';
   static const labelLoading = 'Loading ...';
+  static const labelLogsButton = 'Logs';
   static const labelAboutButton = 'About & Privacy';
   static const labelLicensesButton = 'Licenses';
   static const labelViewCodeButton = 'View source code';
@@ -52,6 +54,7 @@ class Strings {
   static const msgConfirmDeleteCollection = 'Are you sure you want to delete this collection?';
   static const msgSignUp = '💡 You need to have your own self-hosted instance of Anchr as well as a registered account. For more information, see';
   static const msgLinkCopied = 'Copied to clipboard';
+  static const msgCopyLogs = 'Below are the latest logs from this application. They can be used for debugging purposes when posted to GitHub at github.com/muety/anchr-android/issues. Long-press to select and copy them.';
 
   // Error messages
   static const errorLoadCollections = 'Failed to load collections';

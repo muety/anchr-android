@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:anchr_android/services/api_service.dart';
+import 'package:f_logs/f_logs.dart';
 
 class RemoteService extends ApiService {
   static final RemoteService _instance = new RemoteService._internal();
@@ -22,6 +23,7 @@ class RemoteService extends ApiService {
       }
       throw Exception();
     } catch (e) {
+      FLog.error(text: "Failed to fetch page title for $url.", exception: e);
       return defaultVal;
     }
   }

@@ -4,6 +4,11 @@ class WebServiceException implements Exception {
   WebServiceException({String message}) {
     this.message = message;
   }
+
+  @override
+  String toString() {
+    return this.message;
+  }
 }
 
 class UnauthorizedException extends WebServiceException {

@@ -6,6 +6,7 @@ import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/utils.dart';
+import 'package:f_logs/f_logs.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,9 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
+    final Size screenSize = MediaQuery
+        .of(context)
+        .size;
 
     appState.currentContext = _scaffoldKey.currentContext;
     appState.currentState = _scaffoldKey.currentState;
@@ -82,7 +85,10 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                       ),
                       obscureText: true,
                       onSaved: (val) => userPassword = val.trim(),
-                      validator: (val) => val.trim().isNotEmpty ? null : Strings.errorNoPassword),
+                      validator: (val) =>
+                      val
+                          .trim()
+                          .isNotEmpty ? null : Strings.errorNoPassword),
                 ),
                 Container(
                   width: screenSize.width,
@@ -90,7 +96,9 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: RaisedButton(
                       child: const Text(Strings.labelLoginButton, style: TextStyle(color: Colors.white)),
-                      color: Theme.of(context).primaryColor,
+                      color: Theme
+                          .of(context)
+                          .primaryColor,
                       onPressed: _submit,
                     ),
                   ),
@@ -99,11 +107,18 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                   padding: const EdgeInsets.only(top: 16),
                   child: RichText(
                       text: TextSpan(children: <TextSpan>[
-                        TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+                        TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme
+                            .of(context)
+                            .textTheme
+                            .body1
+                            .color)),
                         TextSpan(
                             text: ' github.com/n1try/anchr.',
-                            style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-                            recognizer: TapGestureRecognizer()..onTap = () => Utils.launchURL(Strings.urlAnchrGithub))
+                            style: TextStyle(color: Theme
+                                .of(context)
+                                .primaryColor, fontWeight: FontWeight.bold),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => Utils.launchURL(Strings.urlAnchrGithub))
                       ]
                       )),
                 )
@@ -117,10 +132,13 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
       login(serverUrl, userMail, userPassword)
-          .then((_) => Navigator.pushReplacementNamed(context, CollectionsPage.routeName))
-          .catchError((e) => showSnackbar(Strings.errorLoginUnauthorized), test: (Object o) => o is UnauthorizedException)
-          .catchError((e) => showSnackbar(Strings.errorLoginNoConnection), test: (Object o) => o is SocketException)
-          .catchError((e) => showSnackbar(Strings.errorLogin));
+          .then((_) {
+            FLog.info(text: "User $userMail logged in.");
+            Navigator.pushReplacementNamed(context, CollectionsPage.routeName);
+          })
+          .catchError((e) { FLog.error(text: "User $userMail failed to log in.", exception: e); showSnackbar(Strings.errorLoginUnauthorized); }, test: (Object o) => o is UnauthorizedException)
+          .catchError((e) { FLog.error(text: "User $userMail failed to log in.", exception: e); showSnackbar(Strings.errorLoginNoConnection); }, test: (Object o) => o is SocketException)
+          .catchError((e) { FLog.error(text: "User $userMail failed to log in.", exception: e); showSnackbar(Strings.errorLogin); });
     }
   }
 }

@@ -4,6 +4,8 @@ import 'package:anchr_android/models/exception.dart';
 import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/services/api_service.dart';
 
+import '../utils.dart';
+
 class AuthService extends ApiService {
   static final AuthService _instance = new AuthService._internal();
 
@@ -21,7 +23,7 @@ class AuthService extends ApiService {
     if (res.statusCode == 400 || res.statusCode == 401) {
       throw UnauthorizedException();
     } else if (res.statusCode != 200) {
-      throw WebServiceException(message: res.body);
+      throw WebServiceException(message: Utils.formatResponse(res));
     }
     return json.decode(res.body)['token'];
   }

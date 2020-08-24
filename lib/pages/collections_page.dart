@@ -2,11 +2,13 @@ import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/pages/about_page.dart';
 import 'package:anchr_android/pages/add_link_page.dart';
+import 'package:anchr_android/pages/logs_page.dart';
 import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/widgets/collection_drawer.dart';
 import 'package:anchr_android/widgets/link_list.dart';
+import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,8 +58,9 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
       PopupMenuButton(
         onSelected: (val) => _onOptionSelected(val, context),
         itemBuilder: (ctx) => [
-          PopupMenuItem(value: 0, child: const Text(Strings.labelAboutButton)),
-          PopupMenuItem(value: 1, child: const Text(Strings.labelLicensesButton))
+          PopupMenuItem(value: 0, child: const Text(Strings.labelLogsButton)),
+          PopupMenuItem(value: 1, child: const Text(Strings.labelAboutButton)),
+          PopupMenuItem(value: 2, child: const Text(Strings.labelLicensesButton))
         ],
       )
     ];
@@ -94,9 +97,10 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
       drawer: CollectionDrawer(
         key: GlobalKey(),
         appState: appState,
-        onCollectionSelect: (id) => loadCollection(id).catchError((e) => showSnackbar(Strings.errorLoadCollection)),
+        onCollectionSelect: (id) => loadCollection(id)
+            .catchError((e) { FLog.error(text: Strings.errorLoadCollection, exception: e); showSnackbar(Strings.errorLoadCollection); }),
         onAddCollection: (name) => addCollection(LinkCollection(name: name, links: []))
-            .catchError((e) => showSnackbar(Strings.errorAddCollection)),
+            .catchError((e) { FLog.error(text: Strings.errorAddCollection, exception: e); showSnackbar(Strings.errorAddCollection); }),
         onDeleteCollection: deleteCollection,
         onLogout: logout,
       ),
@@ -132,13 +136,15 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
           return RefreshIndicator(
             child: LinkList(
               links: getFilteredLinks(),
-              deleteLink: (link) => deleteLink(link).catchError((e) => showSnackbar(Strings.errorDeleteLink)),
+              deleteLink: (link) => deleteLink(link)
+                  .catchError((e) { FLog.error(text: Strings.errorDeleteLink, exception: e); showSnackbar(Strings.errorDeleteLink); }),
             ),
             onRefresh: () async {
               refreshing = true;
               try {
                 await loadCollection(appState.activeCollection.id, force: true);
               } catch (e) {
+                FLog.error(text: Strings.errorLoadCollection, exception: e);
                 showSnackbar(Strings.errorLoadCollection);
               } finally {
                 refreshing = false;
@@ -166,6 +172,7 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
         await loadCollection(loadId);
       }
     } catch (e) {
+      FLog.error(text: Strings.errorLoadCollections, exception: e);
       showSnackbar(Strings.errorLoadCollections);
     }
   }
@@ -173,9 +180,12 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
   _onOptionSelected(int val, BuildContext ctx) {
     switch (val) {
       case 0:
-        Navigator.of(ctx).pushNamed(AboutPage.routeName);
+        Navigator.of(ctx).pushNamed(LogsPage.routeName);
         break;
       case 1:
+        Navigator.of(ctx).pushNamed(AboutPage.routeName);
+        break;
+      case 2:
         showLicensePage(context: ctx);
         break;
     }

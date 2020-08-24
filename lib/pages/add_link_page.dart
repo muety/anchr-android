@@ -6,6 +6,7 @@ import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/utils.dart';
+import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -83,7 +84,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
               loadCollection(loadId);
             })
             .then((_) => setState(() => targetCollectionId = appState.activeCollection.id))
-            .catchError((e) => showSnackbar(Strings.errorLoadCollections));
+            .catchError((e) { FLog.error(text: Strings.errorLoadCollections, exception: e); showSnackbar(Strings.errorLoadCollections); });
       });
       attemptedToLoad = true;
     }
@@ -175,7 +176,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
           setLastActiveCollection(targetCollectionId);
         }
         Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName);
-      }).catchError((e) => showSnackbar(Strings.errorAddLink));
+      }).catchError((e) { FLog.error(text: Strings.errorAddLink, exception: e); showSnackbar(Strings.errorAddLink); });
     }
   }
 }

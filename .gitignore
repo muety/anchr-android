@@ -73,3 +73,6 @@ build/
 
 **/*.jks
 **/app_signature_key.key
+
+.flutter-plugins-dependencies
+ios/Flutter/flutter_export_environment.sh

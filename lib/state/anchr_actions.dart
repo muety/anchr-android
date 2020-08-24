@@ -9,6 +9,7 @@ import 'package:anchr_android/services/collection_service.dart';
 import 'package:anchr_android/services/remote_service.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/utils.dart';
+import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -157,6 +158,7 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
   void _clearAll() async {
     await linkDbHelper.delete();
     await collectionDbHelper.delete();
+    FLog.clearLogs();
     preferences.clear();
     appState.user = null;
   }

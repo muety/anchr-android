@@ -5,6 +5,7 @@ import 'package:anchr_android/pages/about_page.dart';
 import 'package:anchr_android/pages/add_link_page.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/pages/login_page.dart';
+import 'package:anchr_android/pages/logs_page.dart';
 import 'package:anchr_android/pages/splash_page.dart';
 import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/anchr_actions.dart';
@@ -96,6 +97,7 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
 
     final SplashPage defaultSplashPage = SplashPage();
     final AboutPage defaultAboutPage = AboutPage();
+    final LogsPage defaultLogsPage = LogsPage();
     final CollectionsPage defaultCollectionsPage = CollectionsPage(appState);
     final AddLinkPage defaultAddLinkPage = AddLinkPage(appState, linkData: linkData);
     final LoginPage defaultLoginPage = LoginPage(appState);
@@ -126,7 +128,8 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
           //5
           CollectionsPage.routeName: (BuildContext context) => defaultCollectionsPage,
           LoginPage.routeName: (BuildContext context) => defaultLoginPage,
-          AboutPage.routeName: (BuildContext context) => defaultAboutPage
+          AboutPage.routeName: (BuildContext context) => defaultAboutPage,
+          LogsPage.routeName: (BuildContext context) => defaultLogsPage
         },
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {

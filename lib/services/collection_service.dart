@@ -9,6 +9,7 @@ import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/services/api_service.dart';
+import 'package:f_logs/f_logs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CollectionService extends ApiService {
@@ -41,6 +42,7 @@ class CollectionService extends ApiService {
             .timeout(Duration(seconds: timeoutSecs), onTimeout: () => _listCollectionsOffline());
       }
     } catch (e) {
+      FLog.warning(text: "Listing offline collections.", exception: e);
       return await _listCollectionsOffline();
     }
   }
@@ -59,6 +61,7 @@ class CollectionService extends ApiService {
       }
 
     } catch (e) {
+      FLog.warning(text: "Getting offline collection.", exception: e);
       return await _getCollectionOffline(id);
     }
   }
