@@ -83,13 +83,13 @@ class Strings {
   static const keyCollectionEtagPrefix = 'etag.collection.';
 
   // Other
-  static const urlAnchrGithub = 'https://github.com/n1try/anchr';
-  static const urlGithub = 'https://github.com/n1try/anchr-android';
+  static const urlAnchrGithub = 'https://github.com/muety/anchr';
+  static const urlGithub = 'https://github.com/muety/anchr-android';
   static const urlLegal = 'https://anchr.io/#/terms';
 
   // Texts
   static const txtAbout = '''
-  Anchr for Android was created by Ferdinand Mütsch (ferdinand@muetsch.io) in 2019 as a private, non-profit open-source project. It is able to consum a self-hosted version of the web service https://github.com/n1try/anchr, whose URL / host name is specified during log in. The service's source code is open to the public.
+  Anchr for Android was created by Ferdinand Mütsch (ferdinand@muetsch.io) in 2019 as a private, non-profit open-source project. It is able to consum a self-hosted version of the web service https://github.com/muety/anchr, whose URL / host name is specified during log in. The service's source code is open to the public.
   
   Ferdinand Mütsch, developer and maintainer of this mobile application, does not take responsibility for content that is shared through it by any user.
   ''';

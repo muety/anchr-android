@@ -114,7 +114,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                             .body1
                             .color)),
                         TextSpan(
-                            text: ' github.com/n1try/anchr.',
+                            text: ' github.com/muety/anchr.',
                             style: TextStyle(color: Theme
                                 .of(context)
                                 .primaryColor, fontWeight: FontWeight.bold),
