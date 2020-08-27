@@ -24,10 +24,6 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
-def keystorePropertiesFile = rootProject.file("key.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
 android {
     compileSdkVersion 30
 
@@ -46,10 +42,34 @@ android {
 
     signingConfigs {
         release {
+            def keystorePropertiesFile = rootProject.file("key.properties")
+            def keystoreProperties = new Properties()
+
+            if (!keystorePropertiesFile.exists()) return;
+
+            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
+        }
+    }
+
+    flavorDimensions "deploy"
+
+    productFlavors {
+        fdroid {
+            dimension "deploy"
+            signingConfig null
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        if (variant.flavorName == "fdroid") {
+            variant.outputs.all { output ->
+                output.outputFileName = "app-fdroid-release.apk"
+            }
         }
     }
 
