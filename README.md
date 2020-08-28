@@ -1,11 +1,19 @@
 # Anchr for Android
-[![Say thanks](https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg)](https://saythanks.io/to/n1try)
 
-![](https://anchr.io/i/ccrHg.png)
+![GitHub package.json version](https://img.shields.io/f-droid/v/io.muetsch.anchrandroid.svg?style=flat-square)
+[![](http://img.shields.io/liberapay/receives/muety.svg?logo=liberapay&style=flat-square)](https://liberapay.com/muety/)
+[![Say thanks](https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg?style=flat-square)](https://saythanks.io/to/n1try)
+![](https://img.shields.io/github/license/muety/anchr-android?style=flat-square)
 
+[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/n1try)
+
+---
 Android client for Anchr.io link collections, built with **[Flutter](https://flutter.dev)**. This project is in an **early development phase** and therefore not yet feature-complete or free of bugs.
 
-[![Google Play](https://anchr.io/i/sdr1N.png)](https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid&utm_source=github)
+<img src="https://anchr.io/images/logo.png" height="128px">
+
+[![F-Droid](https://anchr.io/i/QHjVF.png)](https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid&utm_source=github)
+[![Google Play](https://anchr.io/i/sdr1N.png)](https://f-droid.org/en/packages/io.muetsch.anchrandroid)
 
 ## Prerequisites
 * A hosted instance of [Anchr](https://github.com/n1try/anchr) and a registered account.
@@ -34,6 +42,17 @@ storeFile=/home/you/.android/keystore.jks
 ```
 * `flutter build apk --release` to build an APK
 * `flutter build appbundle --release` to build an AppBundle (**recommended**)
+
+#### F-Droid
+* [How to add app to F-Droid](https://gitlab.com/fdroid/fdroiddata/blob/master/CONTRIBUTING.md)
+* [Build Metadata Reference](https://f-droid.org/docs/Build_Metadata_Reference/)
+* [Example `build.gradle` for Flutter build](https://gitlab.com/nikhiljha/lobsters-app/-/blob/4326b69792c8575e5cbea7c0f2f7ff1b2c38d83d/android/app/build.gradle)
+* [Example store YML for Flutter build](https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.nikhiljha.lobstersapp.yml)
+* [Fastlane specification](https://gitlab.com/snippets/1895688)
+
+```bash
+flutter build apk --flavor fdroid
+```
 
 ## To Do
 There is still plenty of space for improvements. Those include:

@@ -1,0 +1,5 @@
+Anchr.io is a useful little helper or toolbox or the like for common tasks on the internet and this is the official Android app for managing link collections.
+
+While browsing the web on your mobile phone, you can save links for later – with an optional description for easier search and separated into separate categories / collections. Manage all your bookmarks in the cloud and access them from anywhere and any device.
+
+This project was built in addition to <a href="https://anchr.io">Anchr.io</a> and is <a href="https://github.com/n1try/anchr-android">open-source</a> on GitHub.
