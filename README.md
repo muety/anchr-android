@@ -8,12 +8,12 @@
 [![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/n1try)
 
 ---
-Android client for Anchr.io link collections, built with **[Flutter](https://flutter.dev)**. This project is in an **early development phase** and therefore not yet feature-complete or free of bugs.
-
 <img src="https://anchr.io/images/logo.png" height="128px">
 
-[![F-Droid](https://anchr.io/i/QHjVF.png)](https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid&utm_source=github)
-[![Google Play](https://anchr.io/i/sdr1N.png)](https://f-droid.org/en/packages/io.muetsch.anchrandroid)
+Android client for Anchr.io link collections, built with **[Flutter](https://flutter.dev)**. This project is in an **early development phase** and therefore not yet feature-complete or free of bugs.
+
+[![F-Droid](https://anchr.io/i/QHjVF.png)](https://f-droid.org/en/packages/io.muetsch.anchrandroid)
+[![Google Play](https://anchr.io/i/sdr1N.png)](https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid&utm_source=github)
 
 ## Prerequisites
 * A hosted instance of [Anchr](https://github.com/n1try/anchr) and a registered account.
