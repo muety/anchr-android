@@ -1,0 +1,1 @@
+– Add ability to view debug logs from login screen

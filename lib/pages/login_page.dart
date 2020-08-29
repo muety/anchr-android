@@ -11,6 +11,9 @@ import 'package:f_logs/f_logs.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import 'about_page.dart';
+import 'logs_page.dart';
+
 class LoginPage extends StatefulWidget {
   static const String routeName = '/login';
   final AppState appState;
@@ -31,11 +34,24 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
 
   _LoginPageState(AppState appState) : super(appState);
 
+  List<Widget> _getAppBarActions() {
+    List<Widget> widgetList = [
+      PopupMenuButton(
+        onSelected: (val) => _onOptionSelected(val, context),
+        itemBuilder: (ctx) => [
+          PopupMenuItem(value: 0, child: const Text(Strings.labelLogsButton)),
+          PopupMenuItem(value: 1, child: const Text(Strings.labelAboutButton)),
+          PopupMenuItem(value: 2, child: const Text(Strings.labelLicensesButton))
+        ],
+      )
+    ];
+
+    return widgetList;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery
-        .of(context)
-        .size;
+    final Size screenSize = MediaQuery.of(context).size;
 
     appState.currentContext = _scaffoldKey.currentContext;
     appState.currentState = _scaffoldKey.currentState;
@@ -44,6 +60,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
         key: _scaffoldKey,
         appBar: AppBar(
           title: Text(Strings.titleLoginPage),
+          actions: _getAppBarActions(),
         ),
         body: Form(
           key: _formKey,
@@ -86,10 +103,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                       ),
                       obscureText: true,
                       onSaved: (val) => userPassword = val.trim(),
-                      validator: (val) =>
-                      val
-                          .trim()
-                          .isNotEmpty ? null : Strings.errorNoPassword),
+                      validator: (val) => val.trim().isNotEmpty ? null : Strings.errorNoPassword),
                 ),
                 Container(
                   width: screenSize.width,
@@ -97,9 +111,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: RaisedButton(
                       child: const Text(Strings.labelLoginButton, style: TextStyle(color: Colors.white)),
-                      color: Theme
-                          .of(context)
-                          .primaryColor,
+                      color: Theme.of(context).primaryColor,
                       onPressed: _submit,
                     ),
                   ),
@@ -108,20 +120,12 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                   padding: const EdgeInsets.only(top: 16),
                   child: RichText(
                       text: TextSpan(children: <TextSpan>[
-                        TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme
-                            .of(context)
-                            .textTheme
-                            .body1
-                            .color)),
-                        TextSpan(
-                            text: ' github.com/muety/anchr.',
-                            style: TextStyle(color: Theme
-                                .of(context)
-                                .primaryColor, fontWeight: FontWeight.bold),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () => Utils.launchURL(Strings.urlAnchrGithub))
-                      ]
-                      )),
+                    TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+                    TextSpan(
+                        text: ' github.com/muety/anchr.',
+                        style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                        recognizer: TapGestureRecognizer()..onTap = () => Utils.launchURL(Strings.urlAnchrGithub))
+                  ])),
                 )
               ],
             ),
@@ -135,29 +139,46 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      login(serverUrl, userMail, userPassword)
-          .then((_) {
+      login(serverUrl, userMail, userPassword).then((_) {
+        deviceInfo.androidInfo.then((info) {
+          StringBuffer sb = StringBuffer();
+          sb.writeln("SDK Version: ${info.version.sdkInt}");
+          sb.writeln("Android ID: ${info.androidId}");
+          sb.writeln("Brand: ${info.brand}");
+          sb.writeln("Device: ${info.device}");
+          sb.writeln("Manufacturer: ${info.manufacturer}");
+          sb.writeln("Model: ${info.model}");
+          sb.writeln("Physical device: ${info.isPhysicalDevice}");
 
-            deviceInfo.androidInfo.then((info) {
-              StringBuffer sb = StringBuffer();
-              sb.writeln("SDK Version: ${info.version.sdkInt}");
-              sb.writeln("Android ID: ${info.androidId}");
-              sb.writeln("Brand: ${info.brand}");
-              sb.writeln("Device: ${info.device}");
-              sb.writeln("Manufacturer: ${info.manufacturer}");
-              sb.writeln("Model: ${info.model}");
-              sb.writeln("Physical device: ${info.isPhysicalDevice}");
+          FLog.info(text: "Device Info:\n${sb.toString()}");
+        });
 
-              FLog.info(text: "Device Info:\n${sb.toString()}");
-            });
+        FLog.info(text: "User $userMail logged in.");
+        Navigator.pushReplacementNamed(context, CollectionsPage.routeName);
+      }).catchError((e) {
+        FLog.error(text: "User $userMail failed to log in.", exception: e);
+        showSnackbar(Strings.errorLoginUnauthorized);
+      }, test: (Object o) => o is UnauthorizedException).catchError((e) {
+        FLog.error(text: "User $userMail failed to log in.", exception: e);
+        showSnackbar(Strings.errorLoginNoConnection);
+      }, test: (Object o) => o is SocketException).catchError((e) {
+        FLog.error(text: "User $userMail failed to log in.", exception: e);
+        showSnackbar(Strings.errorLogin);
+      });
+    }
+  }
 
-
-            FLog.info(text: "User $userMail logged in.");
-            Navigator.pushReplacementNamed(context, CollectionsPage.routeName);
-          })
-          .catchError((e) { FLog.error(text: "User $userMail failed to log in.", exception: e); showSnackbar(Strings.errorLoginUnauthorized); }, test: (Object o) => o is UnauthorizedException)
-          .catchError((e) { FLog.error(text: "User $userMail failed to log in.", exception: e); showSnackbar(Strings.errorLoginNoConnection); }, test: (Object o) => o is SocketException)
-          .catchError((e) { FLog.error(text: "User $userMail failed to log in.", exception: e); showSnackbar(Strings.errorLogin); });
+  _onOptionSelected(int val, BuildContext ctx) {
+    switch (val) {
+      case 0:
+        Navigator.of(ctx).pushNamed(LogsPage.routeName);
+        break;
+      case 1:
+        Navigator.of(ctx).pushNamed(AboutPage.routeName);
+        break;
+      case 2:
+        showLicensePage(context: ctx);
+        break;
     }
   }
 }
