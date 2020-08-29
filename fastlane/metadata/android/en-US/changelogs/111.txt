@@ -1,2 +1,2 @@
 – Advanced logging functionality
-- Minor bug fixes
+– Minor bug fixes

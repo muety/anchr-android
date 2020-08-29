@@ -26,13 +26,13 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
   AnchrState(this.appState);
 
   set onUnauthorizedCallback(OnUnauthorized cb) {
-    authService.onUnauthorized = cb;
     collectionService.onUnauthorized = cb;
   }
 
   @override
   void initState() {
     super.initState();
+    FLog.info(text: "Initializing app state");
     _loadPreferences();
   }
 
