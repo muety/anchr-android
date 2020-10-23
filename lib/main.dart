@@ -7,6 +7,6 @@ import 'package:flutter/material.dart';
 void main() async {
   runZonedGuarded(
           () => runApp(AnchrApp()),
-          (err, stackTrace) => FLog.error(text: "Root level error", exception: err, stacktrace: stackTrace)
+          (err, stackTrace) => FLog.error(text: "Root level error: $err", stacktrace: stackTrace)
   );
 }

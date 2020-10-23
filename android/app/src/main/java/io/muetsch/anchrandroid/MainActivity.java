@@ -1,39 +1,32 @@
 package io.muetsch.anchrandroid;
 
 import android.content.Intent;
-import android.os.Bundle;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import io.flutter.app.FlutterActivity;
-import io.flutter.plugin.common.MethodCall;
+import androidx.annotation.NonNull;
+import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
 
-    private Map<String, String> sharedData = new HashMap();
+    private final Map<String, String> sharedData = new HashMap<>();
+    private static final String SHARED_DATA_CHANNEL = "app.channel.shared.data";
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        GeneratedPluginRegistrant.registerWith(this);
-
-        handleSendIntent(getIntent());
-
-        new MethodChannel(getFlutterView(), "app.channel.shared.data").setMethodCallHandler(
-                new MethodCallHandler() {
-                    @Override
-                    public void onMethodCall(MethodCall call, MethodChannel.Result result) {
-                        if (call.method.contentEquals("getSharedData")) {
-                            result.success(sharedData);
-                            sharedData.clear();
-                        }
+    public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
+        GeneratedPluginRegistrant.registerWith(flutterEngine);
+        new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), SHARED_DATA_CHANNEL)
+                .setMethodCallHandler(((call, result) -> {
+                    if (call.method.contentEquals("getSharedData")) {
+                        result.success(sharedData);
+                        sharedData.clear();
                     }
-                }
-        );
+                }));
     }
 
     @Override
