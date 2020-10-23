@@ -58,6 +58,7 @@ android {
 
     flavorDimensions "deploy"
 
+    // https://gitlab.com/nikhiljha/lobsters-app/-/blob/master/android/app/build.gradle
     productFlavors {
         fdroid {
             dimension "deploy"
@@ -67,6 +68,11 @@ android {
         fdebug {
             dimension "deploy"
             signingConfig null
+        }
+
+        fmain {
+            dimension "deploy"
+            signingConfig signingConfigs.release
         }
     }
 

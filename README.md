@@ -1,11 +1,9 @@
 # Anchr for Android
 
-![GitHub package.json version](https://img.shields.io/f-droid/v/io.muetsch.anchrandroid.svg?style=flat-square)
-[![](http://img.shields.io/liberapay/receives/muety.svg?logo=liberapay&style=flat-square)](https://liberapay.com/muety/)
-[![Say thanks](https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg?style=flat-square)](https://saythanks.io/to/n1try)
-![](https://img.shields.io/github/license/muety/anchr-android?style=flat-square)
-
-[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/n1try)
+![GitHub package.json version](https://badges.fw-web.space/f-droid/v/io.muetsch.anchrandroid.svg?style=flat-square)
+[![](http://badges.fw-web.space/liberapay/receives/muety.svg?logo=liberapay&style=flat-square)](https://liberapay.com/muety/)
+[![Say thanks](https://badges.fw-web.space/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg?style=flat-square)](https://saythanks.io/to/n1try)
+![](https://badges.fw-web.space/github/license/muety/anchr-android?style=flat-square)
 
 ---
 <img src="https://anchr.io/images/logo.png" height="128px">
@@ -40,8 +38,8 @@ keyPassword=shhh
 keyAlias=some_alias_eg_anchr
 storeFile=/home/you/.android/keystore.jks
 ```
-* `flutter build apk --release` to build an APK
-* `flutter build appbundle --release` to build an AppBundle (**recommended**)
+* `flutter build apk --release --flavor fmain` to build an APK
+* `flutter build appbundle --release --flavor fmain` to build an AppBundle (**recommended**)
 
 #### F-Droid
 * [How to add app to F-Droid](https://gitlab.com/fdroid/fdroiddata/blob/master/CONTRIBUTING.md)
