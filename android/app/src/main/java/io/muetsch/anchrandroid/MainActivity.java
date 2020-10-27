@@ -20,6 +20,9 @@ public class MainActivity extends FlutterActivity {
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine);
+
+        handleSendIntent(getIntent());
+
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), SHARED_DATA_CHANNEL)
                 .setMethodCallHandler(((call, result) -> {
                     if (call.method.contentEquals("getSharedData")) {

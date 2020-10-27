@@ -1,3 +1,4 @@
+import 'package:anchr_android/models/args/collection_page_args.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/pages/about_page.dart';
@@ -36,7 +37,9 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
   @override
   void initState() {
     super.initState();
-    _initData();
+
+    Future.delayed(Duration.zero, _initData);
+
     _searchFocus.addListener(() => setState(() {
           searching = _searchFocus.hasFocus;
           _searchController.clear();
@@ -163,12 +166,14 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
   }
 
   _initData() async {
+    final CollectionPageArgs args = ModalRoute.of(context).settings.arguments;
+
     final prefs = await SharedPreferences.getInstance();
     try {
       await loadCollections();
       if (appState.collections != null && appState.collections.isNotEmpty) {
-        var lastActive = prefs.getString(Strings.keyLastActiveCollectionPref);
-        var loadId = appState.collections.any((c) => c.id == lastActive) ? lastActive : appState.collections.first.id;
+        var activeId = args != null ? args.collectionId : prefs.getString(Strings.keyLastActiveCollectionPref);
+        var loadId = appState.collections.any((c) => c.id == activeId) ? activeId  : appState.collections.first.id;
         await loadCollection(loadId);
       }
     } catch (e) {

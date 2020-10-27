@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:anchr_android/models/args/collection_page_args.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/resources/strings.dart';
@@ -175,7 +176,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
         if (widget.linkData == null || widget.linkData.isEmpty) {
           setLastActiveCollection(targetCollectionId);
         }
-        Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName);
+        Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName, arguments: CollectionPageArgs(targetCollectionId));
       }).catchError((e) { FLog.error(text: Strings.errorAddLink, exception: e); showSnackbar(Strings.errorAddLink); });
     }
   }
