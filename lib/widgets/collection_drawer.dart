@@ -1,5 +1,6 @@
 import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/pages/login_page.dart';
+import 'package:anchr_android/resources/assets.dart';
 import 'package:anchr_android/resources/strings.dart';
 import 'package:anchr_android/state/app_state.dart';
 import 'package:anchr_android/widgets/add_collection_dialog.dart';
@@ -13,9 +14,7 @@ class CollectionDrawer extends StatefulWidget {
   final OnLogout onLogout;
   final DeleteCollection onDeleteCollection;
 
-  const CollectionDrawer(
-      {Key key, this.appState, this.onCollectionSelect, this.onAddCollection, this.onLogout, this.onDeleteCollection})
-      : super(key: key);
+  const CollectionDrawer({Key key, this.appState, this.onCollectionSelect, this.onAddCollection, this.onLogout, this.onDeleteCollection}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CollectionDrawerState();
@@ -25,9 +24,12 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        child: ListView.builder(
-            itemCount: widget.appState.hasData ? widget.appState.collections.length + 2 : 1,
-            itemBuilder: (ctx, idx) => _getDrawerItem(ctx, idx)));
+      child: ListView.builder(
+        itemCount: widget.appState.hasData ? widget.appState.collections.length + 2 : 1,
+        itemBuilder: (ctx, idx) => _getDrawerItem(ctx, idx),
+        padding: const EdgeInsets.all(0.0),
+      ),
+    );
   }
 
   Widget _getDrawerItem(BuildContext ctx, int idx) {
@@ -36,22 +38,41 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              child: Text(Strings.titleDrawer, style: Theme.of(ctx).textTheme.title.copyWith(color: Colors.white)),
-              padding: const EdgeInsets.only(bottom: 8),
-            ),
-            Padding(
-              child: Text(widget.appState.user, style: Theme.of(ctx).textTheme.body1.copyWith(color: Colors.white)),
-              padding: const EdgeInsets.only(bottom: 16),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: Container(
+                    child: Image.asset(
+                      Assets.iconLauncher,
+                      width: 42,
+                    ),
+                    alignment: Alignment.topLeft,
+                  ),
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      child: Text(Strings.titleDrawer, style: Theme.of(ctx).textTheme.headline6.copyWith(color: Colors.white)),
+                      padding: const EdgeInsets.only(bottom: 2),
+                    ),
+                    Padding(
+                      child: Text(widget.appState.user, style: Theme.of(ctx).textTheme.bodyText2.copyWith(color: Colors.white)),
+                      padding: const EdgeInsets.only(bottom: 16),
+                    )
+                  ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                )
+              ],
+              crossAxisAlignment: CrossAxisAlignment.start,
             ),
             Expanded(
               child: Column(
                 children: <Widget>[
                   RaisedButton(
                     child: const Text(Strings.labelLogoutButton),
-                    onPressed: () => widget
-                        .onLogout()
-                        .then((_) => Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, (_) => false)),
+                    onPressed: () => widget.onLogout().then((_) => Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, (_) => false)),
                     color: Theme.of(ctx).accentColor,
                   )
                 ],
@@ -98,8 +119,7 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
                                 onDelete: widget.onDeleteCollection,
                               ).builder))
                     ],
-                  ))
-      );
+                  )));
     }
   }
 }

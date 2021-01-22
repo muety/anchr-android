@@ -27,7 +27,7 @@ class AddCollectionDialog extends AlertDialog {
                     Expanded(
                         child: TextFormField(
                           autofocus: true,
-                          autovalidate: true,
+                          autovalidateMode: AutovalidateMode.always,
                           validator: (name) => _validateName(name) ? null : Strings.errorInvalidName,
                           decoration: const InputDecoration(
                             hintText: Strings.labelCollectionNameInputHint,

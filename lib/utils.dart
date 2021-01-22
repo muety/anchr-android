@@ -32,14 +32,12 @@ abstract class Utils {
     return "Request: ${res.request.method} ${res.request.url}; Response: ${res.statusCode}: ${res.body}";
   }
 
-  /**
-   * Show a notification. Requires a Scaffold to be present.
-   * You must either pass a ScaffoldState directly or use it in a context where a Scaffold widget is available.
-   * Will do nothing if no Scaffold can be found.
-   */
+  /// Show a notification. Requires a Scaffold to be present.
+  /// You must either pass a ScaffoldState directly or use it in a context where a Scaffold widget is available.
+  /// Will do nothing if no Scaffold can be found.
   static void showSnackbar(String text, {BuildContext context, ScaffoldState scaffoldState}) {
     if (scaffoldState == null && context != null) {
-      scaffoldState = context.ancestorStateOfType(TypeMatcher<ScaffoldState>());
+      scaffoldState = context.findAncestorStateOfType<ScaffoldState>();
     }
 
     if (scaffoldState != null) {

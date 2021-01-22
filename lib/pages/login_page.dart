@@ -120,7 +120,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                   padding: const EdgeInsets.only(top: 16),
                   child: RichText(
                       text: TextSpan(children: <TextSpan>[
-                    TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+                    TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme.of(context).textTheme.bodyText2.color)),
                     TextSpan(
                         text: ' github.com/muety/anchr.',
                         style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),

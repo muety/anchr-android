@@ -66,6 +66,7 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     SystemChannels.lifecycle.setMessageHandler((msg) async {
       if (!msg.contains('resumed')) return;
       _handleSharedData(await _getSharedData());
+      return;
     });
   }
 
@@ -73,9 +74,7 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
 
   _handleSharedData(data) {
     if (data.isEmpty) return;
-    Navigator.of(appState.currentContext).pushNamedAndRemoveUntil(
-        AddLinkPage.routeName, (Route<dynamic> route) => route.settings.name != AddLinkPage.routeName,
-        arguments: data);
+    Navigator.of(appState.currentContext).pushNamedAndRemoveUntil(AddLinkPage.routeName, (Route<dynamic> route) => route.settings.name != AddLinkPage.routeName, arguments: data);
   }
 
   bool _isLoggedIn() {
@@ -135,10 +134,10 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
           switch (settings.name) {
             case AddLinkPage.routeName:
               var linkData = (settings.arguments is Map) ? settings.arguments : null;
-              return MaterialPageRoute(
-                  settings: settings, builder: (context) => AddLinkPage(appState, linkData: linkData));
+              return MaterialPageRoute(settings: settings, builder: (context) => AddLinkPage(appState, linkData: linkData));
               break;
           }
+          return null;
         });
   }
 }
