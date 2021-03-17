@@ -24,19 +24,19 @@ abstract class ApiService {
   set safeOnUnauthorized(OnUnauthorized cb) => this._onUnauthorized = cb ?? this._onUnauthorized;
 
   Future<http.Response> head(String resourcePath) {
-    return http.head(_apiUrl + resourcePath, headers: _getHeaders()).then((res) => _checkUnauthorized(res));
+    return http.head(Uri.parse(_apiUrl + resourcePath), headers: _getHeaders()).then((res) => _checkUnauthorized(res));
   }
 
   Future<http.Response> get(String resourcePath) {
-    return http.get(_apiUrl + resourcePath, headers: _getHeaders()).then((res) => _checkUnauthorized(res));
+    return http.get(Uri.parse(_apiUrl + resourcePath), headers: _getHeaders()).then((res) => _checkUnauthorized(res));
   }
 
   Future<http.Response> post(String resourcePath, Map<String, dynamic> data) {
-    return http.post(_apiUrl + resourcePath, headers: _getHeaders(), body: json.encode(data)).then((res) => _checkUnauthorized(res));
+    return http.post(Uri.parse(_apiUrl + resourcePath), headers: _getHeaders(), body: json.encode(data)).then((res) => _checkUnauthorized(res));
   }
 
   Future<http.Response> delete(String resourcePath) {
-    return http.delete(_apiUrl + resourcePath, headers: _getHeaders()).then((res) => _checkUnauthorized(res));
+    return http.delete(Uri.parse(_apiUrl + resourcePath), headers: _getHeaders()).then((res) => _checkUnauthorized(res));
   }
 
   Map<String, String> _getHeaders() {
