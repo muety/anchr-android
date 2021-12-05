@@ -136,7 +136,7 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     return authService.login(userMail, password).then((token) {
       preferences.setString(Strings.keyUserMailPref, userMail);
       preferences.setString(Strings.keyUserTokenPref, token);
-      this.initApp();
+      return this.initApp();
     });
   }
 
