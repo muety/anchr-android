@@ -1,0 +1,3 @@
+- Compatibility with Anchr version 2.0.0
+- Fixed empty set of collections after log in (https://github.com/muety/anchr-android/issues/21)
+- Updated dependencies
