@@ -19,9 +19,9 @@ class AnchrApp extends StatefulWidget {
 }
 
 class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
-  static const platform = const MethodChannel('app.channel.shared.data');
+  static const platform = MethodChannel('app.channel.shared.data');
 
-  Map<dynamic, dynamic> sharedData = Map();
+  Map<dynamic, dynamic> sharedData = {};
   bool initialized = false;
   bool isLoggedIn = false;
 
@@ -70,10 +70,10 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     });
   }
 
-  Future<Map> _getSharedData() async => await platform.invokeMethod('getSharedData');
+  Future<dynamic> _getSharedData() async => await platform.invokeMethod('getSharedData');
 
   _handleSharedData(data) {
-    if (data.isEmpty) return;
+    if (data.isEmpty != null) return;
     Navigator.of(appState.currentContext).pushNamedAndRemoveUntil(AddLinkPage.routeName, (Route<dynamic> route) => route.settings.name != AddLinkPage.routeName, arguments: data);
   }
 
@@ -106,7 +106,7 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
       if (initialized) {
         if (!isLoggedIn) {
           startingPage = defaultLoginPage;
-        } else if (linkData != null && linkData.length > 0) {
+        } else if (linkData != null && linkData.isNotEmpty) {
           startingPage = defaultAddLinkPage;
           sharedData.clear();
         } else {
@@ -121,7 +121,10 @@ class _AnchrAppState extends AnchrState<AnchrApp> with AnchrActions {
     return MaterialApp(
         title: Strings.title,
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(primarySwatch: Colors.teal, accentColor: Color(0xFFDD5237)),
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal)
+                .copyWith(secondary: Color(0xFFDD5237))
+        ),
         home: getPage(),
         routes: <String, WidgetBuilder>{
           //5

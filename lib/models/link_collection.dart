@@ -1,6 +1,6 @@
 import 'package:anchr_android/models/link.dart';
 
-class LinkCollection with Comparable {
+class LinkCollection with Comparable<LinkCollection> {
   String id;
   String name;
   List<Link> links;
@@ -8,8 +8,7 @@ class LinkCollection with Comparable {
   LinkCollection({this.id, this.name, this.links});
 
   factory LinkCollection.fromJson(Map<String, dynamic> json) {
-    List<Link> links =
-        json.containsKey('links') ? (json['links'] as List<dynamic>).map((l) => Link.fromJson(l)).toList() : List();
+    List<Link> links = json.containsKey('links') ? (json['links'] as List<Map<String, dynamic>>).map((l) => Link.fromJson(l)).toList() : [];
     links.sort();
 
     return LinkCollection(
@@ -24,7 +23,7 @@ class LinkCollection with Comparable {
 
   @override
   int compareTo(other) {
-    if (!(other is LinkCollection)) return -1;
-    return name.compareTo((other as LinkCollection).name);
+    if (other is! LinkCollection) return -1;
+    return name.compareTo((other).name);
   }
 }

@@ -11,17 +11,17 @@ abstract class ApiService {
 
   ApiService();
 
-  get apiUrl => _apiUrl;
+  String get apiUrl => _apiUrl;
 
   set apiUrl(String url) => _apiUrl = url;
 
-  set token(String token) => this._token = token;
+  set token(String token) => _token = token;
 
-  set safeToken(String token) => this._token = token ?? this._token;
+  set safeToken(String token) => _token = token ?? _token;
 
-  set onUnauthorized(OnUnauthorized cb) => this._onUnauthorized = cb;
+  set onUnauthorized(OnUnauthorized cb) => _onUnauthorized = cb;
 
-  set safeOnUnauthorized(OnUnauthorized cb) => this._onUnauthorized = cb ?? this._onUnauthorized;
+  set safeOnUnauthorized(OnUnauthorized cb) => _onUnauthorized = cb ?? _onUnauthorized;
 
   Future<http.Response> head(String resourcePath) {
     return http.head(Uri.parse(_apiUrl + resourcePath), headers: _getHeaders()).then((res) => _checkUnauthorized(res));
@@ -43,10 +43,10 @@ abstract class ApiService {
     return {'Authorization': 'Bearer $_token', 'Content-Type': 'application/json'};
   }
 
-  _checkUnauthorized(Response res) {
+  Future<Response> _checkUnauthorized(Response res) {
     if (res.statusCode == 401 && _onUnauthorized != null) {
       _onUnauthorized();
     }
-    return res;
+    return Future.value(res);
   }
 }

@@ -39,13 +39,13 @@ class AddCollectionDialog extends AlertDialog {
                 ],
               ))),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: const Text(Strings.labelCancelButton),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        FlatButton(
+        TextButton(
           child: const Text(Strings.labelAddButton),
           onPressed: () {
             if (_formKey.currentState.validate()) {

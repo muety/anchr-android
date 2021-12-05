@@ -14,13 +14,13 @@ class AppState {
 
   factory AppState.loading() => AppState(isLoading: true);
 
-  String get title => this.activeCollection?.name ?? Strings.titleCollectionPage;
+  String get title => activeCollection?.name ?? Strings.titleCollectionPage;
 
-  bool get hasData => _collections != null && _collections.length > 0 && this.activeCollection != null;
+  bool get hasData => _collections != null && _collections.isNotEmpty && activeCollection != null;
 
   List<LinkCollection> get collections {
     _collections?.sort();
-    return _collections ?? List();
+    return _collections ?? [];
   }
 
   set collections(List<LinkCollection> val) => _collections = val;

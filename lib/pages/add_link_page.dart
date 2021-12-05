@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:anchr_android/models/args/collection_page_args.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/pages/collections_page.dart';
 import 'package:anchr_android/resources/strings.dart';
@@ -26,8 +25,8 @@ class AddLinkPage extends StatefulWidget {
 class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _linkInputController = new TextEditingController();
-  final TextEditingController _descriptionInputController = new TextEditingController();
+  final TextEditingController _linkInputController = TextEditingController();
+  final TextEditingController _descriptionInputController = TextEditingController();
 
   _AddLinkPageState(AppState appState) : super(appState);
 
@@ -43,7 +42,8 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
 
     _linkInputController.text = widget.linkData != null && widget.linkData.containsKey(Strings.keySharedLinkUrl) ? widget.linkData[Strings.keySharedLinkUrl] : '';
 
-    _descriptionInputController.text = widget.linkData != null && widget.linkData.containsKey(Strings.keySharedLinkTitle) ? widget.linkData[Strings.keySharedLinkTitle] : '';
+    _descriptionInputController.text =
+        widget.linkData != null && widget.linkData.containsKey(Strings.keySharedLinkTitle) ? widget.linkData[Strings.keySharedLinkTitle] : '';
   }
 
   @override
@@ -112,7 +112,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: DropdownButtonFormField<String>(
                         value: _targetCollectionId,
-                        decoration: const InputDecoration(icon: const Icon(Icons.list), labelText: Strings.labelCollectionInput, contentPadding: const EdgeInsets.only(top: 20)),
+                        decoration: const InputDecoration(icon: Icon(Icons.list), labelText: Strings.labelCollectionInput, contentPadding: EdgeInsets.only(top: 20)),
                         items: appState.collections
                             .map((c) => DropdownMenuItem<String>(
                                   key: Key(c.id),
@@ -128,7 +128,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                         key: Key('link'),
                         controller: _linkInputController,
                         decoration: const InputDecoration(
-                          icon: const Icon(Icons.link),
+                          icon: Icon(Icons.link),
                           hintText: Strings.labelLinkInputHint,
                           labelText: Strings.labelLinkInput,
                         ),
@@ -140,7 +140,7 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                       key: Key('description'),
                       controller: _descriptionInputController,
                       decoration: const InputDecoration(
-                        icon: const Icon(Icons.text_fields),
+                        icon: Icon(Icons.text_fields),
                         hintText: Strings.labelLinkDescriptionInputHint,
                         labelText: Strings.labelLinkDescriptionInput,
                       ),
@@ -150,9 +150,8 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
                     width: screenSize.width,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         child: const Text(Strings.labelSaveButton, style: TextStyle(color: Colors.white)),
-                        color: Theme.of(context).primaryColor,
                         onPressed: _submit,
                       ),
                     ),
@@ -163,13 +162,13 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
   }
 
   void _submit() {
-    if (this._formKey.currentState.validate()) {
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       addLink(_targetCollectionId, Link(url: _linkInputController.text.trim(), description: _descriptionInputController.text)).then((_) {
         if (widget.linkData == null || widget.linkData.isEmpty) {
           setLastActiveCollection(_targetCollectionId);
         }
-        Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName, arguments: CollectionPageArgs(_targetCollectionId));
+        Navigator.of(context).pushReplacementNamed(CollectionsPage.routeName, arguments: {'collectionId': _targetCollectionId});
       }).catchError((e) {
         FLog.error(text: Strings.errorAddLink, exception: e);
         showSnackbar(Strings.errorAddLink);

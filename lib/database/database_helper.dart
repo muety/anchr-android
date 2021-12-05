@@ -3,11 +3,11 @@ import 'package:sqflite/sqflite.dart';
 abstract class DatabaseHelper {
   Database db;
 
-  Future open(String path) async {
+  Future<dynamic> open(String path) async {
     db = await openDatabase(path, version: schemaVersion, onCreate: onCreate, onUpgrade: onUpgrade);
   }
 
-  Future delete() async {
+  Future<dynamic> delete() async {
     if (db != null) {
       return db.delete(table);
     }

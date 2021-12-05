@@ -1,16 +1,24 @@
-# Anchr for Android
+<p align="center">
+  <img src="https://anchr.io/images/logo.png" width="150">
+</p>
 
-![GitHub package.json version](https://badges.fw-web.space/f-droid/v/io.muetsch.anchrandroid.svg?style=flat-square)
-[![](http://badges.fw-web.space/liberapay/receives/muety.svg?logo=liberapay&style=flat-square)](https://liberapay.com/muety/)
-![](https://badges.fw-web.space/github/license/muety/anchr-android?style=flat-square)
+<h2 align="center">Anchr for Android</h2>
 
----
-<img src="https://anchr.io/images/logo.png" height="128px">
 
-Android client for Anchr.io link collections, built with **[Flutter](https://flutter.dev)**. This project is in an **early development phase** and therefore not yet feature-complete or free of bugs.
+<h3 align="center">
+  Android client for Anchr.io link collections, built with Flutter
+</h3>
 
-[![F-Droid](https://anchr.io/i/QHjVF.png)](https://f-droid.org/en/packages/io.muetsch.anchrandroid)
-[![Google Play](https://anchr.io/i/sdr1N.png)](https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid&utm_source=github)
+<p align="center">
+  <img src="https://badges.fw-web.space/github/license/muety/anchr-android">
+  <img src="https://badges.fw-web.space/endpoint?url=https://wakapi.dev/api/compat/shields/v1/n1try/interval:any/project:anchr-android&color=blue&label=time">
+  <img src="https://badges.fw-web.space/github/languages/code-size/muety/wakapi">
+</p>
+
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=io.muetsch.anchrandroid&utm_source=github"><img src="https://anchr.io/i/sdr1N.png" width="150"></a>
+</p>
+
 
 ## Prerequisites
 * A hosted instance of [Anchr](https://github.com/n1try/anchr) and a registered account.
@@ -70,5 +78,3 @@ Feel free to contribute!
 
 ## License
 GNU General Public License v3 (GPL-3) @ [Ferdinand Mütsch](https://muetsch.io)
-
-[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/n1try)

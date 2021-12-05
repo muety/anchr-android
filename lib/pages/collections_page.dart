@@ -1,4 +1,3 @@
-import 'package:anchr_android/models/args/collection_page_args.dart';
 import 'package:anchr_android/models/link.dart';
 import 'package:anchr_android/models/link_collection.dart';
 import 'package:anchr_android/pages/about_page.dart';
@@ -25,8 +24,8 @@ class CollectionsPage extends StatefulWidget {
 
 class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrActions {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final FocusNode _searchFocus = new FocusNode();
-  final TextEditingController _searchController = new TextEditingController();
+  final FocusNode _searchFocus = FocusNode();
+  final TextEditingController _searchController = TextEditingController();
 
   String searchVal = "";
   bool searching = false;
@@ -58,7 +57,7 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
   List<Widget> _getAppBarActions() {
     List<Widget> widgetList = [
       PopupMenuButton(
-        onSelected: (val) => _onOptionSelected(val, context),
+        onSelected: (int val) => _onOptionSelected(val, context),
         itemBuilder: (ctx) => [
           PopupMenuItem(value: 0, child: const Text(Strings.labelRefreshButton)),
           PopupMenuItem(value: 1, child: const Text(Strings.labelLogsButton)),
@@ -174,13 +173,13 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
   }
 
   _initData() async {
-    final CollectionPageArgs args = ModalRoute.of(context).settings.arguments;
+    final Map<String, String> args = ModalRoute.of(context).settings.arguments as Map<String, String>;
 
     final prefs = await SharedPreferences.getInstance();
     try {
       await loadCollections();
       if (appState.collections != null && appState.collections.isNotEmpty) {
-        var activeId = args != null ? args.collectionId : prefs.getString(Strings.keyLastActiveCollectionPref);
+        var activeId = args != null ? args['collectionId'] : prefs.getString(Strings.keyLastActiveCollectionPref);
         var loadId = appState.collections.any((c) => c.id == activeId) ? activeId : appState.collections.first.id;
         await loadCollection(loadId);
       }

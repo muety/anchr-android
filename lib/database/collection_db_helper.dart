@@ -3,7 +3,7 @@ import 'package:anchr_android/models/link_collection.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CollectionDbHelper extends DatabaseHelper {
-  static final CollectionDbHelper _helper = new CollectionDbHelper._internal();
+  static final CollectionDbHelper _helper = CollectionDbHelper._internal();
   static const int _schemaVersion = 1;
   static const String tableName = 'collection';
   static const String columnId = '_id';
@@ -37,18 +37,18 @@ class CollectionDbHelper extends DatabaseHelper {
     }
   }
 
-  Future insert(LinkCollection collection) async {
+  Future<void> insert(LinkCollection collection) async {
     Map<String, dynamic> collectionMap = collection.toJson();
     await db.insert(tableName, collectionMap, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future insertBatch(List<LinkCollection> collections) async {
+  Future<void> insertBatch(List<LinkCollection> collections) async {
     final batch = db.batch();
-    collections.forEach((c) {
+    for (var c in collections) {
       Map<String, dynamic> collectionMap = c.toJson();
       collectionMap.remove('links');
       batch.insert(tableName, collectionMap, conflictAlgorithm: ConflictAlgorithm.replace);
-    });
+    }
     await batch.commit();
   }
 
@@ -63,17 +63,17 @@ class CollectionDbHelper extends DatabaseHelper {
         where: '$columnId = ?',
         whereArgs: [id]);
 
-    if (maps.length > 0) {
+    if (maps.isNotEmpty) {
       return LinkCollection.fromJson(maps.first);
     }
     return null;
   }
 
-  Future deleteById(String id) async {
+  Future<dynamic> deleteById(String id) async {
     await db.delete(tableName, where: '$columnId = ?', whereArgs: [id]);
   }
 
-  Future deleteAll() async {
+  Future<dynamic> deleteAll() async {
     await db.delete(tableName);
   }
 

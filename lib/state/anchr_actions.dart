@@ -36,25 +36,25 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
   }
 
   Future<dynamic> _loadPreferences() async {
-    this.preferences = await SharedPreferences.getInstance();
-    collectionService.sharedPreferences = this.preferences;
+    preferences = await SharedPreferences.getInstance();
+    collectionService.sharedPreferences = preferences;
   }
 
   Future<bool> initApp() async {
-    if (this.preferences == null) await _loadPreferences();
+    if (preferences == null) await _loadPreferences();
 
-    if (this.preferences.getString(Strings.keyUserServerPref) != null) {
-      authService.apiUrl = this.preferences.getString(Strings.keyUserServerPref);
+    if (preferences.getString(Strings.keyUserServerPref) != null) {
+      authService.apiUrl = preferences.getString(Strings.keyUserServerPref);
     } else {
       return false;
     }
 
-    if (this.preferences.getString(Strings.keyUserTokenPref) != null) {
-      _updateServiceToken(this.preferences.getString(Strings.keyUserTokenPref));
+    if (preferences.getString(Strings.keyUserTokenPref) != null) {
+      _updateServiceToken(preferences.getString(Strings.keyUserTokenPref));
     }
 
-    if (this.preferences.getString(Strings.keyUserMailPref) != null) {
-      appState.user = this.preferences.getString(Strings.keyUserMailPref);
+    if (preferences.getString(Strings.keyUserMailPref) != null) {
+      appState.user = preferences.getString(Strings.keyUserMailPref);
     }
 
     await CollectionDbHelper().open(Strings.keyDbCollections);
@@ -81,7 +81,7 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     }).whenComplete(() => setState(() => appState.isLoading = false));
   }
 
-  Future<dynamic> loadCollection(String id, { force: false }) {
+  Future<dynamic> loadCollection(String id, { bool force = false }) {
     setState(() => appState.isLoading = true);
     return collectionService.getCollection(id, force: force).then((activeCollection) {
       setState(() => appState.activeCollection = activeCollection);
@@ -106,7 +106,7 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
         appState.collections.remove(collection);
         if (appState.activeCollection == collection) {
           // TODO: What if last collection was deleted?
-          this.loadCollection(appState.collections[0].id);
+          loadCollection(appState.collections[0].id);
         }
       });
     });
@@ -130,13 +130,13 @@ mixin AnchrActions<T extends StatefulWidget> on AnchrState<T> {
     return remoteService.fetchPageTitle(url);
   }
 
-  Future<void> login(String serverUrl, String userMail, String password) {
+  Future<dynamic> login(String serverUrl, String userMail, String password) {
     preferences.setString(Strings.keyUserServerPref, serverUrl);
     authService.apiUrl = serverUrl;
     return authService.login(userMail, password).then((token) {
       preferences.setString(Strings.keyUserMailPref, userMail);
       preferences.setString(Strings.keyUserTokenPref, token);
-      return this.initApp();
+      return initApp();
     });
   }
 

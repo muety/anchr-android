@@ -52,7 +52,7 @@ class LinkItem extends StatelessWidget {
                           leading: const Icon(Icons.delete, color: Colors.redAccent,),
                           title: const Text(
                             Strings.labelDeleteButton,
-                            style: const TextStyle(color: Colors.redAccent),
+                            style: TextStyle(color: Colors.redAccent),
                           ),
                           onTap: () => showDialog(
                               context: context,

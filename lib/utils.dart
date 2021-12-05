@@ -14,8 +14,8 @@ abstract class Utils {
   }
 
   static bool validateUrl(String url) {
-    Uri parsedUrl = Uri.tryParse(url);
-    return parsedUrl != null && parsedUrl.scheme.isNotEmpty;
+    final parsedUrl = Uri.tryParse(url);
+    return parsedUrl != null && parsedUrl.scheme.isNotEmpty && parsedUrl.scheme != "data" && url.length < 1024;
   }
 
   static bool validateEmail(String input) {

@@ -1,4 +1,4 @@
-class Link with Comparable {
+class Link with Comparable<Link> {
   String id;
   String url;
   String description;
@@ -7,8 +7,7 @@ class Link with Comparable {
   Link({this.id, this.url, this.description, this.date});
 
   factory Link.fromJson(Map<String, dynamic> json) {
-    return Link(
-        id: json['_id'], url: json['url'], description: json['description'], date: DateTime.parse(json['date']));
+    return Link(id: json['_id'], url: json['url'], description: json['description'], date: DateTime.parse(json['date']));
   }
 
   Map<String, dynamic> toJson() {
@@ -17,7 +16,7 @@ class Link with Comparable {
 
   @override
   int compareTo(other) {
-    if (!(other is Link)) return -1;
-    return (this.date.compareTo((other as Link).date)) * -1;
+    if (other is! Link) return -1;
+    return (date.compareTo((other).date)) * -1;
   }
 }

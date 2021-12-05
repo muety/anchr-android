@@ -26,11 +26,11 @@ class AboutPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
+                  ElevatedButton(
                     child: const Text(Strings.labelViewCodeButton),
                     onPressed: () => Utils.launchURL(Strings.urlGithub),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                     child: const Text(Strings.labelViewLegal),
                     onPressed: () => Utils.launchURL(Strings.urlLegal),
                   )

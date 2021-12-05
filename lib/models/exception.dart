@@ -2,12 +2,12 @@ class WebServiceException implements Exception {
   String message;
 
   WebServiceException({String message}) {
-    this.message = message;
+    message = message;
   }
 
   @override
   String toString() {
-    return this.message;
+    return message;
   }
 }
 

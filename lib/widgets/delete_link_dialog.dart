@@ -21,13 +21,13 @@ class DeleteLinkDialog extends AlertDialog {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: const Text(Strings.labelCancelButton),
           onPressed: () {
             Navigator.of(context).popUntil((r) => r is MaterialPageRoute);
           },
         ),
-        FlatButton(
+        TextButton(
           child: const Text(Strings.labelYesButton),
           onPressed: () {
             onDelete(link);

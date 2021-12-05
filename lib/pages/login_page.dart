@@ -37,7 +37,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
   List<Widget> _getAppBarActions() {
     List<Widget> widgetList = [
       PopupMenuButton(
-        onSelected: (val) => _onOptionSelected(val, context),
+        onSelected: (int val) => _onOptionSelected(val, context),
         itemBuilder: (ctx) => [
           PopupMenuItem(value: 0, child: const Text(Strings.labelLogsButton)),
           PopupMenuItem(value: 1, child: const Text(Strings.labelAboutButton)),
@@ -74,7 +74,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                   child: TextFormField(
                       key: Key('server'),
                       decoration: const InputDecoration(
-                        icon: const Icon(Icons.cloud),
+                        icon: Icon(Icons.cloud),
                         hintText: Strings.labelServerInputHint,
                         labelText: Strings.labelServerInput,
                       ),
@@ -86,7 +86,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                   child: TextFormField(
                       key: Key('email'),
                       decoration: const InputDecoration(
-                        icon: const Icon(Icons.person),
+                        icon: Icon(Icons.person),
                         hintText: Strings.labelEmailInputHint,
                         labelText: Strings.labelEmailInput,
                       ),
@@ -98,7 +98,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                   child: TextFormField(
                       key: Key('password'),
                       decoration: const InputDecoration(
-                        icon: const Icon(Icons.lock),
+                        icon: Icon(Icons.lock),
                         labelText: Strings.labelPasswordInput,
                       ),
                       obscureText: true,
@@ -109,9 +109,8 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                   width: screenSize.width,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       child: const Text(Strings.labelLoginButton, style: TextStyle(color: Colors.white)),
-                      color: Theme.of(context).primaryColor,
                       onPressed: _submit,
                     ),
                   ),
@@ -120,11 +119,11 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
                   padding: const EdgeInsets.only(top: 16),
                   child: RichText(
                       text: TextSpan(children: <TextSpan>[
-                    TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme.of(context).textTheme.bodyText2.color)),
-                    TextSpan(
-                        text: ' github.com/muety/anchr.',
-                        style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-                        recognizer: TapGestureRecognizer()..onTap = () => Utils.launchURL(Strings.urlAnchrGithub))
+                        TextSpan(text: Strings.msgSignUp, style: TextStyle(color: Theme.of(context).textTheme.bodyText2.color)),
+                        TextSpan(
+                            text: ' github.com/muety/anchr.',
+                            style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
+                            recognizer: TapGestureRecognizer()..onTap = () => Utils.launchURL(Strings.urlAnchrGithub))
                   ])),
                 )
               ],
@@ -136,7 +135,7 @@ class _LoginPageState extends AnchrState<LoginPage> with AnchrActions {
   void _submit() {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
-    if (this._formKey.currentState.validate()) {
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
       login(serverUrl, userMail, userPassword).then((_) {

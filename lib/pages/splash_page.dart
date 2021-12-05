@@ -17,8 +17,8 @@ class SplashPage extends StatelessWidget {
               width: 200,
             ),
             const Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: const Text(Strings.labelLoading),
+              padding: EdgeInsets.all(8.0),
+              child: Text(Strings.labelLoading),
             )
           ],
         ),

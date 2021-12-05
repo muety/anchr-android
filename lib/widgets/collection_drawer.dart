@@ -70,18 +70,17 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
             Expanded(
               child: Column(
                 children: <Widget>[
-                  RaisedButton(
-                    child: const Text(Strings.labelLogoutButton),
-                    onPressed: () => widget.onLogout().then((_) => Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, (_) => false)),
-                    color: Theme.of(ctx).accentColor,
-                  )
+                  ElevatedButton(
+                      child: const Text(Strings.labelLogoutButton),
+                      onPressed: () => widget.onLogout().then((_) => Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, (_) => false)),
+                      style: ElevatedButton.styleFrom(primary: Theme.of(ctx).colorScheme.secondary))
                 ],
                 mainAxisAlignment: MainAxisAlignment.end,
               ),
             )
           ],
         ),
-        decoration: BoxDecoration(color: Theme.of(ctx).primaryColor),
+        decoration: BoxDecoration(color: Theme.of(ctx).colorScheme.primary),
       );
     } else if (idx == widget.appState.collections.length + 1) {
       return ListTile(
