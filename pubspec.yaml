@@ -12,20 +12,19 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.4
   http: ^0.13.3
-  url_launcher: ^6.0.5
-  flutter_svg: ^0.19.3
-  shared_preferences: ^0.5.12+4
+  url_launcher: ^6.0.17
+  flutter_svg: ^1.0.0
+  shared_preferences: ^2.0.9
   sqflite: ^2.0.0+4
-  fluttertoast: ^7.1.8
+  fluttertoast: ^8.0.8
   package_info: ^2.0.2
-  f_logs: ^1.2.2
+  f_logs: ^2.0.0
   device_info: ^2.0.3
   share: ^2.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.8.1
 
 flutter:
   uses-material-design: true
