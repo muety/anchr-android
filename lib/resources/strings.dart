@@ -38,6 +38,7 @@ class Strings {
   static const labelNoLinkDescription = '<no description>';
   static const labelNoData = 'No Data :\'-(';
   static const labelLoading = 'Loading ...';
+  static const labelRefreshButton = 'Refresh';
   static const labelLogsButton = 'Logs';
   static const labelAboutButton = 'About & Privacy';
   static const labelLicensesButton = 'Licenses';

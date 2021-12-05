@@ -49,10 +49,9 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
 
   List<Link> getFilteredLinks() {
     return appState.activeCollection != null
-        ? appState.activeCollection.links.where((Link l) =>
-            searchVal.isEmpty ||
-            l.description.toLowerCase().contains(searchVal.toLowerCase()) ||
-            l.url.toLowerCase().contains(searchVal)).toList(growable: false)
+        ? appState.activeCollection.links
+            .where((Link l) => searchVal.isEmpty || l.description.toLowerCase().contains(searchVal.toLowerCase()) || l.url.toLowerCase().contains(searchVal))
+            .toList(growable: false)
         : [];
   }
 
@@ -61,9 +60,10 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
       PopupMenuButton(
         onSelected: (val) => _onOptionSelected(val, context),
         itemBuilder: (ctx) => [
-          PopupMenuItem(value: 0, child: const Text(Strings.labelLogsButton)),
-          PopupMenuItem(value: 1, child: const Text(Strings.labelAboutButton)),
-          PopupMenuItem(value: 2, child: const Text(Strings.labelLicensesButton))
+          PopupMenuItem(value: 0, child: const Text(Strings.labelRefreshButton)),
+          PopupMenuItem(value: 1, child: const Text(Strings.labelLogsButton)),
+          PopupMenuItem(value: 2, child: const Text(Strings.labelAboutButton)),
+          PopupMenuItem(value: 3, child: const Text(Strings.labelLicensesButton))
         ],
       )
     ];
@@ -100,10 +100,14 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
       drawer: CollectionDrawer(
         key: GlobalKey(),
         appState: appState,
-        onCollectionSelect: (id) => loadCollection(id)
-            .catchError((e) { FLog.error(text: Strings.errorLoadCollection, exception: e); showSnackbar(Strings.errorLoadCollection); }),
-        onAddCollection: (name) => addCollection(LinkCollection(name: name, links: []))
-            .catchError((e) { FLog.error(text: Strings.errorAddCollection, exception: e); showSnackbar(Strings.errorAddCollection); }),
+        onCollectionSelect: (id) => loadCollection(id).catchError((e) {
+          FLog.error(text: Strings.errorLoadCollection, exception: e);
+          showSnackbar(Strings.errorLoadCollection);
+        }),
+        onAddCollection: (name) => addCollection(LinkCollection(name: name, links: [])).catchError((e) {
+          FLog.error(text: Strings.errorAddCollection, exception: e);
+          showSnackbar(Strings.errorAddCollection);
+        }),
         onDeleteCollection: deleteCollection,
         onLogout: logout,
       ),
@@ -139,20 +143,12 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
           return RefreshIndicator(
             child: LinkList(
               links: getFilteredLinks(),
-              deleteLink: (link) => deleteLink(link)
-                  .catchError((e) { FLog.error(text: Strings.errorDeleteLink, exception: e); showSnackbar(Strings.errorDeleteLink); }),
+              deleteLink: (link) => deleteLink(link).catchError((e) {
+                FLog.error(text: Strings.errorDeleteLink, exception: e);
+                showSnackbar(Strings.errorDeleteLink);
+              }),
             ),
-            onRefresh: () async {
-              refreshing = true;
-              try {
-                await loadCollection(appState.activeCollection.id, force: true);
-              } catch (e) {
-                FLog.error(text: Strings.errorLoadCollection, exception: e);
-                showSnackbar(Strings.errorLoadCollection);
-              } finally {
-                refreshing = false;
-              }
-            },
+            onRefresh: () async { _refresh(); },
           );
         }(),
       ),
@@ -165,6 +161,18 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
     );
   }
 
+  _refresh() async {
+    refreshing = true;
+    try {
+      await loadCollection(appState.activeCollection.id, force: true);
+    } catch (e) {
+      FLog.error(text: Strings.errorLoadCollection, exception: e);
+      showSnackbar(Strings.errorLoadCollection);
+    } finally {
+      refreshing = false;
+    }
+  }
+
   _initData() async {
     final CollectionPageArgs args = ModalRoute.of(context).settings.arguments;
 
@@ -173,7 +181,7 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
       await loadCollections();
       if (appState.collections != null && appState.collections.isNotEmpty) {
         var activeId = args != null ? args.collectionId : prefs.getString(Strings.keyLastActiveCollectionPref);
-        var loadId = appState.collections.any((c) => c.id == activeId) ? activeId  : appState.collections.first.id;
+        var loadId = appState.collections.any((c) => c.id == activeId) ? activeId : appState.collections.first.id;
         await loadCollection(loadId);
       }
     } catch (e) {
@@ -185,12 +193,15 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
   _onOptionSelected(int val, BuildContext ctx) {
     switch (val) {
       case 0:
-        Navigator.of(ctx).pushNamed(LogsPage.routeName);
+        _refresh();
         break;
       case 1:
-        Navigator.of(ctx).pushNamed(AboutPage.routeName);
+        Navigator.of(ctx).pushNamed(LogsPage.routeName);
         break;
       case 2:
+        Navigator.of(ctx).pushNamed(AboutPage.routeName);
+        break;
+      case 3:
         showLicensePage(context: ctx);
         break;
     }
