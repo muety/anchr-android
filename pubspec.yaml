@@ -5,21 +5,22 @@ version: 1.2.1+29
 
 environment:
   sdk: ">=2.10.0 <3.0.0"
+  flutter: 2.5.3
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.0
-  http: ^0.13.0
-  url_launcher: ^6.0.2
-  flutter_svg: ^0.19.1
+  cupertino_icons: ^1.0.4
+  http: ^0.13.3
+  url_launcher: ^6.0.5
+  flutter_svg: ^0.19.3
   shared_preferences: ^0.5.12+4
-  sqflite: ^2.0.0+3
-  fluttertoast: ^7.0.2
-  package_info: ^2.0.0
+  sqflite: ^2.0.0+4
+  fluttertoast: ^7.1.8
+  package_info: ^2.0.2
   f_logs: ^1.2.2
-  device_info: ^2.0.0
-  share: 2.0.1
+  device_info: ^2.0.3
+  share: ^2.0.1
 
 dev_dependencies:
   flutter_test:
