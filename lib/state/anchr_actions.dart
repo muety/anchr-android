@@ -32,7 +32,6 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
   @override
   void initState() {
     super.initState();
-    FLog.info(text: "Initializing app state");
     _loadPreferences();
   }
 

@@ -52,7 +52,7 @@ class LogsPage extends StatelessWidget {
 
   Future<String> formatLogs() async {
     LogsConfig config = FLog.getDefaultConfigurations();
-    List<Log> logs = await FLog.getAllLogs();
+    List<Log> logs = await FLog.getAllLogsByFilter(filterType: FilterType.WEEK);
     return Stream.fromIterable(logs.reversed).map((l) => Formatter.format(l, config)).join("\n");
   }
 }

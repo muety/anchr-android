@@ -56,7 +56,7 @@ class Strings {
   static const msgConfirmDeleteCollection = 'Are you sure you want to delete this collection?';
   static const msgSignUp = '💡 You need to have your own self-hosted instance of Anchr as well as a registered account. For more information, see';
   static const msgLinkCopied = 'Copied to clipboard';
-  static const msgCopyLogs = 'Below are the latest logs from this application. They can be used for debugging purposes when posted to GitHub at github.com/muety/anchr-android/issues. Long-press to select and copy them.';
+  static const msgCopyLogs = 'Below are the latest (past 7 days) logs from this application. They can be used for debugging purposes when posted to GitHub. Long-press to select and copy them.';
 
   // Error messages
   static const errorLoadCollections = 'Failed to load collections';
