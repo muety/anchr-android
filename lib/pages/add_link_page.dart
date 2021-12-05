@@ -55,18 +55,19 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
   }
 
   void _onLinkEdit() {
-    if (_linkDebounce?.isActive ?? false) _linkDebounce.cancel();
+      final url = _linkInputController.text.trim();
+      if (url == _mostRecentUrl || _descriptionInputController.text.isNotEmpty || !Utils.validateUrl(url)) return;
 
-    final url = _linkInputController.text.trim();
-    if (url == _mostRecentUrl || _descriptionInputController.text.isNotEmpty || !Utils.validateUrl(url)) return;
+      if (_linkDebounce?.isActive ?? false) _linkDebounce.cancel();
 
-    _linkDebounce = Timer(const Duration(milliseconds: 500), () async {
-      if (_descriptionInputController.text.isNotEmpty) return;
-      String pageTitle = await getPageTitle(url);
-      setState(() => _descriptionInputController.text = pageTitle);
-    });
+      _linkDebounce = Timer(const Duration(milliseconds: 1000), () async {
+        if (_descriptionInputController.text.isNotEmpty) return;
+        setState(() => _descriptionInputController.text = Strings.labelLoading);
+        String pageTitle = await getPageTitle(url);
+        setState(() => _descriptionInputController.text = pageTitle ?? '');
+      });
 
-    _mostRecentUrl = url;
+      _mostRecentUrl = url;
   }
 
   @override
