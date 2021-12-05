@@ -139,17 +139,26 @@ class CollectionService extends ApiService {
   }
 
   Future<LinkCollection> _getCollectionOnline(String id) async {
-    final res = (await Future.wait([
+    final responses = (await Future.wait([
       super.get('/collection/$id'),
+      super.get('/collection/$id/links?page=1&pageSize=99999'),
       linkDbHelper.deleteAllByCollection(id)
-    ]))[0];
+    ]));
 
-    if (res.statusCode == 200) {
-      LinkCollection collection = LinkCollection.fromJson(json.decode(res.body));
-      await linkDbHelper.insertBatch(collection.links, collection.id);
-      return collection;
-    } else
-      throw WebServiceException(message: res.body);
+    LinkCollection collection;
+    List<Link> links;
+
+    if (responses[0].statusCode == 200) {
+      collection = LinkCollection.fromJson(json.decode(responses[0].body));
+    } else throw WebServiceException(message: responses[0].body);
+
+    if (responses[1].statusCode == 200) {
+      links = (json.decode(responses[1].body) as List<dynamic>).map((l) => Link.fromJson(l)).toList();
+    } else throw WebServiceException(message: responses[1].body);
+
+    collection.links = links;
+    await linkDbHelper.insertBatch(collection.links, collection.id);
+    return collection;
   }
 
   Future<List<LinkCollection>> _listCollectionsOffline() async {
