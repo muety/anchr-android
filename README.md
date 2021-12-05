@@ -2,7 +2,6 @@
 
 ![GitHub package.json version](https://badges.fw-web.space/f-droid/v/io.muetsch.anchrandroid.svg?style=flat-square)
 [![](http://badges.fw-web.space/liberapay/receives/muety.svg?logo=liberapay&style=flat-square)](https://liberapay.com/muety/)
-[![Say thanks](https://badges.fw-web.space/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg?style=flat-square)](https://saythanks.io/to/n1try)
 ![](https://badges.fw-web.space/github/license/muety/anchr-android?style=flat-square)
 
 ---
@@ -15,7 +14,10 @@ Android client for Anchr.io link collections, built with **[Flutter](https://flu
 
 ## Prerequisites
 * A hosted instance of [Anchr](https://github.com/n1try/anchr) and a registered account.
-* Flutter and Dart to be installed
+* Java >= 11 (JDK path defined in `android/gradle.properties`)
+* Flutter >= 2.5.3
+* Dart (tested with 2.14.4)
+* Android SDK (tested with v31)
 * Android Studio (or VSCode)
 * An Android device or emulator
 

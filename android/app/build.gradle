@@ -27,6 +27,11 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     compileSdkVersion 30
 
+    compileOptions {
+        sourceCompatibility '11'
+        targetCompatibility '11'
+    }
+
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -62,12 +67,10 @@ android {
     productFlavors {
         fdroid {
             dimension "deploy"
-            signingConfig null
         }
 
         fdebug {
             dimension "deploy"
-            signingConfig null
         }
 
         fmain {
