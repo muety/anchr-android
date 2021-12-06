@@ -50,7 +50,7 @@ class _CollectionsPageState extends AnchrState<CollectionsPage> with AnchrAction
     return appState.activeCollection != null
         ? appState.activeCollection.links
             .where((Link l) => searchVal.isEmpty || l.description.toLowerCase().contains(searchVal.toLowerCase()) || l.url.toLowerCase().contains(searchVal))
-            .toList(growable: false)
+            .toList()
         : [];
   }
 
