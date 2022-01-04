@@ -110,7 +110,7 @@ class _CollectionDrawerState extends State<CollectionDrawer> {
                     children: <Widget>[
                       ListTile(
                           leading: const Icon(Icons.delete),
-                          title: const Text(Strings.labelDeleteButton),
+                          title: const Text(Strings.labelDeleteCollectionButton),
                           onTap: () => showDialog(
                               context: context,
                               builder: DeleteCollectionDialog(

@@ -8,7 +8,7 @@ class LinkCollection with Comparable<LinkCollection> {
   LinkCollection({this.id, this.name, this.links});
 
   factory LinkCollection.fromJson(Map<String, dynamic> json) {
-    List<Link> links = json.containsKey('links') ? (json['links'] as List<Map<String, dynamic>>).map((l) => Link.fromJson(l)).toList() : [];
+    List<Link> links = json.containsKey('links') ? (json['links'] as List<dynamic>).map((l) => Link.fromJson(l)).toList() : [];
     links.sort();
 
     return LinkCollection(

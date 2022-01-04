@@ -30,6 +30,7 @@ class Strings {
   static const labelDeleteButton = 'Delete Link';
   static const labelCopyButton = 'Copy Link';
   static const labelShareButton = 'Share Link';
+  static const labelDeleteCollectionButton = 'Delete Collection';
   static const labelLoginButton = 'Login';
   static const labelLogoutButton = 'Logout';
   static const labelCancelButton = 'Cancel';

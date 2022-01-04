@@ -38,12 +38,13 @@ class _AddLinkPageState extends AnchrState<AddLinkPage> with AnchrActions {
   @override
   void initState() {
     super.initState();
-    _linkInputController.addListener(_onLinkEdit);
 
     _linkInputController.text = widget.linkData != null && widget.linkData.containsKey(Strings.keySharedLinkUrl) ? widget.linkData[Strings.keySharedLinkUrl] : '';
 
     _descriptionInputController.text =
         widget.linkData != null && widget.linkData.containsKey(Strings.keySharedLinkTitle) ? widget.linkData[Strings.keySharedLinkTitle] : '';
+
+    _linkInputController.addListener(_onLinkEdit);
   }
 
   @override

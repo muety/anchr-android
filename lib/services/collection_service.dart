@@ -158,7 +158,7 @@ class CollectionService extends ApiService {
     }
 
     if (responses[1].statusCode == 200) {
-      links = (json.decode(responses[1].body) as List<dynamic>).map((l) => Link.fromJson(l)).toList(growable: false);
+      links = (json.decode(responses[1].body) as List<dynamic>).map((l) => Link.fromJson(l)).toList();
     } else {
       throw WebServiceException(message: responses[1].body);
     }

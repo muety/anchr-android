@@ -39,6 +39,7 @@ class CollectionDbHelper extends DatabaseHelper {
 
   Future<void> insert(LinkCollection collection) async {
     Map<String, dynamic> collectionMap = collection.toJson();
+    collectionMap.remove('links');
     await db.insert(tableName, collectionMap, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
