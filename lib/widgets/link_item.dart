@@ -49,7 +49,10 @@ class LinkItem extends StatelessWidget {
                             Share.share(link.url, subject: link.description);
                           }),
                       ListTile(
-                          leading: const Icon(Icons.delete, color: Colors.redAccent,),
+                          leading: const Icon(
+                            Icons.delete,
+                            color: Colors.redAccent,
+                          ),
                           title: const Text(
                             Strings.labelDeleteButton,
                             style: TextStyle(color: Colors.redAccent),

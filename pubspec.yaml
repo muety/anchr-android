@@ -1,7 +1,7 @@
 name: anchr_android
 description: Android client for Anchr.io link collections
 
-version: 1.2.4+32
+version: 1.2.5+33
 
 environment:
   sdk: ">=2.10.0 <3.0.0"
