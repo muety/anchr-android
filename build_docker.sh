@@ -9,3 +9,5 @@ docker run --rm \
     -v "$PWD":/src \
     "$IMAGE_NAME" \
     bash -c "flutter clean && flutter pub get && flutter build apk --release --flavor fdroid 2>&1 && ls -lh build/app/outputs/flutter-apk"
+
+# Install via `adb install -r build/app/outputs/flutter-apk/app-fdroid-release.apk`
