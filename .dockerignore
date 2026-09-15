@@ -1,0 +1,12 @@
+build/
+.dart_tool/
+.gradle/
+gen/
+*.iml
+.git
+**/local.properties
+**/key.properties
+*.keystore
+*.jks
+.flutter-plugins*
+.packages

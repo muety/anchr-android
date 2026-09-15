@@ -89,7 +89,11 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (rootProject.file("key.properties").exists()) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
+            }
         }
     }
 }
