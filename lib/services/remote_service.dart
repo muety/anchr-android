@@ -1,12 +1,15 @@
 import 'dart:convert';
 
+import 'package:anchr_android/models/types.dart';
 import 'package:anchr_android/services/api_service.dart';
 import 'package:f_logs/f_logs.dart';
 
 class RemoteService extends ApiService {
   static final RemoteService _instance = RemoteService._internal();
 
-  factory RemoteService() {
+  factory RemoteService({String token, OnUnauthorized onUnauthorized}) {
+    _instance.safeToken = token;
+    _instance.safeOnUnauthorized = onUnauthorized;
     return _instance;
   }
 

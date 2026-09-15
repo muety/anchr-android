@@ -68,6 +68,7 @@ abstract class AnchrState<T extends StatefulWidget> extends State<T> {
   void _updateServiceToken(String token) {
     collectionService.safeToken = token;
     authService.safeToken = token;
+    remoteService.safeToken = token;
   }
 }
 
